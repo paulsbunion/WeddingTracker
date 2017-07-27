@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+    <class name="main.java.com.defrainphoto.weddingtracker.model.Photographer" table="Photographer">
+        <id name="user_id" column="USER_ID">
+            <generator class="assigned"/>
+        </id>
+        
+        <property name="name">
+            <column name="NAME"/>
+        </property>
+        
+        <property name="address">
+            <column name="ADDRESS"/>
+        </property>
+        
+    </class>
+</hibernate-mapping>

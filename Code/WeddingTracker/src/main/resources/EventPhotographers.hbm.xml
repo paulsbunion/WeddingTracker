@@ -5,7 +5,7 @@
  
 <hibernate-mapping>
     <class name="main.java.com.defrainphoto.weddingtracker.model.EventPhotographers" table="EVENT_PHOTOGRAPHERS">
-        <composite-id>
+        <composite-id >
         	<key-many-to-one name="eventId" class="main.java.com.defrainphoto.weddingtracker.model.Event" column="EVENTID"/>
         	<key-many-to-one name="staffId" class="main.java.com.defrainphoto.weddingtracker.model.Photographer" column="STAFFID"/>
         </composite-id>

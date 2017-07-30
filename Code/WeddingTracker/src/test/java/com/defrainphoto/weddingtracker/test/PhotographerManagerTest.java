@@ -20,41 +20,59 @@ public class PhotographerManagerTest {
 	
 	@Before
 	public void setUp() {
-		session = HibernateUtil.getSessionFactory().openSession();
-		
 		photog = new Photographer(null, "John", "Smith");
 		photogManager = new PhotographerManager();
 	}
 	
 	@After
 	public void tearDown() {
-		session.close();
+//		session.close();
 	}
 	
 	@Test
 	public void testInsertPhotographer() {
-		System.out.println("ready to retrun");
-		photogManager.addPhotographer(photog, session);
-		System.out.println("ready to retrun");
+		System.out.println("adding new photog");
+		photogManager.addPhotographer(photog);
+		System.out.println("done adding new photog");
 		
-		Photographer retreivedPhotog = photogManager.getPhotographers(photog, session);
-		
-		assertEquals("photographer not found", photog, retreivedPhotog);
+		Photographer retreivedPhotog = photogManager.getPhotographerbyName(photog);
+		System.out.println("added staff id: " + photog.getStaffId());
+		assertEquals("photographer not added", photog, retreivedPhotog);
 	}
 	
 	@Test
-	public void testUpdatePhotographer() {
-		photog.setFirstName("no longer John");
+	public void testUpdatePhotographerFirstName() {
+		Photographer updatedPhotog = null;
+
+		try {
+			updatedPhotog = photogManager.setPhotographerFirstName(photog, "no longer John");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-//		session.beginTransaction();
-		photogManager.addPhotographer(photog, session);
-//		session.getTransaction().commit();
+		Photographer newPhotog = photogManager.getPhotographerById(photog);
 		
-//		session.beginTransaction();
-		Photographer newPhotog = session.load(Photographer.class, photog.getStaffId());
-//		session.getTransaction().commit();
+		assertTrue("Did not update First Name", updatedPhotog != null);
+		assertEquals("Entities are not the same" + photog.toString() + " vs. " + newPhotog.toString(),
+				photog.getFirstName(), newPhotog.getFirstName());
+	}
+	
+	@Test
+	public void testUpdatePhotographerLastName() {
+		Photographer updatedPhotog = null;
+		try {
+			updatedPhotog = photogManager.setPhotographerLastName(photog, "no longer Smith");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-		assertEquals("not updated", photog.getFirstName(), newPhotog.getFirstName());
+		Photographer newPhotog = photogManager.getPhotographerById(photog);
+		
+		assertTrue("Did not update Last Name", updatedPhotog != null);
+		assertEquals("Entities are not the same: " + photog.toString() + " vs. " + newPhotog.toString(),
+				photog.getLastName(), newPhotog.getLastName());
 	}
 
 }

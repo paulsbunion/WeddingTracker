@@ -33,7 +33,7 @@
         	<column name="AUTOREMIND"/>
         </property>
         
-        <set name="events" table="EVENT_CLIENTS" fetch="select" cascade="save-update">
+        <set name="events" table="EVENT_CLIENTS" fetch="select" cascade="all">
         	<key column="CLIENTID"/>
         	<many-to-many column="EVENTID" unique="true" class="main.java.com.defrainphoto.weddingtracker.model.Event"/>
         </set>

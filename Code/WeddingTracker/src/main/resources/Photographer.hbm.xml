@@ -17,7 +17,8 @@
             <column name="LASTNAME"/>
         </property>
         
-        <set name="events" table="EVENT_PHOTOGRAPHERS" fetch="select" cascade="all">
+<!--         <set name="events" table="EVENT_PHOTOGRAPHERS" fetch="select" cascade="all"> -->
+			<set name="events" table="EVENT_PHOTOGRAPHERS" fetch="select">
             <key>
                 <column name="STAFFID" not-null="true" />
             </key>

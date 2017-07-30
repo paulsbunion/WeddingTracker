@@ -1,5 +1,7 @@
 package main.java.com.defrainphoto.weddingtracker.model;
 
+import java.util.Set;
+
 import org.hibernate.Session;
 
 public class EventManager {
@@ -46,6 +48,34 @@ public class EventManager {
 		
 		// close the session
 		closeSession();
+	}
+	
+	public void addClient() {
+		
+	}
+	
+	public Set<Photographer> getPhotographers() {
+		return null;
+	}
+	
+	public void getTimeline() {
+		
+	}
+	
+	public void setTimeline() {
+		
+	}
+	
+	public void updateExtraPrice() {
+		
+	}
+	
+	public void getDuration() {
+		
+	}
+	
+	public void getStartTime() {
+		
 	}
 	
 	public void openSession() {

@@ -10,6 +10,14 @@ public class Photographer implements Serializable{
 	String lastName;
 	private Set<Event> events;	
 	
+	public Photographer() {}
+	
+	public Photographer(String staffId, String firstName, String lastName) {
+		this.staffId = staffId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+	
 	public String getStaffId() {
 		return staffId;
 	}

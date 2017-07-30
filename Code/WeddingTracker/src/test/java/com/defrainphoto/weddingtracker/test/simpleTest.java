@@ -62,26 +62,28 @@ public class simpleTest {
 //	}
 	@Test
 	public void testAddEvent() {
-		Client c = new Client("2", "jim", "Walker", "no address", "noPhone", "g@yahoo.com", "N");
-		Client c2 = new Client("3", "Kevin", "Bean", "no address", "noPhone", "g@yahoo.com", "N");
-		c.setClientId("1");
-		c2.setClientId("2");
+		Client c = new Client("1", "jim", "Walker", "no address", "noPhone", "g@yahoo.com", "N");
+		Client c2 = new Client("2", "Kevin", "Bean", "no address", "noPhone", "g@yahoo.com", "N");
+		c.setClientId(null);
+		c2.setClientId(null);
 		
 		Photographer p = new Photographer();
 		p.setFirstName("home");
 		p.setLastName("me");
-		p.setStaffId("1");
+		p.setStaffId(null);
+//		p.setStaffId("1");
 		
 		Photographer p2 = new Photographer();
 		p2.setFirstName("christy");
 		p2.setLastName("D");
-		p2.setStaffId("2");
+		p2.setStaffId(null);
+//		p2.setStaffId("2");
 		
 		//EventType simpleEventType = new EventType(1, "simpleEvent", "$50");
 		EventType simpleEventType = new EventType();
 		simpleEventType.setBaseCost("$50");
 		simpleEventType.setEventType("simpleEvent");
-		simpleEventType.setEventTypeId(1);
+//		simpleEventType.setEventTypeId(1);
 	
 		session.beginTransaction();
 		session.saveOrUpdate(c);
@@ -99,7 +101,7 @@ public class simpleTest {
 		Time startTime = new Time(12, 0, 0);
 		
 		Event testEvent = new Event();
-		testEvent.setEventId(1);
+//		testEvent.setEventId(1);
 		testEvent.setDescription("test");
 		testEvent.setAdditionalCost("$4.00");
 		testEvent.setClients(c);

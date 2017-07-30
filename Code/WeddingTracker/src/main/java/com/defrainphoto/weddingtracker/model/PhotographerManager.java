@@ -37,7 +37,7 @@ public class PhotographerManager {
 		return found ? newPhotographer : null;
 	}
 
-	public Photographer getPhotographerbyName(Photographer photog) {
+	public Photographer getPhotographerByName(Photographer photog) {
 		Photographer result;
 		
 		result = findPhotographer(photog, false, true, true);
@@ -245,4 +245,62 @@ public class PhotographerManager {
 	private void closeSession() {
 		session.close();
 	}
+
+	/**
+	 * Attempts to delete a photographer by <b>Id</b> from the database
+	 * @param photog the <code>Photographer</code> to delete
+	 * @return deleted <code>Photographer</code> if found, <code>null</code> otherwise
+	 */
+	public Photographer DeletePhotographerById(Photographer photog) {
+		boolean deleted = false;
+		
+		Photographer foundPhotog = null;
+		// check if in database
+		foundPhotog = findPhotographer(photog, true, false, false);
+		
+		if (foundPhotog != null) {
+			deleted = deletePhotographer(foundPhotog);
+		}
+
+		return deleted? foundPhotog : null;
+	}
+	
+	public Photographer DeletePhotographerByName(Photographer photog) {
+		boolean deleted = false;
+		
+		Photographer foundPhotog = null;
+		// check if in database
+		foundPhotog = findPhotographer(photog, false, true, true);
+		
+		if (foundPhotog != null) {
+			System.out.println("we are going to delete " + foundPhotog.toString());
+			deleted = deletePhotographer(foundPhotog);
+			if (deleted) {
+				System.out.println("he was deleted! " + foundPhotog.toString());
+			}
+		}
+
+		return deleted? foundPhotog : null;
+	}
+
+	// helper method to delete from database. returns success / falure status
+	private boolean deletePhotographer(Photographer photographerToDelete) {
+		boolean success = false;
+		try {
+			openSession();
+			
+			session.beginTransaction();
+			session.delete(photographerToDelete);
+			session.getTransaction().commit();
+			closeSession();
+			success = true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return success;
+	}
+
+	
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+    <class name="main.java.com.defrainphoto.weddingtracker.model.Location" table="Location">
+        <id name="locationId" column="LOCATIONID">
+            <generator class="native"/>
+        </id>
+                        
+		<property name="city">
+        	<column name="CITY"/>
+        </property>
+
+        <property name="state">
+        	<column name="STATE"/>
+        </property>
+        
+        <property name="zip">
+        	<column name="ZIP"/>
+        </property>
+        
+        <property name="address">
+        	<column name="ADDRESS"/>
+        </property>
+        
+        <property name="description">
+        	<column name="DESCRIPTION"/>
+        </property>
+    </class>
+</hibernate-mapping>

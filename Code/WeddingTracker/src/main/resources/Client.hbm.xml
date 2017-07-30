@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+    <class name="main.java.com.defrainphoto.weddingtracker.model.Client" table="CLIENT">
+        <id name="clientId" column="CLIENTID">
+            <generator class="native"/>
+        </id>
+        
+		<property name="firstName">
+        	<column name="FIRSTNAME"/>
+        </property>
+        
+        <property name="lastName">
+        	<column name="LASTNAME"/>
+        </property>
+        
+        <property name="address">
+        	<column name="ADDRESS"/>
+        </property>
+        
+        <property name="phoneNum">
+        	<column name="PHONENUM"/>
+        </property>
+        
+        <property name="email">
+        	<column name="EMAIL"/>
+        </property>
+        
+        <property name="autoRemind">
+        	<column name="AUTOREMIND"/>
+        </property>
+        
+        <set name="events" table="EVENT_CLIENTS" fetch="select" cascade="save-update">
+        	<key column="CLIENTID"/>
+        	<many-to-many column="EVENTID" unique="true" class="main.java.com.defrainphoto.weddingtracker.model.Event"/>
+        </set>
+        
+    </class>
+</hibernate-mapping>

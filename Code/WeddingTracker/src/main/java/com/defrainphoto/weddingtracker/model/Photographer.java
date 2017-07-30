@@ -1,26 +1,88 @@
 package main.java.com.defrainphoto.weddingtracker.model;
 
-public class Photographer {
-	String user_id;
-	String name;
-	String address;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+public class Photographer implements Serializable{
+	String staffId;
+	String firstName;
+	String lastName;
+	private Set<Event> events;	
 	
-	public String getUser_id() {
-		return user_id;
+	public String getStaffId() {
+		return staffId;
 	}
-	public void setUser_id(String id) {
-		this.user_id = id;
+	public void setStaffId(String staffId) {
+		this.staffId = staffId;
 	}
-	public String getName() {
-		return name;
+	public String getFirstName() {
+		return firstName;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
-	public String getAddress() {
-		return address;
+	public String getLastName() {
+		return lastName;
 	}
-	public void setAddress(String address) {
-		this.address = address;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	public Set<Event> getEvents() {
+		return events;
+	}
+	public void setEvents(Set<Event> events) {
+		if (this.events == null) {
+			this.events = new HashSet<Event>();
+		}
+		if (events != null) {
+			try {
+				this.events.addAll((Set<Event>) events);
+			}
+			catch (Exception e) {
+				System.out.println(e.getStackTrace());
+			}
+		}
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((events == null) ? 0 : events.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((staffId == null) ? 0 : staffId.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Photographer other = (Photographer) obj;
+		if (events == null) {
+			if (other.events != null)
+				return false;
+		} else if (!events.equals(other.events))
+			return false;
+		if (firstName == null) {
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (lastName == null) {
+			if (other.lastName != null)
+				return false;
+		} else if (!lastName.equals(other.lastName))
+			return false;
+		if (staffId == null) {
+			if (other.staffId != null)
+				return false;
+		} else if (!staffId.equals(other.staffId))
+			return false;
+		return true;
 	}
 }

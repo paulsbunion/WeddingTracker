@@ -1,4 +1,4 @@
-package test.java.com.defrainphoto.weddingtracker.test;
+package futureTESTS;
 
 import static org.junit.Assert.*;
 

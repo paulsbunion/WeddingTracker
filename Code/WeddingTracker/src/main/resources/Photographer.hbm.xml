@@ -5,17 +5,28 @@
  
 <hibernate-mapping>
     <class name="main.java.com.defrainphoto.weddingtracker.model.Photographer" table="Photographer">
-        <id name="user_id" column="USER_ID">
-            <generator class="assigned"/>
+        <id name="staffId" column="STAFFID">
+            <generator class="identity"/>
         </id>
         
-        <property name="name">
-            <column name="NAME"/>
+        <property name="firstName">
+            <column name="FIRSTNAME"/>
         </property>
         
-        <property name="address">
-            <column name="ADDRESS"/>
+        <property name="lastName">
+            <column name="LASTNAME"/>
         </property>
+        
+        <set name="events" table="EVENT_PHOTOGRAPHERS" fetch="select" cascade="all">
+            <key>
+                <column name="STAFFID" not-null="true" />
+            </key>
+<!--             <one-to-many class="main.java.com.defrainphoto.weddingtracker.model.EventPhotographers"/> -->
+            <many-to-many entity-name="main.java.com.defrainphoto.weddingtracker.model.Event">
+                <column name="EVENTID" not-null="true" />
+            </many-to-many>
+
+        </set>
         
     </class>
 </hibernate-mapping>

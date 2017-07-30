@@ -1,4 +1,4 @@
-package test.java.com.defrainphoto.weddingtracker.test;
+package oldTESTS;
 
 import static org.junit.Assert.*;
 
@@ -12,6 +12,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import main.java.com.defrainphoto.weddingtracker.model.Client;
@@ -122,6 +123,7 @@ public class simpleTest {
 	}
 	
 	@Test
+	@Ignore
 	public void testGetPhotographer() {
 		String first = "christy";
 		String last = "D";

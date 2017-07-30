@@ -93,4 +93,9 @@ public class Photographer implements Serializable{
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Photographer [staffId=" + staffId + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+	}
 }

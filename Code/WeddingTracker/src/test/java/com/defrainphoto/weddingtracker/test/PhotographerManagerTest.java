@@ -129,9 +129,6 @@ public class PhotographerManagerTest {
 		Photographer deleteMe2 = new Photographer(null, "SecondFirstName", "SecondLastName");
 		
 		deleteMe1 = photogManager.addPhotographer(deleteMe1);
-		if (deleteMe1 != null) {
-			System.out.println("HES ALIVET!!!!  " + deleteMe1.toString());
-		}
 		photogManager.addPhotographer(deleteMe2);
 		
 		Photographer deletedPhotographer = null;
@@ -142,7 +139,6 @@ public class PhotographerManagerTest {
 		
 		try {
 			deletedPhotographer = photogManager.DeletePhotographerByName(deleteMe1);
-			System.out.println("for shiz, the deleted photog was " + deletedPhotographer.toString());
 			deleteMe1.setStaffId(deletedPhotographer.getStaffId());
 			
 			deletedPhotographer2 = photogManager.DeletePhotographerByName(deleteMe2);

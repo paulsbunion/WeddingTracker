@@ -12,20 +12,20 @@ public class Client implements Serializable{
 	private String firstName;
 	private String lastName;
 	private String address;
-	private String phoneNum;
+	private String phoneNumber;
 	private String email;
 	private String autoRemind;
 	private Set<Event> events;
 	
 	public Client() {}
 	
-	public Client(String clientId, String firstName, String lastName, String address, String phoneNum, String email,
+	public Client(String clientId, String firstName, String lastName, String address, String phoneNumber, String email,
 			String autoRemind) {
 		this.clientId = clientId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
-		this.phoneNum = phoneNum;
+		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.autoRemind = autoRemind;
 	}
@@ -66,13 +66,13 @@ public class Client implements Serializable{
 		this.address = address;
 	}
 	
-	public String getPhoneNum() {
-		return phoneNum;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 	
 	@NotNull
-	public void setPhoneNum(String phoneNum) {
-		this.phoneNum = phoneNum;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 	
 	public String getEmail() {
@@ -112,7 +112,7 @@ public class Client implements Serializable{
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((phoneNum == null) ? 0 : phoneNum.hashCode());
+		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
 		return result;
 	}
 
@@ -155,12 +155,18 @@ public class Client implements Serializable{
 				return false;
 		} else if (!lastName.equals(other.lastName))
 			return false;
-		if (phoneNum == null) {
-			if (other.phoneNum != null)
+		if (phoneNumber == null) {
+			if (other.phoneNumber != null)
 				return false;
-		} else if (!phoneNum.equals(other.phoneNum))
+		} else if (!phoneNumber.equals(other.phoneNumber))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Client [clientId=" + clientId + ", firstName=" + firstName + ", lastName=" + lastName + ", address="
+				+ address + ", phoneNumber=" + phoneNumber + ", email=" + email + ", autoRemind=" + autoRemind + "]";
 	}
 	
 	

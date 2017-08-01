@@ -75,7 +75,6 @@ public class PhotographerManager {
 		}
 		
 		else {
-			System.out.println("yep, here");
 			found = false;
 		}
 		
@@ -273,10 +272,8 @@ public class PhotographerManager {
 		foundPhotog = findPhotographer(photog, false, true, true);
 		
 		if (foundPhotog != null) {
-			System.out.println("we are going to delete " + foundPhotog.toString());
 			deleted = deletePhotographer(foundPhotog);
 			if (deleted) {
-				System.out.println("he was deleted! " + foundPhotog.toString());
 			}
 		}
 

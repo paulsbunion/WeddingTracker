@@ -21,8 +21,8 @@
         	<column name="ADDRESS"/>
         </property>
         
-        <property name="phoneNum">
-        	<column name="PHONENUM"/>
+        <property name="phoneNumber">
+        	<column name="PHONENUMBER"/>
         </property>
         
         <property name="email">

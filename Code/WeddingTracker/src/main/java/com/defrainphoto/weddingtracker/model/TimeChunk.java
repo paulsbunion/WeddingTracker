@@ -1,37 +1,59 @@
 package main.java.com.defrainphoto.weddingtracker.model;
 
+import java.io.Serializable;
 import java.sql.Time;
+import java.util.Set;
 
-public class TimeChunk {
-	String timelineId;
-	Time startTime;
-	Location location;
-	Time duration;
-	String description;
-	Client client;
-	Photographer photographer;
+public class TimeChunk implements Serializable {
+	private int chunkId;
+	private Timeline timeline;
+	private int position;
+	private Time startTime;
+	private Location location;
+	private Time duration;
+	private String description;
+	private Client client;
+	private Set<Photographer> photographers;
 	
 	public TimeChunk() {}
-	
-	public TimeChunk(String timelineId, Time startTime, Location location, Time duration, String description,
-			Client client, Photographer photographer) {
-		this.timelineId = timelineId;
+		
+	public TimeChunk(int chunkId, Timeline timeline, int position, Time startTime, Location location, Time duration,
+			String description, Client client, Set<Photographer> photographers) {
+		this.chunkId = chunkId;
+		this.timeline = timeline;
+		this.position = position;
 		this.startTime = startTime;
 		this.location = location;
 		this.duration = duration;
 		this.description = description;
 		this.client = client;
-		this.photographer = photographer;
+		this.photographers = photographers;
 	}
 
-	public String getTimelineId() {
-		return timelineId;
+	public int getChunkId() {
+		return chunkId;
 	}
 	
-	public void setTimelineId(String timelineId) {
-		this.timelineId = timelineId;
+	public void setChunkId(int chunkId) {
+		this.chunkId = chunkId;
 	}
 	
+	public Timeline getTimeline() {
+		return timeline;
+	}
+	
+	public void setTimeline(Timeline timeline) {
+		this.timeline = timeline;
+	}
+	
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
+	}
+
 	public Time getStartTime() {
 		return startTime;
 	}
@@ -72,21 +94,21 @@ public class TimeChunk {
 		this.client = client;
 	}
 	
-	public Photographer getPhotographer() {
-		return photographer;
+	public Set<Photographer> getPhotographers() {
+		return photographers;
 	}
 	
-	public void setPhotographer(Photographer photographer) {
-		this.photographer = photographer;
+	public void setPhotographers(Set<Photographer> photographers) {
+		this.photographers = photographers;
 	}
 	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((photographer == null) ? 0 : photographer.hashCode());
-		result = prime * result + ((startTime == null) ? 0 : startTime.hashCode());
-		result = prime * result + ((timelineId == null) ? 0 : timelineId.hashCode());
+		result = prime * result + chunkId;
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((timeline == null) ? 0 : timeline.hashCode());
 		return result;
 	}
 	@Override
@@ -98,29 +120,26 @@ public class TimeChunk {
 		if (getClass() != obj.getClass())
 			return false;
 		TimeChunk other = (TimeChunk) obj;
-		if (photographer == null) {
-			if (other.photographer != null)
-				return false;
-		} else if (!photographer.equals(other.photographer))
+		if (chunkId != other.chunkId)
 			return false;
-		if (startTime == null) {
-			if (other.startTime != null)
+		if (description == null) {
+			if (other.description != null)
 				return false;
-		} else if (!startTime.equals(other.startTime))
+		} else if (!description.equals(other.description))
 			return false;
-		if (timelineId == null) {
-			if (other.timelineId != null)
+		if (timeline == null) {
+			if (other.timeline != null)
 				return false;
-		} else if (!timelineId.equals(other.timelineId))
+		} else if (!timeline.equals(other.timeline))
 			return false;
 		return true;
 	}
 	
 	@Override
 	public String toString() {
-		return "TimeChunk [timelineId=" + timelineId + ", startTime=" + startTime + ", location=" + location
-				+ ", duration=" + duration + ", description=" + description + ", client=" + client + ", photographer="
-				+ photographer + "]";
+		return "TimeChunk [chunkId=" + chunkId + ", timeline=" + timeline + ", position=" + position + ", startTime="
+				+ startTime + ", location=" + location + ", duration=" + duration + ", description=" + description
+				+ ", client=" + client + ", photographers=" + photographers + "]";
 	}
 
 	

@@ -5,9 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Photographer implements Serializable{
-	String staffId;
-	String firstName;
-	String lastName;
+	private String staffId;
+	private String firstName;
+	private String lastName;
 	private Set<Event> events;	
 	
 	public Photographer() {}

@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+    <class name="main.java.com.defrainphoto.weddingtracker.model.TimeChunk" table="TIME_CHUNK">
+    	<composite-id>
+    		<key-many-to-one name="timeline" class="main.java.com.defrainphoto.weddingtracker.model.Timeline" column="TIMELINEID"/>
+    		<key-property name="chunkId" column="CHUNKID"/>
+    	</composite-id>
+<!--         <id name="chunkId" column="CHUNKID"> -->
+<!--             <generator class="identity"/> -->
+<!--         </id> -->
+        
+<!--         <property name="timelineId"> -->
+<!--             <column name="TIMELINEID"/> -->
+<!--         </property> -->
+        
+        <many-to-one name="timeline" class="main.java.com.defrainphoto.weddingtracker.model.Timeline" column="TIMELINEID" insert="false" update="false"/>
+<!-- 		<many-to-one name="timeline" class="main.java.com.defrainphoto.weddingtracker.model.Timeline" column="TIMELINEID"/> -->
+        
+        <property name="position">
+            <column name="POSITION"/>
+        </property>
+        
+        <property name="startTime">
+            <column name="STARTTIME"/>
+        </property>
+        
+        <property name="location">
+            <column name="LOCATIONDID"/>
+        </property>
+        
+        <property name="duration">
+            <column name="DURATION"/>
+        </property>
+        
+        <property name="description">
+            <column name="DESCRIPTION"/>
+        </property>
+        
+        <property name="client">
+            <column name="CLIENTID"/>
+        </property>
+        
+		<set name="photographers" table="TIMECHUNKPHOTOGRAPHER" fetch="select">
+            <key>
+                <column name="CHUNKID" not-null="true" />
+                <column name="TIMELINEID" not-null="true" />
+            </key>
+<!-- 			<one-to-many class="main.java.com.defrainphoto.weddingtracker.model.Photographer"/> -->
+            <many-to-many entity-name="main.java.com.defrainphoto.weddingtracker.model.Photographer">
+                <column name="STAFFID" not-null="true" />
+            </many-to-many>
+
+        </set>
+        
+    </class>
+</hibernate-mapping>

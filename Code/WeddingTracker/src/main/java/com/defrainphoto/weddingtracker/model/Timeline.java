@@ -6,10 +6,10 @@ import java.util.List;
 
 public class Timeline implements Serializable{
 
-	int timelineId;
-	List<TimeChunk> timeChunks;
-	Time startTime;
-	Time totalTime;
+	private int timelineId;
+	private List<TimeChunk> timeChunks;
+	private Time startTime;
+	private Time totalTime;
 	
 	public int getTimelineId() {
 		return timelineId;

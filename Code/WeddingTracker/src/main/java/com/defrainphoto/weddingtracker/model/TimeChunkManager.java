@@ -1,7 +1,11 @@
 package main.java.com.defrainphoto.weddingtracker.model;
 
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityExistsException;
 
@@ -20,7 +24,7 @@ public class TimeChunkManager {
 		TimeChunk temp = null;
 		
 		// if already in DB, throw exception
-		temp = findTimeChunk(newChunk);
+		temp = findTimeChunk(newChunk, false, true, true);
 		
 		if (temp != null) {
 			throw new EntityExistsException("Entity already Exists:  " + newChunk .toString());
@@ -31,11 +35,14 @@ public class TimeChunkManager {
 		else {
 			openSession();
 			
+			int newId = getNextId(newChunk);
+			newChunk.setChunkId(newId);
+			
 			session.beginTransaction();
 			session.save(newChunk);
 			session.getTransaction().commit();
 			
-			temp = findTimeChunk(newChunk);
+			temp = findTimeChunk(newChunk, true, true, false);
 			newChunk = temp; 
 			closeSession();
 			found = true;
@@ -45,56 +52,115 @@ public class TimeChunkManager {
 		
 	}
 	
-	public TimeChunk getTimeChunk(TimeChunk timeChunk) {
+	private int getNextId(TimeChunk newChunk) {
+		int nextId = -1;
+		List<TimeChunk> foundChunks = new ArrayList<TimeChunk>(); 
+		
+		openSession();
+		
+		try {
+			session.beginTransaction();
+			
+			StringBuilder queryString = new StringBuilder("from TIME_CHUNK where ");
+			buildQuery(queryString, false, true, false);
+			
+			Query query = session.createQuery(queryString.toString());
+			System.out.println(query.toString());
+			setQueryVariables(newChunk, query, false, true, false);
+
+			List list = query.list();
+			
+			session.getTransaction().commit();
+			
+			if (list != null && !list.isEmpty()) {
+				foundChunks = (List<TimeChunk>) list;
+				Collections.sort(foundChunks, chunkIdComparator);
+				nextId = foundChunks.get(foundChunks.size() - 1).getChunkId();
+				nextId++;
+			}
+		}
+		
+		catch (HibernateException e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+		}
+		
+		closeSession();
+		
+		return nextId;
+	}
+
+	public TimeChunk getTimeChunkByDescriptionAndTimeline(TimeChunk timeChunk) {
 		TimeChunk result;
 		
-		result = findTimeChunk(timeChunk);
+		result = findTimeChunk(timeChunk, false, true, true);
 		
 		return result; 
 	}
 	
+	public TimeChunk getTimeChunkByIdAndTimeline(TimeChunk timeChunk) {
+		TimeChunk result;
+		
+		result = findTimeChunk(timeChunk, true, true, false);
+		
+		return result; 
+	}
+	
+	public TimeChunk setTimeChunkPosition(TimeChunk timeChunk, int newPosition) {
+		return setTimeChunkHelper(timeChunk, newPosition, null, null, null, null, null, null, 
+				true, false, false, false, false, false, false);
+	}
+	
 	public TimeChunk setTimeChunkStartTime(TimeChunk timeChunk, Time newStartTime) {
-		return setTimeChunkHelper(timeChunk, newStartTime, null, null, null, null, null, true, false, false, false, false, false);
+		return setTimeChunkHelper(timeChunk, null, newStartTime, null, null, null, null, null, 
+				false, true, false, false, false, false, false);
 	}
 	
 	public TimeChunk setTimeChunkLocation(TimeChunk timeChunk, Location newLocation) {
-		return setTimeChunkHelper(timeChunk, null, newLocation, null, null, null, null, false, true, false, false, false, false);
+		return setTimeChunkHelper(timeChunk, null, null, newLocation, null, null, null, null, 
+				false, false, true, false, false, false, false);
 	}
 	
 	public TimeChunk setTimeChunkDuration(TimeChunk timeChunk, Time newDuration) {
-		return setTimeChunkHelper(timeChunk, null, null, newDuration, null, null, null, false, false, true, false, false, false);
+		return setTimeChunkHelper(timeChunk, null, null, null, newDuration, null, null, null, 
+				false, false, false, true, false, false, false);
 	}
 	
 	public TimeChunk setTimeChunkDescription(TimeChunk timeChunk, String newDescription) {
-		return setTimeChunkHelper(timeChunk, null, null, null, newDescription, null, null, false, false, false, true, false, false);
+		return setTimeChunkHelper(timeChunk, null, null, null, null, newDescription, null, null, 
+				false, false, false, false, true, false, false);
 	}
 	
 	public TimeChunk setTimeChunkClient(TimeChunk timeChunk, Client newClient) {
-		return setTimeChunkHelper(timeChunk, null, null, null, null, newClient, null, false, false, false, false, true, false);
+		return setTimeChunkHelper(timeChunk, null, null, null, null, null, newClient, null, 
+				false, false, false, false, false, true, false);
 	}
 	
-	public TimeChunk setPhotographer(TimeChunk timeChunk, Photographer newPhotographer) {
-		return setTimeChunkHelper(timeChunk, null, null, null, null, null, newPhotographer, false, false, false, false, false, true);
+	public TimeChunk setPhotographer(TimeChunk timeChunk, Set<Photographer> newPhotographers) {
+		return setTimeChunkHelper(timeChunk, null, null, null, null, null, null, newPhotographers, 
+				false, false, false, false, false, false, true);
 	}
 	
-	private TimeChunk findTimeChunk(TimeChunk newChunk) {
+	private TimeChunk findTimeChunk(TimeChunk timeChunk, boolean byChunkId, boolean byTimelineId, boolean byDescription) {
 		boolean found = false;
 		openSession();
 		
 		try {
 			session.beginTransaction();
 			
-			StringBuilder queryString = new StringBuilder("from TIME_CHUNK where TIMELINEID = :timelineId AND STARTTIME = :starttime");
-			Query query = session.createQuery(queryString.toString());
-			query.setParameter("timelineId", newChunk.getTimelineId());
-			query.setParameter("starttime", newChunk.getStartTime());
+			StringBuilder queryString = new StringBuilder("from TIME_CHUNK where ");
+			buildQuery(queryString, byChunkId, byTimelineId, byDescription);
 			
+			Query query = session.createQuery(queryString.toString());
+			System.out.println(query.toString());
+			setQueryVariables(timeChunk, query, byChunkId, byTimelineId, byDescription);
+
 			List list = query.list();
 			
 			session.getTransaction().commit();
 			
 			if (list != null && !list.isEmpty()) {
-				newChunk = (TimeChunk) list.get(0);
+				timeChunk = (TimeChunk) list.get(0);
 				found = true;
 			}
 			
@@ -110,14 +176,54 @@ public class TimeChunkManager {
 		
 		closeSession();
 		
-		return found ? newChunk : null;
+		return found ? timeChunk : null;
 	}
 	
-	private TimeChunk setTimeChunkHelper(TimeChunk timeChunk, Time newStartTime, Location newLocation, Time newDuration,
-			String newDescription, Client newClient, Photographer newPhotographer, boolean updateStartTime, boolean updateLocation, boolean updateDuration,
-			boolean updateDescription, boolean updateClient, boolean updatePhotographer) {
+	private void buildQuery(StringBuilder queryString, boolean byChunkId, boolean byTimelineId, boolean byDescription) {
+		boolean moreThanOne = false;
+		
+		if (byChunkId) {
+			queryString.append("chunkid = :chunkid ");
+			moreThanOne = true;
+		}
+		if (byTimelineId) {
+			if (moreThanOne) {
+				queryString.append("AND ");
+			}
+			queryString.append("timelineid = :timelineid ");
+			moreThanOne = true;			
+		}
+		
+		if (byDescription) {
+			if (moreThanOne) {
+				queryString.append("AND ");
+			}
+			queryString.append("description = :description ");
+			moreThanOne = true;
+		}		
+	}
+	
+	private void setQueryVariables(TimeChunk timeChunk, Query query, boolean byChunkId, boolean byTimelineId, boolean byDescription) {
+		if (byChunkId) {
+			query.setParameter("chunkid", timeChunk.getChunkId());
+		}
+		if (byTimelineId) {
+			query.setParameter("timelineid", timeChunk.getTimeline().getTimelineId());
+		}
+		if (byDescription) {
+			query.setParameter("description", timeChunk.getDescription());
+		}
+		
+	}
+	
+	private TimeChunk setTimeChunkHelper(TimeChunk timeChunk, Integer newPosition, Time newStartTime, Location newLocation, Time newDuration,
+			String newDescription, Client newClient, Set<Photographer> newPhotographers, boolean updatePosition, boolean updateStartTime, boolean updateLocation, boolean updateDuration,
+			boolean updateDescription, boolean updateClient, boolean updatePhotographers) {
 		
 		// if any new value to update is null and should not be, throw exception
+//		if (updatePosition && newPosition == null) {
+//		throw new IllegalArgumentException("cannot update field to Null: newPosition");
+//		}
 		if (updateStartTime && newStartTime == null) {
 			 throw new IllegalArgumentException("cannot update field to Null: newStartTime");
 		}
@@ -142,14 +248,18 @@ public class TimeChunkManager {
 		boolean valid = false;
 		
 		// Strings to store old data
+		int oldPosition = timeChunk.getPosition();
 		Time oldStartTime = timeChunk.getStartTime();
 		Location oldLocation = timeChunk.getLocation();
 		Time oldDuration = timeChunk.getDuration();
 		String oldDescription = timeChunk.getDescription();
 		Client oldClient = timeChunk.getClient();
-		Photographer oldPhotographer = timeChunk.getPhotographer(); 
+		Set<Photographer> oldPhotographers = timeChunk.getPhotographers(); 
 		
 		// set new parameters
+		if (!updatePosition) {
+			newPosition = oldPosition;
+		}
 		if (!updateStartTime) {
 			newStartTime = oldStartTime;
 		}
@@ -166,21 +276,22 @@ public class TimeChunkManager {
 			newClient = oldClient;
 		}
 		
-		if (!updatePhotographer) {
-			newPhotographer = oldPhotographer;
+		if (!updatePhotographers) {
+			newPhotographers = oldPhotographers;
 		}
 		
 		// first try to find the timeChunk
-		TimeChunk foundTimeChunk = findTimeChunk(timeChunk);
+		TimeChunk foundTimeChunk = findTimeChunk(timeChunk, false, true, true);
 		
 		TimeChunk foundTimeChunkConflict = null;
 		
 		// if updating the startTime, check if the new startTime already exists
 		if (updateStartTime) {
-			foundTimeChunkConflict = new TimeChunk(timeChunk.getTimelineId(), newStartTime, timeChunk.getLocation(), 
-					timeChunk.getDuration(), timeChunk.getDescription(), timeChunk.getClient(), timeChunk.getPhotographer());
+			foundTimeChunkConflict = new TimeChunk(timeChunk.getChunkId(), timeChunk.getTimeline(), timeChunk.getPosition(),
+					newStartTime, timeChunk.getLocation(), timeChunk.getDuration(), timeChunk.getDescription(), 
+					timeChunk.getClient(), timeChunk.getPhotographers());
 			
-			foundTimeChunkConflict = findTimeChunk(foundTimeChunkConflict);
+			foundTimeChunkConflict = findTimeChunk(foundTimeChunkConflict, false, true, true);
 			
 			if (foundTimeChunkConflict != null) {
 				throw new EntityExistsException("Cannot have tow chunks at the same time, add code to offe user to shift all timechunks: " + foundTimeChunkConflict.toString());
@@ -198,20 +309,22 @@ public class TimeChunkManager {
 		try {
 			if (foundTimeChunk != null && foundTimeChunkConflict == null) {
 				
+				foundTimeChunk.setPosition(newPosition);
 				foundTimeChunk.setStartTime(newStartTime);
 				foundTimeChunk.setLocation(newLocation);
 				foundTimeChunk.setDuration(newDuration);
 				foundTimeChunk.setDescription(newDescription);
 				foundTimeChunk.setClient(newClient);
-				foundTimeChunk.setPhotographer(newPhotographer);
+				foundTimeChunk.setPhotographers(newPhotographers);
 				
 				// update the client id and new last name
+				timeChunk.setPosition(newPosition);
 				timeChunk.setStartTime(newStartTime);
 				timeChunk.setLocation(newLocation);
 				timeChunk.setDuration(newDuration);
 				timeChunk.setDescription(newDescription);
 				timeChunk.setClient(newClient);
-				timeChunk.setPhotographer(newPhotographer);
+				timeChunk.setPhotographers(newPhotographers);
 				
 				// open new session and commit
 				openSession();
@@ -237,12 +350,13 @@ public class TimeChunkManager {
 			
 			// if not valid, reset to old name
 			if (!valid) {
+				timeChunk.setPosition(oldPosition);
 				timeChunk.setStartTime(oldStartTime);
 				timeChunk.setLocation(oldLocation);
 				timeChunk.setDuration(oldDuration);
 				timeChunk.setDescription(oldDescription);
 				timeChunk.setClient(oldClient);
-				timeChunk.setPhotographer(oldPhotographer);
+				timeChunk.setPhotographers(oldPhotographers);
 			}
 		}
 		return valid ? timeChunk : null;
@@ -261,4 +375,11 @@ public class TimeChunkManager {
 			}
 		}
 	}
+	
+	Comparator<TimeChunk> chunkIdComparator = new Comparator<TimeChunk>() {
+		
+		public int compare(TimeChunk o1, TimeChunk o2) {
+			return Integer.valueOf(o1.getChunkId()).compareTo(Integer.valueOf(o2.getChunkId()));
+		}
+	};
 }

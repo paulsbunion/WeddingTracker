@@ -23,6 +23,8 @@
         <mapping resource="Event.hbm.xml" />
         <mapping resource="Client.hbm.xml" />
         <mapping resource="EventType.hbm.xml"/>
+        <mapping resource="TimeChunk.hbm.xml"/>
+        <mapping resource="Timeline.hbm.xml"/>
 <!--         <mapping resource="EventPhotographers.hbm.xml"/> -->
         
     </session-factory>

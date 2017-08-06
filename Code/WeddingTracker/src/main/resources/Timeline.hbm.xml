@@ -2,17 +2,23 @@
 <!DOCTYPE hibernate-mapping PUBLIC
 "-//Hibernate/Hibernate Mapping DTD//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
- 
+	
 <hibernate-mapping>
     <class name="main.java.com.defrainphoto.weddingtracker.model.Timeline" table="TIMELINE">
-        <id name="timelineId" column="TIMELINEID">
-            <generator class="identity"/>
+        <id name="eventId" column="EVENTID" >
+            <generator class="foreign">
+            	<param name="property">event</param>
+            </generator>
         </id>
-
-		<many-to-one name="timeChunks" class="main.java.com.defrainphoto.weddingtracker.model.TimeChunk" insert="false" update="false">
-			<column name="CHUNKID"></column>
-			<column name="TIMELINEID" ></column>
-		</many-to-one>
+		
+		<one-to-one name="event" class="main.java.com.defrainphoto.weddingtracker.model.Event" constrained="true"/>
+		
+        <set name="timeChunks" cascade="all" inverse="true" >
+        	<key not-null="false" >
+        		<column name="EVENTID" not-null="false"></column>
+        	</key>
+        	<one-to-many class="main.java.com.defrainphoto.weddingtracker.model.TimeChunk" not-found="ignore"/>
+        </set>
         
         <property name="startTime">
             <column name="STARTTIME"/>

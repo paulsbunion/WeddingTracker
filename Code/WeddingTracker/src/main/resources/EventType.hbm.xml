@@ -6,7 +6,7 @@
 <hibernate-mapping>
 	<class name="main.java.com.defrainphoto.weddingtracker.model.EventType" table = "EVENTTYPE">
 		<id name="eventTypeId" column="EVENTTYPEID">
-			<generator class="native"/>
+			<generator class="assigned"/>
 		</id>
 		
 		<property name="eventType">

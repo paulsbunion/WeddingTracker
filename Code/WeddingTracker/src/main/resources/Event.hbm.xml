@@ -6,78 +6,61 @@
 <hibernate-mapping>
     <class name="main.java.com.defrainphoto.weddingtracker.model.Event" table="Event">
         <id name="eventId" column="EVENTID">
-            <generator class="identity"/>
+            <generator class="assigned"/>
         </id>
         
-<!--         <many-to-one name="location" class="main.java.com.defrainphoto.weddingtracker.model.Location" -->
-<!--        cascade="all"> -->
-<!--         	<column name="ID"/> -->
-<!--         </many-to-one> -->
-        
-<!--         <property name="primaryPhotographer"> -->
-<!--             <column name="PRIMARYPHOTOGRAPHER"/> -->
-<!--         </property> -->
-        
-		<property name="multiplePhotographers">
-        	<column name="MULTISTAFF"/>
+        <property name="eventName">
+        	<column name="EVENTNAME"/>
         </property>
         
-        
-<!-- 		<set name="photographers" table="EVENT_PHOTOGRAPHERS"  fetch="select" cascade="all"> -->
-			<set name="photographers" table="EVENT_PHOTOGRAPHERS"  fetch="select" >
-        	<key column="EVENTID" not-null="true"/>
-<!--         	<one-to-many class="main.java.com.defrainphoto.weddingtracker.model.EventPhotographers"/> -->
-        	<many-to-many column="STAFFID"
-        				  unique="true" 
-        				  class="main.java.com.defrainphoto.weddingtracker.model.Photographer"/>
-        </set>
-<!--  		<set name="photographers" table="EVENT_PHOTOGRAPHERS" cascade="all"> -->
-<!--         	<key column="EVENTID"/> -->
-<!--         	<many-to-many column="ID" -->
-<!--         				  unique="true"  -->
-<!--         				  class="main.java.com.defrainphoto.weddingtracker.model.Photographer"/> -->
-<!--         </set> -->
-        
-<!--         <many-to-one name="eventType" column="TYPE" class="main.java.com.defrainphoto.weddingtracker.model.EventType" cascade="all"/> -->
-<many-to-one name="eventType" column="TYPE" class="main.java.com.defrainphoto.weddingtracker.model.EventType"/>
-        
-<!--         embedded eventtype class -->
-<!--         <composite-id name="eventType" class="main.java.com.defrainphoto.weddingtracker.model.EventType"> -->
-<!--         	<key-property name="id" column="ID"/> -->
-<!--         </composite-id> -->
-        
-<!--         <property name="eventType"> -->
-<!--         	<column name="TYPE"/> -->
-<!--         </property> -->
-        
-        <property name="multiClient">
-        	<column name="MULTICLIENT"/>
-        </property>
-        
-<!--         <set name="clients" table="EVENT_CLIENTS" fetch="select" cascade="all"> -->
-		<set name="clients" table="EVENT_CLIENTS" fetch="select">
-        	<key column="EVENTID"/>
-        	<many-to-many column="CLIENTID" unique="true" class="main.java.com.defrainphoto.weddingtracker.model.Client"/>
-        </set>
+        <many-to-one name="eventType" 
+        			 column="TYPE" 
+        			 class="main.java.com.defrainphoto.weddingtracker.model.EventType"/>
         
         <property name="eventDate">
         	<column name="EVENTDATE"/>
         </property>
         
-<!--         <property name="eventTimeline"> -->
-<!--         	<column name="TIMELINE"/> -->
-<!--         </property> -->
-        
-        <property name="additionalCost">
-        	<column name="EXTRACOST"/>
-        </property>
-        
-        <property name="description">
-        	<column name="EVENTNAME"/>
-        </property>
-        
         <property name="startTime">
         	<column name="STARTTIME"/>
         </property>
+        
+        <property name="duration">
+        	<column name="DURATION"/>
+        </property>
+        
+        <one-to-one name="timeline" 
+        			class="main.java.com.defrainphoto.weddingtracker.model.Timeline" cascade="all"/>
+        
+        <property name="multiClient">
+        	<column name="MULTICLIENT"/>
+        </property>
+        
+        <property name="extraCost">
+        	<column name="EXTRACOST"/>
+        </property>
+        
+        <property name="notes">
+        	<column name="NOTES"/>
+        </property>
+        
+        <property name="multiStaff">
+        	<column name="MULTISTAFF"/>
+        </property>
+                
+		<set name="photographers" table="EVENT_PHOTOGRAPHERS"  fetch="select" >
+        	<key column="EVENTID" not-null="true"/>
+        	<many-to-many column="STAFFID"
+        				  unique="true" 
+        				  class="main.java.com.defrainphoto.weddingtracker.model.Photographer"/>
+        </set>
+        
+		<set name="clients" table="EVENT_CLIENTS" fetch="select">
+        	<key column="EVENTID"/>
+        	<many-to-many column="CLIENTID" 
+        				  unique="true" 
+        				  class="main.java.com.defrainphoto.weddingtracker.model.Client"/>
+        </set>
+        
     </class>
 </hibernate-mapping>

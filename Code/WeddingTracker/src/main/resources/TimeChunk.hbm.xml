@@ -6,7 +6,7 @@
 <hibernate-mapping>
     <class name="main.java.com.defrainphoto.weddingtracker.model.TimeChunk" table="TIME_CHUNK">
     	<composite-id>
-    		<key-many-to-one name="timeline" class="main.java.com.defrainphoto.weddingtracker.model.Timeline" column="TIMELINEID"/>
+    		<key-many-to-one name="timeline" class="main.java.com.defrainphoto.weddingtracker.model.Timeline" column="EVENTID"/>
     		<key-property name="chunkId" column="CHUNKID"/>
     	</composite-id>
 <!--         <id name="chunkId" column="CHUNKID"> -->
@@ -17,7 +17,7 @@
 <!--             <column name="TIMELINEID"/> -->
 <!--         </property> -->
         
-        <many-to-one name="timeline" class="main.java.com.defrainphoto.weddingtracker.model.Timeline" column="TIMELINEID" insert="false" update="false"/>
+        <many-to-one name="timeline" class="main.java.com.defrainphoto.weddingtracker.model.Timeline" column="EVENTID" insert="false" update="false"/>
 <!-- 		<many-to-one name="timeline" class="main.java.com.defrainphoto.weddingtracker.model.Timeline" column="TIMELINEID"/> -->
         
         <property name="position">
@@ -28,9 +28,21 @@
             <column name="STARTTIME"/>
         </property>
         
-        <property name="location">
-            <column name="LOCATIONDID"/>
-        </property>
+        <many-to-one name="Location" >
+        	<column name="LOCATIONID" not-null="false" />
+        </many-to-one>
+<!--         <set name="location" table="Location" inverse="true" fetch="select"> -->
+<!--         	<key> -->
+<!--         		<column name="LOCATIONID" not-null="false" ></column> -->
+<!--         	</key> -->
+<!--         	<one-to-many class="main.java.com.defrainphoto.weddingtracker.model.Location"/> -->
+<!--         </set> -->
+        
+<!--         <one-to-one name="locationId" class="main.java.com.defrainphoto.weddingtracker.model.Location" constrained="true"/> -->
+        
+<!--         <property name="location"> -->
+<!--             <column name="LOCATIONDID"/> -->
+<!--         </property> -->
         
         <property name="duration">
             <column name="DURATION"/>
@@ -47,7 +59,7 @@
 		<set name="photographers" table="TIMECHUNKPHOTOGRAPHER" fetch="select">
             <key>
                 <column name="CHUNKID" not-null="true" />
-                <column name="TIMELINEID" not-null="true" />
+                <column name="EVENTID" not-null="true" />
             </key>
 <!-- 			<one-to-many class="main.java.com.defrainphoto.weddingtracker.model.Photographer"/> -->
             <many-to-many entity-name="main.java.com.defrainphoto.weddingtracker.model.Photographer">

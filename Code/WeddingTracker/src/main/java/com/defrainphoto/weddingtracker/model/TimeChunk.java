@@ -9,6 +9,7 @@ public class TimeChunk implements Serializable {
 	private Timeline timeline;
 	private int position;
 	private Time startTime;
+//	private int locationId;
 	private Location location;
 	private Time duration;
 	private String description;
@@ -62,6 +63,14 @@ public class TimeChunk implements Serializable {
 		this.startTime = startTime;
 	}
 	
+//	public int getLocationId() {
+//		return locationId;
+//	}
+//
+//	public void setLocationId(int locationId) {
+//		this.locationId = locationId;
+//	}
+
 	public Location getLocation() {
 		return location;
 	}

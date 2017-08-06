@@ -1,70 +1,145 @@
 package main.java.com.defrainphoto.weddingtracker.model;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.sql.Time;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 public class Event implements Serializable{
-	private int eventId;
-	//private Set<Location> locations;
-	//private Photographer primaryPhotographer;
-	private String multiplePhotographers;
-	//private Set<Photographer> additionalPhotographers;
-	private Set<Photographer> photographers;	
+	private String eventId;
+	private String eventName;
 	private EventType eventType;
-	private String multiClient;
-	private Set<Client> clients;
 	private Date eventDate;
-	//private Timeline eventTimeline;
-	private String additionalCost;
-	private String description;
 	private Time startTime;
+	private Time duration;
+	private Timeline timeline;
+	private String multiClient;
+	private String extraCost;
+	private String notes;
+	private String multiStaff;
 	
-	public int getEventId() {
+	private Set<Photographer> photographers;	
+	private Set<Client> clients;
+
+	public Event() {}
+	
+	public Event(String eventId, String eventName, EventType eventType, Date eventDate, Time startTime, Time duration,
+			Timeline timeline, String multiClient, String extraCost, String notes, String multiStaff,
+			Set<Photographer> photographers, Set<Client> clients) {
+		super();
+		this.eventId = eventId;
+		this.eventName = eventName;
+		this.eventType = eventType;
+		this.eventDate = eventDate;
+		this.startTime = startTime;
+		this.duration = duration;
+		this.timeline = timeline;
+		this.multiClient = multiClient;
+		this.extraCost = extraCost;
+		this.notes = notes;
+		this.multiStaff = multiStaff;
+		this.photographers = photographers;
+		this.clients = clients;
+	}
+
+	public String getEventId() {
 		return eventId;
 	}
 
-	public void setEventId(int eventId) {
+	public void setEventId(String eventId) {
 		this.eventId = eventId;
 	}
 
-//	public Set<Location> getLocations() {
-//		return locations;
-//	}
-//	
-//	@NotNull
-//	public void setLocations(Location location) {
-//		if (this.locations == null) {
-//			locations = new HashSet<Location>();
-//		}
-//		this.locations.add(location);
-//	}
+	public String getEventName() {
+		return eventName;
+	}
 
-//	public Photographer getPrimaryPhotographer() {
-//		return primaryPhotographer;
-//	}
+	public void setEventName(String eventName) {
+		this.eventName = eventName;
+	}
 
-//	@NotNull
-//	public void setPrimaryPhotographer(Photographer primaryPhotographer) {
-//		this.primaryPhotographer = primaryPhotographer;
-//	}
+	public EventType getEventType() {
+		return eventType;
+	}
+
+	public void setEventType(EventType eventType) {
+		this.eventType = eventType;
+	}
+
+	public Date getEventDate() {
+		return eventDate;
+	}
+
+	public void setEventDate(Date eventDate) {
+		this.eventDate = eventDate;
+	}
+
+	public Time getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Time startTime) {
+		this.startTime = startTime;
+	}
+
+	public Time getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Time duration) {
+		this.duration = duration;
+		if (duration == null) {
+			duration = new Time(0, 0, 0);
+		}
+	}
+
+	public Timeline getTimeline() {
+		return timeline;
+	}
+
+	public void setTimeline(Timeline timeline) {
+		this.timeline = timeline;
+	}
+
+	public String getMultiClient() {
+		return multiClient;
+	}
+
+	public void setMultiClient(String multiClient) {
+		this.multiClient = multiClient;
+	}
+
+	public String getExtraCost() {
+		return extraCost;
+	}
+
+	public void setExtraCost(String extraCost) {
+		this.extraCost = extraCost;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
+	public String getMultiStaff() {
+		return multiStaff;
+	}
+
+	public void setMultiStaff(String multiStaff) {
+		this.multiStaff = multiStaff;
+	}
 
 	public Set<Photographer> getPhotographers() {
 		return photographers;
 	}
 
-//	@NotNull
-//	public void setAdditionalPhotographers(Photographer newPhotographer) {
-//		this.photographers.add(newPhotographer);
-//	}
-	
 	@NotNull
 	public void setPhotographers(Set<Photographer> photographers) {
 		if (photographers == null) {
@@ -79,23 +154,6 @@ public class Event implements Serializable{
 			photographers = new HashSet<Photographer>();
 		}
 		this.photographers.add(newPhotographer);
-	}
-
-	public EventType getEventType() {
-		return eventType;
-	}
-
-	public void setEventType(EventType eventType) {
-		this.eventType = eventType;
-	}
-
-	public String getMultiClient() {
-		return multiClient;
-	}
-
-	@NotNull
-	public void setMultiClient(String multiClient) {
-		this.multiClient = multiClient;
 	}
 
 	public Set<Client> getClients() {
@@ -118,72 +176,11 @@ public class Event implements Serializable{
 		this.clients.add(client);
 	}
 
-	public Date getEventDate() {
-		return eventDate;
-	}
-
-	@NotNull
-	public void setEventDate(Date eventDate) {
-		this.eventDate = eventDate;
-	}
-
-//	public Timeline getEventTimeline() {
-//		return eventTimeline;
-//	}
-//
-//	public void setEventTimeline(Timeline eventTimeline) {
-//		this.eventTimeline = eventTimeline;
-//	}
-
-	public String getAdditionalCost() {
-		return additionalCost;
-	}
-
-	@NotNull
-	public void setAdditionalCost(String additionalCost) {
-		this.additionalCost = additionalCost;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	@NotNull
-	@NotBlank
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Time getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(Time startTime) {
-		this.startTime = startTime;
-	}
-
-	public String isMultiplePhotographers() {
-		return multiplePhotographers;
-	}
-
-	@NotNull
-	public void setMultiplePhotographers(String hasMultiple) {
-		this.multiplePhotographers = hasMultiple;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((additionalCost == null) ? 0 : additionalCost.hashCode());
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((eventDate == null) ? 0 : eventDate.hashCode());
-		result = prime * result + eventId;
-		result = prime * result + ((eventType == null) ? 0 : eventType.hashCode());
-		result = prime * result + ((multiClient == null) ? 0 : multiClient.hashCode());
-		result = prime * result + ((multiplePhotographers == null) ? 0 : multiplePhotographers.hashCode());
-		result = prime * result + ((photographers == null) ? 0 : photographers.hashCode());
-		result = prime * result + ((startTime == null) ? 0 : startTime.hashCode());
+		result = prime * result + ((eventId == null) ? 0 : eventId.hashCode());
 		return result;
 	}
 
@@ -196,48 +193,19 @@ public class Event implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Event other = (Event) obj;
-		if (additionalCost == null) {
-			if (other.additionalCost != null)
+		if (eventId == null) {
+			if (other.eventId != null)
 				return false;
-		} else if (!additionalCost.equals(other.additionalCost))
-			return false;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
-		if (eventDate == null) {
-			if (other.eventDate != null)
-				return false;
-		} else if (!eventDate.equals(other.eventDate))
-			return false;
-		if (eventId != other.eventId)
-			return false;
-		if (eventType == null) {
-			if (other.eventType != null)
-				return false;
-		} else if (!eventType.equals(other.eventType))
-			return false;
-		if (multiClient == null) {
-			if (other.multiClient != null)
-				return false;
-		} else if (!multiClient.equals(other.multiClient))
-			return false;
-		if (multiplePhotographers == null) {
-			if (other.multiplePhotographers != null)
-				return false;
-		} else if (!multiplePhotographers.equals(other.multiplePhotographers))
-			return false;
-		if (photographers == null) {
-			if (other.photographers != null)
-				return false;
-		} else if (!photographers.equals(other.photographers))
-			return false;
-		if (startTime == null) {
-			if (other.startTime != null)
-				return false;
-		} else if (!startTime.equals(other.startTime))
+		} else if (!eventId.equals(other.eventId))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Event [eventId=" + eventId + ", eventName=" + eventName + ", eventType=" + eventType + ", eventDate="
+				+ eventDate + ", startTime=" + startTime + ", duration=" + duration + ", timeline=" + timeline
+				+ ", multiClient=" + multiClient + ", extraCost=" + extraCost + ", notes=" + notes + ", multiStaff="
+				+ multiStaff + ", photographers=" + photographers + ", clients=" + clients + "]";
 	}
 }

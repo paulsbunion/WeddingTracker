@@ -361,7 +361,7 @@ public class ClientManager {
 		return deleted? foundClient : null;
 	}
 
-	// helper method to delete from database. returns success / falure status
+	// helper method to delete from database. returns success / failure status
 	private boolean deleteClient(Client clientToDelete) {
 		boolean success = false;
 		try {

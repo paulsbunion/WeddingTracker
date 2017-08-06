@@ -141,7 +141,7 @@ public class TimeChunkManager {
 				false, false, false, false, false, false, true);
 	}
 	
-	private TimeChunk findTimeChunk(TimeChunk timeChunk, boolean byChunkId, boolean byTimelineId, boolean byDescription) {
+	private TimeChunk findTimeChunk(TimeChunk timeChunk, boolean byChunkId, boolean byEventId, boolean byDescription) {
 		boolean found = false;
 		openSession();
 		
@@ -149,11 +149,11 @@ public class TimeChunkManager {
 			session.beginTransaction();
 			
 			StringBuilder queryString = new StringBuilder("from TIME_CHUNK where ");
-			buildQuery(queryString, byChunkId, byTimelineId, byDescription);
+			buildQuery(queryString, byChunkId, byEventId, byDescription);
 			
 			Query query = session.createQuery(queryString.toString());
 			System.out.println(query.toString());
-			setQueryVariables(timeChunk, query, byChunkId, byTimelineId, byDescription);
+			setQueryVariables(timeChunk, query, byChunkId, byEventId, byDescription);
 
 			List list = query.list();
 			
@@ -179,18 +179,18 @@ public class TimeChunkManager {
 		return found ? timeChunk : null;
 	}
 	
-	private void buildQuery(StringBuilder queryString, boolean byChunkId, boolean byTimelineId, boolean byDescription) {
+	private void buildQuery(StringBuilder queryString, boolean byChunkId, boolean byEventId, boolean byDescription) {
 		boolean moreThanOne = false;
 		
 		if (byChunkId) {
 			queryString.append("chunkid = :chunkid ");
 			moreThanOne = true;
 		}
-		if (byTimelineId) {
+		if (byEventId) {
 			if (moreThanOne) {
 				queryString.append("AND ");
 			}
-			queryString.append("timelineid = :timelineid ");
+			queryString.append("eventid = :eventid ");
 			moreThanOne = true;			
 		}
 		
@@ -203,12 +203,12 @@ public class TimeChunkManager {
 		}		
 	}
 	
-	private void setQueryVariables(TimeChunk timeChunk, Query query, boolean byChunkId, boolean byTimelineId, boolean byDescription) {
+	private void setQueryVariables(TimeChunk timeChunk, Query query, boolean byChunkId, boolean byEventId, boolean byDescription) {
 		if (byChunkId) {
 			query.setParameter("chunkid", timeChunk.getChunkId());
 		}
-		if (byTimelineId) {
-			query.setParameter("timelineid", timeChunk.getTimeline().getTimelineId());
+		if (byEventId) {
+			query.setParameter("eventid", timeChunk.getTimeline().getEvent().getEventId());
 		}
 		if (byDescription) {
 			query.setParameter("description", timeChunk.getDescription());

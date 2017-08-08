@@ -5,7 +5,7 @@ import java.sql.Time;
 import java.util.Set;
 
 public class TimeChunk implements Serializable {
-	private int chunkId;
+	private String chunkId;
 	private Timeline timeline;
 	private int position;
 	private Time startTime;
@@ -18,7 +18,7 @@ public class TimeChunk implements Serializable {
 	
 	public TimeChunk() {}
 		
-	public TimeChunk(int chunkId, Timeline timeline, int position, Time startTime, Location location, Time duration,
+	public TimeChunk(String chunkId, Timeline timeline, int position, Time startTime, Location location, Time duration,
 			String description, Client client, Set<Photographer> photographers) {
 		this.chunkId = chunkId;
 		this.timeline = timeline;
@@ -31,11 +31,11 @@ public class TimeChunk implements Serializable {
 		this.photographers = photographers;
 	}
 
-	public int getChunkId() {
+	public String getChunkId() {
 		return chunkId;
 	}
 	
-	public void setChunkId(int chunkId) {
+	public void setChunkId(String chunkId) {
 		this.chunkId = chunkId;
 	}
 	
@@ -115,9 +115,8 @@ public class TimeChunk implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + chunkId;
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((timeline == null) ? 0 : timeline.hashCode());
+		result = prime * result + ((chunkId == null) ? 0 : chunkId.hashCode());
+		result = prime * result + ((timeline.getEventId() == null) ? 0 : timeline.getEventId().hashCode());
 		return result;
 	}
 	@Override
@@ -129,26 +128,24 @@ public class TimeChunk implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		TimeChunk other = (TimeChunk) obj;
-		if (chunkId != other.chunkId)
-			return false;
-		if (description == null) {
-			if (other.description != null)
+		if (chunkId == null) {
+			if (other.chunkId != null)
 				return false;
-		} else if (!description.equals(other.description))
+		} else if (!chunkId.equals(other.chunkId))
 			return false;
 		if (timeline == null) {
 			if (other.timeline != null)
 				return false;
-		} else if (!timeline.equals(other.timeline))
+		} else if (!timeline.getEventId().equals(other.timeline.getEventId()))
 			return false;
 		return true;
 	}
 	
 	@Override
 	public String toString() {
-		return "TimeChunk [chunkId=" + chunkId + ", timeline=" + timeline + ", position=" + position + ", startTime="
+		return "TimeChunk [chunkId=" + chunkId + ", position=" + position + ", startTime="
 				+ startTime + ", location=" + location + ", duration=" + duration + ", description=" + description
-				+ ", client=" + client + ", photographers=" + photographers + "]";
+				+ ", client=" + client + "]";
 	}
 
 	

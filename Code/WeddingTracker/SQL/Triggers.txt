@@ -2,39 +2,13 @@
 	TRIGGERS 
  --------------------------------------------------------------------------------------- */
 
-DELIMITER /
 
-/* On insert into TIME_CHUNK, set TIMELINE(TOTALTIME) */
-CREATE OR REPLACE TRIGGER TIME_CHUNK_TRIGGER
-BEFORE INSERT ON TIME_CHUNK
-FOR EACH ROW
-	DECLARE
-		v_oldTime TIME;
-		v_oldId   INT;
-	BEGIN
-		/* update the current timelines total time */
-		SELECT TIMELINE.TOTALTIME, TIMELINE.ID INTO v_oldTime, v_oldId
-		FROM TIMELINE
-		WHERE TIMELINE.ID = :NEW.TIMELINEID;
+DROP TRIGGER IF EXISTS test_trig_insert;
+DROP TRIGGER IF EXISTS test_trig_update;
+DROP TRIGGER IF EXISTS test_trig_delete;
+DROP TRIGGER IF EXISTS timeline_update_totaltime;
+DROP TRIGGER IF EXISTS timeline_delete_totaltime;
 
-		/* if old time null but valid id, use this time */
-		IF v_oldId NOT NULL AND v_oldTime IS NULL
-		THEN
-			UPDATE TIMELINE
-			SET TIMELINE.TOTALTIME = :NEW.DURATION
-			WHERE TIMELINE.ID = :NEW.TIMELINEID;
-		ELSIF v_oldId NOT NULL
-		THEN
-			UPDATE TIMELINE
-			SET TIMELINE.TOTALTIME = v_oldTime + :NEW.DURATION;
-		END IF;
-	END;
- /
-DELIMETER ;
-
-
-
-DROP TRIGGER IF EXISTS test_trig;
 commit;
 
 DELIMETER |
@@ -49,18 +23,23 @@ FOR EACH ROW
 		SELECT TIMELINE.TOTALTIME
 		INTO _oldTime
 		FROM TIMELINE
-		WHERE TIMELINE.ID = NEW.TIMELINEID;
+		WHERE TIMELINE.EVENTID = NEW.EVENTID;
 
       		UPDATE timeline 
-		SET totaltime = NEW.duration + _oldTime
-		WHERE timeline.ID = NEW.TIMELINEID;
+		SET totaltime = ADDTIME(NEW.duration, _oldTime)
+		WHERE timeline.EVENTID = NEW.EVENTID;
+
+		SELECT TIMELINE.TOTALTIME
+		INTO _oldTime
+		FROM TIMELINE
+		WHERE TIMELINE.EVENTID = NEW.EVENTID;
+
+      		UPDATE EVENT
+		SET DURATION = _oldTime
+		WHERE EVENT.EVENTID = NEW.EVENTID;
         END;
  |
-DELIMETER ;
 
-
-
-DELIMETER |
 
 /* On update into TIME_CHUNK, set TIMELINE(TOTALTIME) + NEW.duration - OLD.duration */
 CREATE TRIGGER test_trig_update
@@ -72,17 +51,27 @@ FOR EACH ROW
 		SELECT TIMELINE.TOTALTIME
 		INTO _oldTime
 		FROM TIMELINE
-		WHERE TIMELINE.ID = NEW.TIMELINEID;
+		WHERE TIMELINE.EVENTID = NEW.EVENTID;
 
       		UPDATE timeline 
-		SET totaltime = NEW.duration + _oldTime - OLD.duration
-		WHERE timeline.ID = NEW.TIMELINEID;
+		SET totaltime = ADDTIME(NEW.duration, _oldTime)
+		WHERE timeline.EVENTID = NEW.EVENTID;
+
+		UPDATE timeline 
+		SET totaltime = SUBTIME(totaltime, OLD.duration)
+		WHERE timeline.EVENTID = NEW.EVENTID;
+
+		SELECT TIMELINE.TOTALTIME
+		INTO _oldTime
+		FROM TIMELINE
+		WHERE TIMELINE.EVENTID = NEW.EVENTID;
+
+      		UPDATE EVENT
+		SET DURATION = _oldTime
+		WHERE EVENT.EVENTID = NEW.EVENTID;
         END;
  |
-DELIMETER ;
 
-
-DELIMETER |
 
 /* On delete into TIME_CHUNK, set TIMELINE(TOTALTIME) - OLD.duration */
 CREATE TRIGGER test_trig_delete
@@ -94,14 +83,61 @@ FOR EACH ROW
 		SELECT TIMELINE.TOTALTIME
 		INTO _oldTime
 		FROM TIMELINE
-		WHERE TIMELINE.ID = OLD.TIMELINEID;
+		WHERE TIMELINE.EVENTID = OLD.EVENTID;
 
       		UPDATE timeline 
-		SET totaltime = _oldTime - OLD.duration
-		WHERE timeline.ID = OLD.TIMELINEID;
+		SET totaltime = SUBTIME(_oldTime, OLD.duration)
+		WHERE timeline.EVENTID = OLD.EVENTID;
+
+		SELECT TIMELINE.TOTALTIME
+		INTO _oldTime
+		FROM TIMELINE
+		WHERE TIMELINE.EVENTID = OLD.EVENTID;
+
+      		UPDATE EVENT
+		SET DURATION = _oldTime
+		WHERE EVENT.EVENTID = OLD.EVENTID;
         END;
  |
 DELIMETER ;
+
+
+
+
+
+CREATE TRIGGER timeline_update_totaltime
+AFTER UPDATE ON TIMELINE
+FOR EACH ROW
+	BEGIN
+	DECLARE _oldTime TIME;
+		
+		SELECT EVENT.DURATION
+		INTO _oldTime
+		FROM EVENT
+		WHERE EVENT.EVENTID = NEW.EVENTID;
+
+      		UPDATE EVENT 
+		SET EVENT.DURATION = NEW.TOTALTIME
+		WHERE EVENT.EVENTID = NEW.EVENTID;
+        END;
+ |
+
+CREATE TRIGGER timeline_delete_totaltime
+AFTER DELETE ON TIMELINE
+FOR EACH ROW
+	BEGIN
+	DECLARE _oldTime TIME;
+		
+		SELECT EVENT.DURATION
+		INTO _oldTime
+		FROM EVENT
+		WHERE EVENT.EVENTID = EVENTID;
+
+      		UPDATE EVENT 
+		SET DURATION = SEC_TO_TIME(0)
+		WHERE EVENT.EVENTID = EVENTID;
+        END;
+ |
 
 SELECT * FROM TIMELINE;
 
@@ -126,3 +162,44 @@ SELECT * FROM TIMELINE;
 
 
  COMMIT;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* On insert into TIME_CHUNK, set TIMELINE(TOTALTIME) + NEW.duration */
+CREATE TRIGGER test_trig_insert
+AFTER INSERT ON TIME_CHUNK
+FOR EACH ROW
+	BEGIN
+	DECLARE _oldTime TIME;
+		
+		SELECT TIMELINE.TOTALTIME
+		INTO _oldTime
+		FROM TIMELINE
+		WHERE TIMELINE.EVENTID = NEW.EVENTID;
+
+      		UPDATE timeline 
+		SET totaltime = ADDTIME(NEW.duration, _oldTime)
+		WHERE timeline.EVENTID = NEW.EVENTID;
+        END;
+ |
+DELIMETER ;
+
+

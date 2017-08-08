@@ -4,7 +4,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
-    <class name="main.java.com.defrainphoto.weddingtracker.model.Photographer" table="Photographer">
+    <class name="main.java.com.defrainphoto.weddingtracker.model.Photographer" table="Photographer" >
         <id name="staffId" column="STAFFID">
             <generator class="identity"/>
         </id>

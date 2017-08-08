@@ -5,9 +5,13 @@ import static org.junit.Assert.fail;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.event.DocumentEvent.EventType;
 
@@ -17,12 +21,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.com.defrainphoto.weddingtracker.model.Client;
 import main.java.com.defrainphoto.weddingtracker.model.Event;
 import main.java.com.defrainphoto.weddingtracker.model.EventManager;
 import main.java.com.defrainphoto.weddingtracker.model.HibernateUtil;
 import main.java.com.defrainphoto.weddingtracker.model.TimeChunk;
-import main.java.com.defrainphoto.weddingtracker.model.TimeChunkManager;
 import main.java.com.defrainphoto.weddingtracker.model.Timeline;
 import main.java.com.defrainphoto.weddingtracker.model.TimelineManager;
 
@@ -46,13 +48,15 @@ public class TimelineManagerTest {
 	public void setUp() {
 		timelineManager = new TimelineManager();
 		createEvent();
+		createTimeline();
 		createTimeChunks();
 	}
 
 	@After
 	public void tearDown() {
-//		deleteEvent();
-//		deleteTimeChunks();
+		deleteEvent();
+		deleteTimeline();
+		deleteTimeChunks();
 	}
 	
 	@Test
@@ -62,6 +66,8 @@ public class TimelineManagerTest {
 		startTime = new Time(0, 0, 0);
 		duration =  new Time(0, 0, 0);
 		extraCost = "";
+		
+		System.out.println("Adding a timeline");
 		
 		try {
 			event = new Event("2", "the 2nd big Event", eventType, date, startTime, duration, null, "n", extraCost, "", "n", null, null);
@@ -95,23 +101,88 @@ public class TimelineManagerTest {
 //		cleanUp(timelineList);
 	}
 	
-//	@Test
-//	public void testGetTimeChunks() {
-//		fail("Not yet implemented");
-//	}
-//	
-//	@Test
-//	public void testSetTimeChunks() {
-//		fail("Not yet implemented");
-//	}
-//	
-//	@Test
-//	public void testAddTimechunk() {
-//		fail("Not yet implemented");
-//	}
-//	
+	@Test
+	public void testAddTimechunk() {
+		Time sTime = new Time(1, 0, 0);
+		Time dur = new Time(0, 30, 0);
+//		session.close();
+		
+		System.out.println(" the error begins here");
+		System.out.println("timeline: " );
+		System.out.println(timeline.toString());
+//		 //create a timechunk
+		TimeChunk addedChunk = new TimeChunk("4", timeline, 1, sTime, null, dur, "first chunk", null, null);
+		System.out.println("the timeline: " + timeline.toString());
+		timelineManager.addTimechunk(timeline, addedChunk);
+//		TimeChunk addedChunk = timelineManager.timeChunkManager.addTimeChunk(new TimeChunk("4", 
+//				timeline, 1, sTime, null, dur, "first chunk", null, null));
+		System.out.println("the added chunk");
+		System.out.println(addedChunk);
+		TimeChunk foundChunk = timelineManager.timeChunkManager.getTimeChunkByIdAndTimeline(addedChunk);
+		System.out.println("the found chunk");
+		System.out.println(foundChunk);
+		// ensure added
+		assertEquals("did not find the added chunk: ", addedChunk, foundChunk);
+	}
+	
+	
+	@Test
+	public void testGetTimeChunks() {
+		// event
+		
+		Set<TimeChunk> datatest = timelineManager.getTimeChunks(timeline);
+		System.out.println("timeline size: " + datatest.toString());
+		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+		
+		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+		assertEquals("should have 3 chunks", 3, data.size());
+		for (int i = 0; i < data.size(); i++) {
+			assertEquals("invalid chunk id",data.get(i).getChunkId() , "" + (i + 1));
+		}
+	}
+	
+	
+	@Test
+	public void testSetTimeChunks() {
+		Set<TimeChunk> chunksToAdd = new HashSet<TimeChunk>();
+		
+		// create a set of timechunks
+		Time sTime = new Time(1, 0, 0);
+		Time dur = new Time(0, 30, 0);
+		
+		//create a timechunk
+		TimeChunk addedChunk = new TimeChunk("1", 
+				timeline, 1, sTime, null, dur, "group chunk 1", null, null);
+		chunksToAdd.add(addedChunk);
+		
+		addedChunk = new TimeChunk("2", 
+				timeline, 1, sTime, null, dur, "group chunk 2", null, null);
+		chunksToAdd.add(addedChunk);
+		
+		addedChunk = new TimeChunk("3", 
+				timeline, 1, sTime, null, dur, "group chunk 3", null, null);
+		chunksToAdd.add(addedChunk);
+		
+		addedChunk = new TimeChunk("4", 
+				timeline, 1, sTime, null, dur, "group chunk 4", null, null);
+		chunksToAdd.add(addedChunk);
+		
+		// add all chunks
+		timelineManager.setTimeChunks(timeline, chunksToAdd);
+		
+		// get the addeed chunks
+		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+		
+		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+		for (int i = 0; i < data.size(); i++) {
+			assertEquals("invalid chunk data",data.get(i).getDescription() , "group chunk " + (i + 1));
+		}
+	}
+	
+	
 //	@Test
 //	public void testRemoveTimechunk() {
+//		
 //		fail("Not yet implemented");
 //	}
 //	
@@ -219,8 +290,6 @@ public class TimelineManagerTest {
 			session.saveOrUpdate(event);
 			session.getTransaction().commit();
 			System.out.println("Event Created!");
-			
-			closeSession();
 		}
 		
 		catch (Exception e) {
@@ -228,22 +297,51 @@ public class TimelineManagerTest {
 			System.out.println("Could not create object");
 		}
 		
+		finally {
+			closeSession();
+		}
+		
+	}
+	
+	private void createTimeline() {		
+		//create a timeline
+		startTime = new Time(11, 0, 0);
+		duration = new Time(0, 0, 0);
+		timeline = new Timeline(event.getEventId(), event, null, startTime, duration);
+		try {
+			openSession();
+			System.out.println("creating a timeline");
+			session.beginTransaction();
+			session.createSQLQuery("insert into timeline(eventid, starttime)" + 
+					" values(1, '12:30:00')").executeUpdate();
+			session.getTransaction().commit();
+			closeSession();
+		}
+		catch (Exception e) {}
+		finally {
+			closeSession();
+		}
 	}
 	
 	private void createTimeChunks() {
-		openSession();
-		System.out.println("creating time chunks");
-		session.beginTransaction();
-		session.createSQLQuery("insert into time_chunk(chunkid, eventid, position, starttime)" + 
-				" values(1, 2, 1, '12:30:00')").executeUpdate();
-		session.createSQLQuery("insert into time_chunk(chunkid, eventid, position, starttime)" + 
-				" values(2, 2, 2, '13:00:00')").executeUpdate();
-		session.createSQLQuery("insert into time_chunk(chunkid, eventid, position, starttime)" + 
-				" values(3, 2, 3, '13:30:00')").executeUpdate();
-		System.out.println("done creating chunks");
-		session.getTransaction().commit();
-		
-		closeSession();
+		try {
+			openSession();
+			
+			System.out.println("creating time chunks");
+			session.beginTransaction();
+			session.createSQLQuery("insert into time_chunk(chunkid, eventid, position, starttime, duration)" + 
+					" values(1, 1, 1, '12:30:00', '00:20:00')").executeUpdate();
+			session.createSQLQuery("insert into time_chunk(chunkid, eventid, position, starttime, duration)" + 
+					" values(2, 1, 2, '13:00:00', '00:30:00')").executeUpdate();
+			session.createSQLQuery("insert into time_chunk(chunkid, eventid, position, starttime, duration)" + 
+					" values(3, 1, 3, '13:30:00', '00:45:00')").executeUpdate();
+			System.out.println("done creating chunks");
+			session.getTransaction().commit();
+		}
+		catch (Exception e) {}
+		finally {
+			closeSession();
+		}
 	}
 	
 	private void deleteEvent() {
@@ -254,19 +352,24 @@ public class TimelineManagerTest {
 		System.out.println("Name: " + Event.class.getName());
 		session.getTransaction().commit();
 		
-//		session.beginTransaction();
-//		session.createQuery("delete from " + EventType.class.getName());
-//		session.getTransaction().commit();
-		
 		closeSession();
 	}
 
+	private void deleteTimeline() {
+		openSession();
+		
+		session.beginTransaction();
+		session.createQuery("delete from " + Timeline.class.getName()).executeUpdate();
+		session.getTransaction().commit();
+
+		closeSession();		
+	}
 
 	private void deleteTimeChunks() {
 		openSession();
 		
 		session.beginTransaction();
-		session.createQuery("delete from " + TimeChunk.class.getName());
+		session.createQuery("delete from " + TimeChunk.class.getName()).executeUpdate();
 		session.getTransaction().commit();
 
 		closeSession();		

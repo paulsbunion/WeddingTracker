@@ -4,9 +4,9 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
-    <class name="main.java.com.defrainphoto.weddingtracker.model.TimeChunk" table="TIME_CHUNK">
+    <class name="main.java.com.defrainphoto.weddingtracker.model.TimeChunk" table="TIME_CHUNK" >
     	<composite-id>
-    		<key-many-to-one name="timeline" class="main.java.com.defrainphoto.weddingtracker.model.Timeline" column="EVENTID"/>
+    		<key-many-to-one name="timeline" class="main.java.com.defrainphoto.weddingtracker.model.Timeline" column="EVENTID" />
     		<key-property name="chunkId" column="CHUNKID"/>
     	</composite-id>
 <!--         <id name="chunkId" column="CHUNKID"> -->
@@ -17,7 +17,7 @@
 <!--             <column name="TIMELINEID"/> -->
 <!--         </property> -->
         
-        <many-to-one name="timeline" class="main.java.com.defrainphoto.weddingtracker.model.Timeline" column="EVENTID" insert="false" update="false"/>
+        <many-to-one name="timeline" class="main.java.com.defrainphoto.weddingtracker.model.Timeline" column="EVENTID" insert="false" update="false" />
 <!-- 		<many-to-one name="timeline" class="main.java.com.defrainphoto.weddingtracker.model.Timeline" column="TIMELINEID"/> -->
         
         <property name="position">

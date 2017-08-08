@@ -4,7 +4,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 	
 <hibernate-mapping>
-    <class name="main.java.com.defrainphoto.weddingtracker.model.Timeline" table="TIMELINE">
+    <class name="main.java.com.defrainphoto.weddingtracker.model.Timeline" table="TIMELINE" >
         <id name="eventId" column="EVENTID" >
             <generator class="foreign">
             	<param name="property">event</param>

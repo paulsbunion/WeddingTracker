@@ -1,18 +1,20 @@
 package main.java.com.defrainphoto.weddingtracker.model;
 
 import java.sql.Time;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityExistsException;
 
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
 public class TimelineManager {
 	private Session session;
-	private static TimeChunkManager timeChunkManager;
+	public static TimeChunkManager timeChunkManager = new TimeChunkManager();
 	
 	public Timeline addTimeline(Timeline newTimeline) {
 		boolean found = false;
@@ -53,10 +55,16 @@ public class TimelineManager {
 	}
 	
 	public Set<TimeChunk> getTimeChunks(Timeline timeline) {
+		boolean found = false;
+		Set<TimeChunk> foundChunks = null;
 		Timeline result;
 		
 		result = findTimeline(timeline, true);
-		return timeline.getTimeChunks();
+		if (result != null) {
+			found = true;
+			foundChunks = new HashSet<TimeChunk>(timeChunkManager.getTimeChunksByTimeline(timeline)); 
+		}
+		return found ? foundChunks : null;
 	}
 	
 	public Timeline setTimeChunks(Timeline timeline, Set<TimeChunk> timeChunks) {
@@ -67,6 +75,9 @@ public class TimelineManager {
 		openSession();
 		try {
 			session.beginTransaction();
+			// delete old
+			session.delete(timeline);
+			// save new timeline
 			session.saveOrUpdate(timeline);
 			session.getTransaction().commit();
 		}
@@ -86,28 +97,34 @@ public class TimelineManager {
 	}
 	
 	public Timeline addTimechunk (Timeline timeline, TimeChunk newChunk) {
-		Set<TimeChunk> oldChunks = timeline.getTimeChunks();
-		
-		timeline.getTimeChunks().add(newChunk);
-		
-		openSession();
-		try {
-			session.beginTransaction();
-			session.saveOrUpdate(timeline);
-			session.getTransaction().commit();
-		}
-		
-		catch (HibernateException e) {
-			e.printStackTrace();
-			timeline.setTimeChunks(oldChunks);
-			throw(e);
-		}
-		
-		finally {
-			session.getTransaction().rollback();
-			closeSession();
-		}
-		
+		newChunk.setTimeline(timeline);
+		timeChunkManager.addTimeChunk(newChunk);
+//		Set<TimeChunk> oldChunks = timeline.getTimeChunks();
+//		Set<TimeChunk> timeChunks = timeline.getTimeChunks();
+//		if (timeChunks == null) {
+//			timeChunks = new HashSet<TimeChunk>();
+//		}
+//		
+//		timeChunks.add(newChunk);
+//		System.out.println("not null here: " + newChunk.toString());
+//		openSession();
+//		try {
+//			session.beginTransaction();
+//			session.saveOrUpdate(timeline);
+//			session.getTransaction().commit();
+//		}
+//		
+//		catch (HibernateException e) {
+//			e.printStackTrace();
+//			timeline.setTimeChunks(oldChunks);
+//			throw(e);
+//		}
+//		
+//		finally {
+//			session.getTransaction().rollback();
+//			closeSession();
+//		}
+//		
 		return timeline;
 	}
 	
@@ -219,6 +236,8 @@ public class TimelineManager {
 		List list = query.list();
 		
 		session.getTransaction().commit();
+		Hibernate.initialize(timeline.getTimeChunks());
+		
 		System.out.println("found one? ");
 		
 		if (list != null && !list.isEmpty()) {

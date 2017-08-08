@@ -4,6 +4,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ public class TimeChunkManager {
 	Session session;
 
 	public TimeChunk addTimeChunk(TimeChunk newChunk) {
+		System.out.println("adding a timechunk: " + newChunk.toString());
 		boolean found = false;
 		TimeChunk temp = null;
 		
@@ -27,17 +29,17 @@ public class TimeChunkManager {
 		temp = findTimeChunk(newChunk, false, true, true);
 		
 		if (temp != null) {
-			throw new EntityExistsException("Entity already Exists:  " + newChunk .toString());
+//			throw new EntityExistsException("Entity already Exists:  " + newChunk .toString());
 			}
 		
 		
 		// else, open session, save, and commit
 		else {
-			openSession();
 			
-			int newId = getNextId(newChunk);
+			String newId = getNextId(newChunk);
 			newChunk.setChunkId(newId);
 			
+			openSession();
 			session.beginTransaction();
 			session.save(newChunk);
 			session.getTransaction().commit();
@@ -52,7 +54,7 @@ public class TimeChunkManager {
 		
 	}
 	
-	private int getNextId(TimeChunk newChunk) {
+	private String getNextId(TimeChunk newChunk) {
 		int nextId = -1;
 		List<TimeChunk> foundChunks = new ArrayList<TimeChunk>(); 
 		
@@ -61,7 +63,7 @@ public class TimeChunkManager {
 		try {
 			session.beginTransaction();
 			
-			StringBuilder queryString = new StringBuilder("from TIME_CHUNK where ");
+			StringBuilder queryString = new StringBuilder("from TimeChunk where ");
 			buildQuery(queryString, false, true, false);
 			
 			Query query = session.createQuery(queryString.toString());
@@ -75,8 +77,11 @@ public class TimeChunkManager {
 			if (list != null && !list.isEmpty()) {
 				foundChunks = (List<TimeChunk>) list;
 				Collections.sort(foundChunks, chunkIdComparator);
-				nextId = foundChunks.get(foundChunks.size() - 1).getChunkId();
+				nextId = Integer.valueOf(foundChunks.get(foundChunks.size() - 1).getChunkId());
 				nextId++;
+			}
+			else if (list.isEmpty()) {
+				nextId = 1;
 			}
 		}
 		
@@ -87,9 +92,43 @@ public class TimeChunkManager {
 		
 		closeSession();
 		
-		return nextId;
+		return "" + nextId;
 	}
 
+	public Set<TimeChunk> getTimeChunksByTimeline(Timeline timeline) {
+		Set<TimeChunk> foundChunks = new HashSet<TimeChunk>(); 
+		openSession();
+		
+		try {
+			session.beginTransaction();
+			
+			StringBuilder queryString = new StringBuilder("from TimeChunk where ");
+			buildQuery(queryString, false, true, false);
+			
+			Query query = session.createQuery(queryString.toString());
+			System.out.println(query.toString());
+			setQueryVariables(timeline, query);
+
+			List list = query.list();
+			
+			session.getTransaction().commit();
+			
+			if (list != null && !list.isEmpty()) {
+//				foundChunks = (Set<TimeChunk>) list;
+				foundChunks.addAll(list);
+			}
+		}
+		
+		catch (HibernateException e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+		}
+		finally {
+			closeSession();
+		}
+		return foundChunks;
+	}
+	
 	public TimeChunk getTimeChunkByDescriptionAndTimeline(TimeChunk timeChunk) {
 		TimeChunk result;
 		
@@ -100,9 +139,9 @@ public class TimeChunkManager {
 	
 	public TimeChunk getTimeChunkByIdAndTimeline(TimeChunk timeChunk) {
 		TimeChunk result;
-		
+		System.out.println("timeline and id: " + timeChunk.getTimeline().getEventId() + " " + timeChunk.getChunkId());
 		result = findTimeChunk(timeChunk, true, true, false);
-		
+//		System.out.println("found it: " + result.toString());
 		return result; 
 	}
 	
@@ -143,24 +182,31 @@ public class TimeChunkManager {
 	
 	private TimeChunk findTimeChunk(TimeChunk timeChunk, boolean byChunkId, boolean byEventId, boolean byDescription) {
 		boolean found = false;
+
 		openSession();
 		
 		try {
 			session.beginTransaction();
 			
-			StringBuilder queryString = new StringBuilder("from TIME_CHUNK where ");
+			StringBuilder queryString = new StringBuilder("from TimeChunk where ");
 			buildQuery(queryString, byChunkId, byEventId, byDescription);
-			
+			System.out.println("before open");
 			Query query = session.createQuery(queryString.toString());
+			System.out.println("after open 1");
 			System.out.println(query.toString());
+			System.out.println("after open 2");
 			setQueryVariables(timeChunk, query, byChunkId, byEventId, byDescription);
 
+			System.out.println("after open 3");
 			List list = query.list();
-			
+			System.out.println("after open 4");
 			session.getTransaction().commit();
+			System.out.println("after open");
 			
 			if (list != null && !list.isEmpty()) {
-				timeChunk = (TimeChunk) list.get(0);
+				TimeChunk temp = (TimeChunk) list.get(0);
+				System.out.println("found one: " + temp.toString());
+				timeChunk = temp;
 				found = true;
 			}
 			
@@ -173,8 +219,9 @@ public class TimeChunkManager {
 			e.printStackTrace();
 			session.getTransaction().rollback();
 		}
-		
-		closeSession();
+		finally {
+			closeSession();
+		}
 		
 		return found ? timeChunk : null;
 	}
@@ -205,15 +252,25 @@ public class TimeChunkManager {
 	
 	private void setQueryVariables(TimeChunk timeChunk, Query query, boolean byChunkId, boolean byEventId, boolean byDescription) {
 		if (byChunkId) {
+			System.out.println("Setting chunkid");
 			query.setParameter("chunkid", timeChunk.getChunkId());
 		}
 		if (byEventId) {
-			query.setParameter("eventid", timeChunk.getTimeline().getEvent().getEventId());
+			System.out.println("Setting eventid");
+			System.out.println(timeChunk.getTimeline().getEventId());
+			query.setParameter("eventid", timeChunk.getTimeline().getEventId());
 		}
 		if (byDescription) {
+			System.out.println("Setting description");
 			query.setParameter("description", timeChunk.getDescription());
 		}
 		
+	}
+	
+	private void setQueryVariables(Timeline timeline, Query query) {
+		System.out.println("Setting eventid");
+		System.out.println(timeline.getEventId());
+		query.setParameter("eventid", timeline.getEventId());
 	}
 	
 	private TimeChunk setTimeChunkHelper(TimeChunk timeChunk, Integer newPosition, Time newStartTime, Location newLocation, Time newDuration,
@@ -376,7 +433,7 @@ public class TimeChunkManager {
 		}
 	}
 	
-	Comparator<TimeChunk> chunkIdComparator = new Comparator<TimeChunk>() {
+	public Comparator<TimeChunk> chunkIdComparator = new Comparator<TimeChunk>() {
 		
 		public int compare(TimeChunk o1, TimeChunk o2) {
 			return Integer.valueOf(o1.getChunkId()).compareTo(Integer.valueOf(o2.getChunkId()));

@@ -14,7 +14,7 @@ import org.hibernate.Session;
 
 public class TimelineManager {
 	private Session session;
-	public static TimeChunkManager timeChunkManager = new TimeChunkManager();
+	public TimeChunkManager timeChunkManager = new TimeChunkManager();
 	
 	public Timeline addTimeline(Timeline newTimeline) {
 		boolean found = false;
@@ -38,7 +38,7 @@ public class TimelineManager {
 			closeSession();
 			
 			System.out.println("going to find");
-			temp = findTimeline(newTimeline, false);
+			temp = findTimeline(newTimeline, true);
 			newTimeline.setEvent(temp.getEvent()); 
 			
 			found = true;
@@ -284,5 +284,24 @@ public class TimelineManager {
 	
 	private void closeSession() {
 		session.close();
+	}
+
+	public boolean deleteTimeChunk(TimeChunk timeChunk) {
+		boolean success = false;
+		try {
+			openSession();
+			
+			session.beginTransaction();
+			session.delete(timeChunk);
+			session.getTransaction().commit();
+			closeSession();
+			success = true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return success;
+		
 	}
 }

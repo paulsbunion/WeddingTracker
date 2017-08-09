@@ -205,7 +205,6 @@ public class Event implements Serializable{
 	public String toString() {
 		return "Event [eventId=" + eventId + ", eventName=" + eventName + ", eventType=" + eventType + ", eventDate="
 				+ eventDate + ", startTime=" + startTime + ", duration=" + duration + ", timeline=" + timeline
-				+ ", multiClient=" + multiClient + ", extraCost=" + extraCost + ", notes=" + notes + ", multiStaff="
-				+ multiStaff + ", photographers=" + photographers + ", clients=" + clients + "]";
+				+ ", extraCost=" + extraCost + ", notes=" + notes + "]";
 	}
 }

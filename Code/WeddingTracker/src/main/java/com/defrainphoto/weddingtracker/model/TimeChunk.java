@@ -145,7 +145,7 @@ public class TimeChunk implements Serializable {
 	public String toString() {
 		return "TimeChunk [chunkId=" + chunkId + ", position=" + position + ", startTime="
 				+ startTime + ", location=" + location + ", duration=" + duration + ", description=" + description
-				+ ", client=" + client + "]";
+				+ ", client=" + client + ", photographers=" + photographers + "]";
 	}
 
 	

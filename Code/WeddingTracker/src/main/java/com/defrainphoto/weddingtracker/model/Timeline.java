@@ -92,7 +92,7 @@ public class Timeline implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Timeline [eventId=" + eventId + ", timeChunks=" + timeChunks + ", startTime=" + startTime
+		return "Timeline [timeChunks=" + timeChunks + ", startTime=" + startTime
 				+ ", totalTime=" + totalTime + "]";
 	}
 	

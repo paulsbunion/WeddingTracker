@@ -124,6 +124,11 @@ public class Location implements Serializable{
 			return false;
 		return true;
 	}
+	@Override
+	public String toString() {
+		return "Location [locationId=" + locationId + ", city=" + city + ", state=" + state + ", zip=" + zip
+				+ ", address=" + address + ", description=" + description + "]";
+	}
 	
 
 }

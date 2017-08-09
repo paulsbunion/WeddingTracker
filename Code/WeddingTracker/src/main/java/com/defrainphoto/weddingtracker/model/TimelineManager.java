@@ -35,6 +35,7 @@ public class TimelineManager {
 			System.out.println(newTimeline.toString());
 			session.save(newTimeline);
 			session.getTransaction().commit();
+			Hibernate.initialize(newTimeline);
 			closeSession();
 			
 			System.out.println("going to find");
@@ -84,12 +85,13 @@ public class TimelineManager {
 		
 		catch (HibernateException e) {
 			e.printStackTrace();
+			session.getTransaction().rollback();
 			timeline.setTimeChunks(oldChunks);
 			throw(e);
 		}
 		
 		finally {
-			session.getTransaction().rollback();
+			Hibernate.initialize(timeline);
 			closeSession();
 		}
 		
@@ -154,12 +156,13 @@ public class TimelineManager {
 		
 		catch (HibernateException e) {
 			e.printStackTrace();
+			session.getTransaction().rollback();
 			timeline.setTimeChunks(oldChunks);
 			throw(e);
 		}
 		
 		finally {
-			session.getTransaction().rollback();
+			Hibernate.initialize(timeline);
 			closeSession();
 		}
 		
@@ -253,6 +256,7 @@ public class TimelineManager {
 			found = false;
 		}
 		
+		Hibernate.initialize(timeline);
 		closeSession();
 		
 		return found ? timeline : null;

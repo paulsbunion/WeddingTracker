@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityExistsException;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -30,6 +31,7 @@ public class PhotographerManager {
 			
 			temp = findPhotographer(newPhotographer, false, true, true);
 			newPhotographer.setStaffId(temp.getStaffId()); 
+			Hibernate.initialize(newPhotographer);
 			closeSession();
 			found = true;
 		}
@@ -78,6 +80,7 @@ public class PhotographerManager {
 			found = false;
 		}
 		
+		Hibernate.initialize(photog);
 		closeSession();
 		
 		return found ? photog : null;
@@ -165,6 +168,7 @@ public class PhotographerManager {
 				session.saveOrUpdate(foundPhotog);
 				session.getTransaction().commit();
 				
+				Hibernate.initialize(photog);
 				closeSession();
 				
 				valid = true;
@@ -218,6 +222,7 @@ public class PhotographerManager {
 						session.saveOrUpdate(foundPhotog);
 						session.getTransaction().commit();
 						
+						Hibernate.initialize(photog);
 						closeSession();
 						
 						valid = true;

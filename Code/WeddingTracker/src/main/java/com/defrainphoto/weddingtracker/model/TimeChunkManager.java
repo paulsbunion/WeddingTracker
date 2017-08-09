@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.persistence.EntityExistsException;
 
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateError;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -46,6 +47,8 @@ public class TimeChunkManager {
 			
 			temp = findTimeChunk(newChunk, true, true, false);
 			newChunk = temp; 
+			
+			Hibernate.initialize(newChunk);
 			closeSession();
 			found = true;
 		}
@@ -124,6 +127,11 @@ public class TimeChunkManager {
 			session.getTransaction().rollback();
 		}
 		finally {
+			Hibernate.initialize(foundChunks);
+			for (TimeChunk chunk : foundChunks) {
+				Hibernate.initialize(chunk.getPhotographers());
+				Hibernate.initialize(chunk.getClient());
+			}
 			closeSession();
 		}
 		return foundChunks;
@@ -220,6 +228,7 @@ public class TimeChunkManager {
 			session.getTransaction().rollback();
 		}
 		finally {
+			Hibernate.initialize(timeChunk);
 			closeSession();
 		}
 		
@@ -387,9 +396,19 @@ public class TimeChunkManager {
 				openSession();
 					
 				session.beginTransaction();
+				if (updateClient) {
+					System.out.println("the new client added:");
+					System.out.println(newClient.toString());
+					System.out.println(foundTimeChunk);
+				}
 				session.saveOrUpdate(foundTimeChunk);
 				session.getTransaction().commit();
 				
+				// persist to avoid lazy error
+				Hibernate.initialize(timeChunk);
+				if (updateClient) {
+					Hibernate.initialize(timeChunk.getClient());
+				}
 				closeSession();
 				
 				valid = true;

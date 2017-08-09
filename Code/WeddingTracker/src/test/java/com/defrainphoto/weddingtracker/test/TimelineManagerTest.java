@@ -15,12 +15,15 @@ import java.util.Set;
 
 import javax.swing.event.DocumentEvent.EventType;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.type.ListType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import main.java.com.defrainphoto.weddingtracker.model.Client;
+import main.java.com.defrainphoto.weddingtracker.model.ClientManager;
 import main.java.com.defrainphoto.weddingtracker.model.Event;
 import main.java.com.defrainphoto.weddingtracker.model.EventManager;
 import main.java.com.defrainphoto.weddingtracker.model.HibernateUtil;
@@ -31,6 +34,7 @@ import main.java.com.defrainphoto.weddingtracker.model.TimelineManager;
 public class TimelineManagerTest {
 	TimelineManager timelineManager;
 	EventManager eventManager;
+	ClientManager clientManager;
 	
 	Timeline timeline;
 	Event event;
@@ -46,6 +50,7 @@ public class TimelineManagerTest {
 	@Before
 	public void setUp() {
 		timelineManager = new TimelineManager();
+		clientManager = new ClientManager();
 		createEvent();
 		createTimeline();
 		createTimeChunks();
@@ -56,251 +61,273 @@ public class TimelineManagerTest {
 		deleteEvent();
 		deleteTimeline();
 		deleteTimeChunks();
+		deleteClients();
 	}
 	
-	@Test
-	public void testAddTimeline() {
-		List<Timeline> timelineList = new LinkedList<Timeline>();
-		date = new Date(2017, 06, 15);
-		startTime = new Time(0, 0, 0);
-		duration =  new Time(0, 0, 0);
-		extraCost = "";
-		
-		System.out.println("Adding a timeline");
-		
-			event = new Event("2", "the 2nd big Event", eventType, date, startTime, duration, null, "n", extraCost, "", "n", null, null);
-			System.out.println(event.toString());
-			openSession();
-			session.beginTransaction();
-			session.save(event);
-			session.getTransaction().commit();
-			closeSession();
-			
-			Time startTime = new Time(12, 30, 0);
-			timeline = new Timeline(event.getEventId(), event, null, startTime, duration);
-			timelineList.add(timeline);
-			System.out.println("getting ready to add a timeline");
-			System.out.println(event.toString());
-			System.out.println(timeline.toString());
-			timelineManager.addTimeline(timeline);
-			System.out.println("Timeline added!");
-			
-			Timeline retreived;
-			retreived = timelineManager.getTimelineByEventId(timeline);
-			
-			assertEquals("did not add Event", timeline, retreived);
-		
-		// clean up
-//		cleanUp(timelineList);
-	}
+//	@Test
+//	public void testAddTimeline() {
+//		List<Timeline> timelineList = new LinkedList<Timeline>();
+//		date = new Date(2017, 06, 15);
+//		startTime = new Time(0, 0, 0);
+//		duration =  new Time(0, 0, 0);
+//		extraCost = "";
+//		
+//		System.out.println("Adding a timeline");
+//		
+//			event = new Event("2", "the 2nd big Event", eventType, date, startTime, duration, null, "n", extraCost, "", "n", null, null);
+//			System.out.println(event.toString());
+//			openSession();
+//			session.beginTransaction();
+//			session.save(event);
+//			session.getTransaction().commit();
+//			closeSession();
+//			
+//			Time startTime = new Time(12, 30, 0);
+//			timeline = new Timeline(event.getEventId(), event, null, startTime, duration);
+//			timelineList.add(timeline);
+//			System.out.println("getting ready to add a timeline");
+//			System.out.println(event.toString());
+//			System.out.println(timeline.toString());
+//			timelineManager.addTimeline(timeline);
+//			System.out.println("Timeline added!");
+//			
+//			Timeline retreived;
+//			retreived = timelineManager.getTimelineByEventId(timeline);
+//			
+//			assertEquals("did not add Event", timeline, retreived);
+//		
+//		// clean up
+////		cleanUp(timelineList);
+//	}
+//	
+//	@Test
+//	public void testAddTimechunk() {
+//		Time sTime = new Time(1, 0, 0);
+//		Time dur = new Time(0, 30, 0);
+////		session.close();
+//		
+//		System.out.println(" the error begins here");
+//		System.out.println("timeline: " );
+//		System.out.println(timeline.toString());
+////		 //create a timechunk
+//		TimeChunk addedChunk = new TimeChunk("4", timeline, 1, sTime, null, dur, "first chunk", null, null);
+//		System.out.println("the timeline: " + timeline.toString());
+//		timelineManager.addTimechunk(timeline, addedChunk);
+////		TimeChunk addedChunk = timelineManager.timeChunkManager.addTimeChunk(new TimeChunk("4", 
+////				timeline, 1, sTime, null, dur, "first chunk", null, null));
+//		System.out.println("the added chunk");
+//		System.out.println(addedChunk);
+//		TimeChunk foundChunk = timelineManager.timeChunkManager.getTimeChunkByIdAndTimeline(addedChunk);
+//		System.out.println("the found chunk");
+//		System.out.println(foundChunk);
+//		// ensure added
+//		assertEquals("did not find the added chunk: ", addedChunk, foundChunk);
+//	}
+//	
+//	
+//	@Test
+//	public void testGetTimeChunks() {
+//		
+//		Set<TimeChunk> datatest = timelineManager.getTimeChunks(timeline);
+//		System.out.println("timeline size: " + datatest.toString());
+//		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+//		
+//		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+//		assertEquals("should have 3 chunks", 3, data.size());
+//		for (int i = 0; i < data.size(); i++) {
+//			assertEquals("invalid chunk id",data.get(i).getChunkId() , "" + (i + 1));
+//		}
+//	}
+//	
+//	
+//	@Test
+//	public void testSetTimeChunks() {
+//		Set<TimeChunk> chunksToAdd = new HashSet<TimeChunk>();
+//		
+//		// create a set of timechunks
+//		Time sTime = new Time(1, 0, 0);
+//		Time dur = new Time(0, 30, 0);
+//		
+//		//create a timechunk
+//		TimeChunk addedChunk = new TimeChunk("1", 
+//				timeline, 1, sTime, null, dur, "group chunk 1", null, null);
+//		chunksToAdd.add(addedChunk);
+//		
+//		addedChunk = new TimeChunk("2", 
+//				timeline, 1, sTime, null, dur, "group chunk 2", null, null);
+//		chunksToAdd.add(addedChunk);
+//		
+//		addedChunk = new TimeChunk("3", 
+//				timeline, 1, sTime, null, dur, "group chunk 3", null, null);
+//		chunksToAdd.add(addedChunk);
+//		
+//		addedChunk = new TimeChunk("4", 
+//				timeline, 1, sTime, null, dur, "group chunk 4", null, null);
+//		chunksToAdd.add(addedChunk);
+//		
+//		// add all chunks
+//		timelineManager.setTimeChunks(timeline, chunksToAdd);
+//		
+//		// get the addeed chunks
+//		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+//		
+//		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+//		for (int i = 0; i < data.size(); i++) {
+//			assertEquals("invalid chunk data",data.get(i).getDescription() , "group chunk " + (i + 1));
+//		}
+//	}
+//	
+//	
+//	@Test
+//	public void testRemoveTimechunk() {
+//		// get and sort the timechunk data
+//		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+//		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+//		
+//		assertEquals("should have 3 chunks", 3, data.size());
+//		for (int i = 0; i < data.size(); i++) {
+//			assertEquals("invalid chunk id",data.get(i).getChunkId() , "" + (i + 1));
+//		}
+//		
+//		// delete a chunk by name
+//		timelineManager.deleteTimeChunk(data.get(1));
+//		
+//		data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+//		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+//		
+//		assertEquals("should have 2 chunks", 2, data.size());
+//		assertEquals("invalid chunk description", "chunk " + (1), data.get(0).getDescription());
+//		assertEquals("invalid chunk description", "chunk " + (3), data.get(1).getDescription());
+//	}
+//	
+//	
+//	@Test
+//	public void testGetTotalTime() {
+//		// get the timeline
+//		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
+//		Time expectedTime = new Time(1, 35, 0);
+//		
+//		assertEquals("Did not get correct time", expectedTime, eventTimeline.getTotalTime());
+//	}
+//	
+//	@Test
+//	public void testSetStartTime() {
+//		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+//		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+//		Time oldStartTime = new Time(12, 30, 0);
+//		
+//		// ensure correct startTime
+//		assertEquals("Did not get correct startTime", oldStartTime, data.get(0).getStartTime());		
+//		
+//		Time newStartTime = new Time(1, 20, 0);
+//		timelineManager.timeChunkManager.setTimeChunkStartTime(data.get(0), newStartTime);
+//
+//		Time expectedTime = new Time(1, 35, 0);
+//		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
+//		
+//		//ensure correct updated startTime
+//		data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+//		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+//		assertEquals("Did not get correct startTime", newStartTime, data.get(0).getStartTime());
+//		
+//		// ensure totaltime now reflects the updated timechunk
+//		assertEquals("Did not get correct time", expectedTime, eventTimeline.getTotalTime());
+//	}
+//	
+//	@Test
+//	public void testSetDuration() {
+//		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+//		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+//		Time oldDuration = new Time(0, 20, 0);
+//		
+//		// ensure correct duration
+//		assertEquals("Did not get correct duration", oldDuration, data.get(0).getDuration());		
+//		
+//		Time newDuration = new Time(1, 20, 0);
+//		timelineManager.timeChunkManager.setTimeChunkDuration(data.get(0), newDuration);
+//
+//		Time expectedTime = new Time(2, 35, 0);
+//		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
+//		
+//		//ensure correct updated duration
+//		data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+//		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+//		assertEquals("Did not get correct duration", newDuration, data.get(0).getDuration());
+//		
+//		// ensure totaltime now reflects the updated timechunk
+//		assertEquals("Did not get correct time", expectedTime, eventTimeline.getTotalTime());
+//	}
+//	
+//	@Test
+//	public void testSetDescription() {
+//		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+//		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+//		String oldDescription ="chunk 1";
+//		
+//		// ensure correct description
+//		assertEquals("Did not get correct description", oldDescription, data.get(0).getDescription());		
+//		
+//		String newDescription = "chunk 1 updated description";
+//		timelineManager.timeChunkManager.setTimeChunkDescription(data.get(0), newDescription);
+//
+//		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
+//		
+//		//ensure correct updated description
+//		data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+//		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+//		assertEquals("Did not get correct description", newDescription, data.get(0).getDescription());
+//	}
+//
+//	@Test
+//	public void testSetPosition() {
+//		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+//		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+//		int oldPosition = 1;
+//		
+//		// ensure correct position
+//		assertEquals("Did not get correct position", oldPosition, data.get(0).getPosition());		
+//		
+//		int newPosition = 4;
+//		timelineManager.timeChunkManager.setTimeChunkPosition(data.get(0), newPosition);
+//
+//		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
+//		
+//		//ensure correct updated description
+//		data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+//		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+//		assertEquals("Did not get correct position", newPosition, data.get(0).getPosition());
+//	}
 	
 	@Test
-	public void testAddTimechunk() {
-		Time sTime = new Time(1, 0, 0);
-		Time dur = new Time(0, 30, 0);
-//		session.close();
+	public void testSetClient() {
+		Client newClient = new Client("1", "Kevin", "Bacon", "123 E Main St.", "1-614-322-4545", "kevin@Bacon.com", "n");
+		newClient = clientManager.addClient(newClient);
 		
-		System.out.println(" the error begins here");
-		System.out.println("timeline: " );
-		System.out.println(timeline.toString());
-//		 //create a timechunk
-		TimeChunk addedChunk = new TimeChunk("4", timeline, 1, sTime, null, dur, "first chunk", null, null);
-		System.out.println("the timeline: " + timeline.toString());
-		timelineManager.addTimechunk(timeline, addedChunk);
-//		TimeChunk addedChunk = timelineManager.timeChunkManager.addTimeChunk(new TimeChunk("4", 
-//				timeline, 1, sTime, null, dur, "first chunk", null, null));
-		System.out.println("the added chunk");
-		System.out.println(addedChunk);
-		TimeChunk foundChunk = timelineManager.timeChunkManager.getTimeChunkByIdAndTimeline(addedChunk);
-		System.out.println("the found chunk");
-		System.out.println(foundChunk);
-		// ensure added
-		assertEquals("did not find the added chunk: ", addedChunk, foundChunk);
-	}
-	
-	
-	@Test
-	public void testGetTimeChunks() {
-		
-		Set<TimeChunk> datatest = timelineManager.getTimeChunks(timeline);
-		System.out.println("timeline size: " + datatest.toString());
 		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
-		
 		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
-		assertEquals("should have 3 chunks", 3, data.size());
-		for (int i = 0; i < data.size(); i++) {
-			assertEquals("invalid chunk id",data.get(i).getChunkId() , "" + (i + 1));
-		}
-	}
-	
-	
-	@Test
-	public void testSetTimeChunks() {
-		Set<TimeChunk> chunksToAdd = new HashSet<TimeChunk>();
+		Client oldClient = null;
 		
-		// create a set of timechunks
-		Time sTime = new Time(1, 0, 0);
-		Time dur = new Time(0, 30, 0);
+		// ensure correct Client
+		assertEquals("Did not get correct Client", oldClient, data.get(0).getClient());		
 		
-		//create a timechunk
-		TimeChunk addedChunk = new TimeChunk("1", 
-				timeline, 1, sTime, null, dur, "group chunk 1", null, null);
-		chunksToAdd.add(addedChunk);
+		timelineManager.timeChunkManager.setTimeChunkClient(data.get(0), newClient);
+
+		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
 		
-		addedChunk = new TimeChunk("2", 
-				timeline, 1, sTime, null, dur, "group chunk 2", null, null);
-		chunksToAdd.add(addedChunk);
-		
-		addedChunk = new TimeChunk("3", 
-				timeline, 1, sTime, null, dur, "group chunk 3", null, null);
-		chunksToAdd.add(addedChunk);
-		
-		addedChunk = new TimeChunk("4", 
-				timeline, 1, sTime, null, dur, "group chunk 4", null, null);
-		chunksToAdd.add(addedChunk);
-		
-		// add all chunks
-		timelineManager.setTimeChunks(timeline, chunksToAdd);
-		
-		// get the addeed chunks
-		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
-		
-		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
-		for (int i = 0; i < data.size(); i++) {
-			assertEquals("invalid chunk data",data.get(i).getDescription() , "group chunk " + (i + 1));
-		}
-	}
-	
-	
-	@Test
-	public void testRemoveTimechunk() {
-		// get and sort the timechunk data
-		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
-		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
-		
-		assertEquals("should have 3 chunks", 3, data.size());
-		for (int i = 0; i < data.size(); i++) {
-			assertEquals("invalid chunk id",data.get(i).getChunkId() , "" + (i + 1));
-		}
-		
-		// delete a chunk by name
-		timelineManager.deleteTimeChunk(data.get(1));
-		
+		//ensure correct updated client
 		data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
 		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
-		
-		assertEquals("should have 2 chunks", 2, data.size());
-		assertEquals("invalid chunk description", "chunk " + (1), data.get(0).getDescription());
-		assertEquals("invalid chunk description", "chunk " + (3), data.get(1).getDescription());
+		Client foundClient = new Client(data.get(0).getClient());
+		assertEquals("Did not get correct Client", newClient, foundClient);
 	}
 	
-	
-	@Test
-	public void testGetTotalTime() {
-		// get the timeline
-		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
-		Time expectedTime = new Time(1, 35, 0);
-		
-		assertEquals("Did not get correct time", expectedTime, eventTimeline.getTotalTime());
-	}
-	
-	@Test
-	public void testSetStartTime() {
-		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
-		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
-		Time oldStartTime = new Time(12, 30, 0);
-		
-		// ensure correct startTime
-		assertEquals("Did not get correct startTime", oldStartTime, data.get(0).getStartTime());		
-		
-		Time newStartTime = new Time(1, 20, 0);
-		timelineManager.timeChunkManager.setTimeChunkStartTime(data.get(0), newStartTime);
-
-		Time expectedTime = new Time(1, 35, 0);
-		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
-		
-		//ensure correct updated startTime
-		data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
-		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
-		assertEquals("Did not get correct startTime", newStartTime, data.get(0).getStartTime());
-		
-		// ensure totaltime now reflects the updated timechunk
-		assertEquals("Did not get correct time", expectedTime, eventTimeline.getTotalTime());
-	}
-	
-	@Test
-	public void testSetDuration() {
-		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
-		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
-		Time oldDuration = new Time(0, 20, 0);
-		
-		// ensure correct duration
-		assertEquals("Did not get correct duration", oldDuration, data.get(0).getDuration());		
-		
-		Time newDuration = new Time(1, 20, 0);
-		timelineManager.timeChunkManager.setTimeChunkDuration(data.get(0), newDuration);
-
-		Time expectedTime = new Time(2, 35, 0);
-		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
-		
-		//ensure correct updated duration
-		data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
-		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
-		assertEquals("Did not get correct duration", newDuration, data.get(0).getDuration());
-		
-		// ensure totaltime now reflects the updated timechunk
-		assertEquals("Did not get correct time", expectedTime, eventTimeline.getTotalTime());
-	}
-	
-	@Test
-	public void testSetDescription() {
-		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
-		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
-		String oldDescription ="chunk 1";
-		
-		// ensure correct description
-		assertEquals("Did not get correct description", oldDescription, data.get(0).getDescription());		
-		
-		String newDescription = "chunk 1 updated description";
-		timelineManager.timeChunkManager.setTimeChunkDescription(data.get(0), newDescription);
-
-		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
-		
-		//ensure correct updated description
-		data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
-		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
-		assertEquals("Did not get correct description", newDescription, data.get(0).getDescription());
-	}
-
-	@Test
-	public void testSetPosition() {
-		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
-		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
-		int oldPosition = 1;
-		
-		// ensure correct position
-		assertEquals("Did not get correct position", oldPosition, data.get(0).getPosition());		
-		
-		int newPosition = 4;
-		timelineManager.timeChunkManager.setTimeChunkPosition(data.get(0), newPosition);
-
-		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
-		
-		//ensure correct updated description
-		data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
-		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
-		assertEquals("Did not get correct position", newPosition, data.get(0).getPosition());
-	}
 //	
 //	@Test
 //	public void testSetPhotographer() {
 //		fail("Not yet implemented");
 //	}
 //	
-//	@Test
-//	public void testSetClient() {
-//		fail("Not yet implemented");
-//	}
+	
 //	
 //	@Test
 //	public void testSetLocation() {
@@ -438,6 +465,16 @@ public class TimelineManagerTest {
 		
 		session.beginTransaction();
 		session.createQuery("delete from " + TimeChunk.class.getName()).executeUpdate();
+		session.getTransaction().commit();
+
+		closeSession();		
+	}
+	
+	private void deleteClients() {
+		openSession();
+		
+		session.beginTransaction();
+		session.createQuery("delete from " + Client.class.getName()).executeUpdate();
 		session.getTransaction().commit();
 
 		closeSession();		

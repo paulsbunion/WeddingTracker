@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityExistsException;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -31,6 +32,7 @@ public class ClientManager {
 			
 			temp = findClient(newClient, false, true, true, false, false);
 			newClient.setClientId(temp.getClientId()); 
+			Hibernate.initialize(newClient);
 			closeSession();
 			found = true;
 		}
@@ -91,7 +93,7 @@ public class ClientManager {
 		else {
 			found = false;
 		}
-		
+		Hibernate.initialize(client);
 		closeSession();
 		
 		return found ? client : null;
@@ -294,6 +296,7 @@ public class ClientManager {
 				session.saveOrUpdate(foundClient);
 				session.getTransaction().commit();
 				
+				Hibernate.initialize(foundClient);
 				closeSession();
 				
 				valid = true;

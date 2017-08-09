@@ -30,6 +30,16 @@ public class Client implements Serializable{
 		this.autoRemind = autoRemind;
 	}
 
+	public Client(Client client) {
+		this.clientId = client.getClientId();
+		this.firstName = client.getFirstName();
+		this.lastName = client.getLastName();
+		this.address = client.getAddress();
+		this.phoneNumber = client.getPhoneNumber();
+		this.email = client.getEmail();
+		this.autoRemind = client.getAutoRemind();
+	}
+
 	public String getClientId() {
 		return clientId;
 	}
@@ -106,13 +116,7 @@ public class Client implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		result = prime * result + ((autoRemind == null) ? 0 : autoRemind.hashCode());
 		result = prime * result + ((clientId == null) ? 0 : clientId.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
 		return result;
 	}
 
@@ -122,43 +126,15 @@ public class Client implements Serializable{
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+//		if (getClass() != obj.getClass())
+//			return false;
+		if (!(obj instanceof Client))
 			return false;
 		Client other = (Client) obj;
-		if (address == null) {
-			if (other.address != null)
-				return false;
-		} else if (!address.equals(other.address))
-			return false;
-		if (autoRemind == null) {
-			if (other.autoRemind != null)
-				return false;
-		} else if (!autoRemind.equals(other.autoRemind))
-			return false;
 		if (clientId == null) {
-			if (other.clientId != null)
+			if (other.clientId != null) 
 				return false;
 		} else if (!clientId.equals(other.clientId))
-			return false;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
-		if (phoneNumber == null) {
-			if (other.phoneNumber != null)
-				return false;
-		} else if (!phoneNumber.equals(other.phoneNumber))
 			return false;
 		return true;
 	}

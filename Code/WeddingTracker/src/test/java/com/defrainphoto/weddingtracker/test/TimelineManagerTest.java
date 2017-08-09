@@ -42,7 +42,6 @@ public class TimelineManagerTest {
 	String extraCost;
 	
 	Session session;
-	boolean doOnce = false;
 	
 	@Before
 	public void setUp() {
@@ -69,7 +68,6 @@ public class TimelineManagerTest {
 		
 		System.out.println("Adding a timeline");
 		
-		try {
 			event = new Event("2", "the 2nd big Event", eventType, date, startTime, duration, null, "n", extraCost, "", "n", null, null);
 			System.out.println(event.toString());
 			openSession();
@@ -91,11 +89,6 @@ public class TimelineManagerTest {
 			retreived = timelineManager.getTimelineByEventId(timeline);
 			
 			assertEquals("did not add Event", timeline, retreived);
-		}
-		catch(Exception e) {
-			System.out.println("ERROR!!");
-			System.out.println(e.getMessage());
-		}
 		
 		// clean up
 //		cleanUp(timelineList);
@@ -128,7 +121,6 @@ public class TimelineManagerTest {
 	
 	@Test
 	public void testGetTimeChunks() {
-		// event
 		
 		Set<TimeChunk> datatest = timelineManager.getTimeChunks(timeline);
 		System.out.println("timeline size: " + datatest.toString());
@@ -180,32 +172,125 @@ public class TimelineManagerTest {
 	}
 	
 	
-//	@Test
-//	public void testRemoveTimechunk() {
-//		
-//		fail("Not yet implemented");
-//	}
-//	
-//	@Test
-//	public void testGetTotalTime() {
-//		fail("Not yet implemented");
-//	}
+	@Test
+	public void testRemoveTimechunk() {
+		// get and sort the timechunk data
+		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+		
+		assertEquals("should have 3 chunks", 3, data.size());
+		for (int i = 0; i < data.size(); i++) {
+			assertEquals("invalid chunk id",data.get(i).getChunkId() , "" + (i + 1));
+		}
+		
+		// delete a chunk by name
+		timelineManager.deleteTimeChunk(data.get(1));
+		
+		data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+		
+		assertEquals("should have 2 chunks", 2, data.size());
+		assertEquals("invalid chunk description", "chunk " + (1), data.get(0).getDescription());
+		assertEquals("invalid chunk description", "chunk " + (3), data.get(1).getDescription());
+	}
 	
 	
-//	@Test
-//	public void testAddTimeChunk() {
-//		fail("Not yet implemented");
-//	}
-//	
-//	@Test
-//	public void testGetChunkByDescriptionAndTimeline() {
-//		fail("Not yet implemented");
-//	}
-//	
-//	@Test
-//	public void testGetChunkByIdAndTimeline() {
-//		fail("Not yet implemented");
-//	}
+	@Test
+	public void testGetTotalTime() {
+		// get the timeline
+		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
+		Time expectedTime = new Time(1, 35, 0);
+		
+		assertEquals("Did not get correct time", expectedTime, eventTimeline.getTotalTime());
+	}
+	
+	@Test
+	public void testSetStartTime() {
+		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+		Time oldStartTime = new Time(12, 30, 0);
+		
+		// ensure correct startTime
+		assertEquals("Did not get correct startTime", oldStartTime, data.get(0).getStartTime());		
+		
+		Time newStartTime = new Time(1, 20, 0);
+		timelineManager.timeChunkManager.setTimeChunkStartTime(data.get(0), newStartTime);
+
+		Time expectedTime = new Time(1, 35, 0);
+		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
+		
+		//ensure correct updated startTime
+		data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+		assertEquals("Did not get correct startTime", newStartTime, data.get(0).getStartTime());
+		
+		// ensure totaltime now reflects the updated timechunk
+		assertEquals("Did not get correct time", expectedTime, eventTimeline.getTotalTime());
+	}
+	
+	@Test
+	public void testSetDuration() {
+		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+		Time oldDuration = new Time(0, 20, 0);
+		
+		// ensure correct duration
+		assertEquals("Did not get correct duration", oldDuration, data.get(0).getDuration());		
+		
+		Time newDuration = new Time(1, 20, 0);
+		timelineManager.timeChunkManager.setTimeChunkDuration(data.get(0), newDuration);
+
+		Time expectedTime = new Time(2, 35, 0);
+		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
+		
+		//ensure correct updated duration
+		data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+		assertEquals("Did not get correct duration", newDuration, data.get(0).getDuration());
+		
+		// ensure totaltime now reflects the updated timechunk
+		assertEquals("Did not get correct time", expectedTime, eventTimeline.getTotalTime());
+	}
+	
+	@Test
+	public void testSetDescription() {
+		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+		String oldDescription ="chunk 1";
+		
+		// ensure correct description
+		assertEquals("Did not get correct description", oldDescription, data.get(0).getDescription());		
+		
+		String newDescription = "chunk 1 updated description";
+		timelineManager.timeChunkManager.setTimeChunkDescription(data.get(0), newDescription);
+
+		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
+		
+		//ensure correct updated description
+		data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+		assertEquals("Did not get correct description", newDescription, data.get(0).getDescription());
+	}
+
+	@Test
+	public void testSetPosition() {
+		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+		int oldPosition = 1;
+		
+		// ensure correct position
+		assertEquals("Did not get correct position", oldPosition, data.get(0).getPosition());		
+		
+		int newPosition = 4;
+		timelineManager.timeChunkManager.setTimeChunkPosition(data.get(0), newPosition);
+
+		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
+		
+		//ensure correct updated description
+		data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+		assertEquals("Did not get correct position", newPosition, data.get(0).getPosition());
+	}
 //	
 //	@Test
 //	public void testSetPhotographer() {
@@ -218,29 +303,12 @@ public class TimelineManagerTest {
 //	}
 //	
 //	@Test
-//	public void testSetDescription() {
-//		fail("Not yet implemented");
-//	}
-//	
-//	@Test
-//	public void testSetDuration() {
-//		fail("Not yet implemented");
-//	}
-//	
-//	@Test
 //	public void testSetLocation() {
 //		fail("Not yet implemented");
 //	}
 //	
-//	@Test
-//	public void testSetPosition() {
-//		fail("Not yet implemented");
-//	}
 //	
-//	@Test
-//	public void testSetStartTime() {
-//		fail("Not yet implemented");
-//	}
+	
 	
 	private void cleanUp(List<Timeline> timelineList) {
 		// TODO Auto-generated method stub
@@ -329,12 +397,12 @@ public class TimelineManagerTest {
 			
 			System.out.println("creating time chunks");
 			session.beginTransaction();
-			session.createSQLQuery("insert into time_chunk(chunkid, eventid, position, starttime, duration)" + 
-					" values(1, 1, 1, '12:30:00', '00:20:00')").executeUpdate();
-			session.createSQLQuery("insert into time_chunk(chunkid, eventid, position, starttime, duration)" + 
-					" values(2, 1, 2, '13:00:00', '00:30:00')").executeUpdate();
-			session.createSQLQuery("insert into time_chunk(chunkid, eventid, position, starttime, duration)" + 
-					" values(3, 1, 3, '13:30:00', '00:45:00')").executeUpdate();
+			session.createSQLQuery("insert into time_chunk(chunkid, eventid, position, starttime, duration, description)" + 
+					" values(1, 1, 1, '12:30:00', '00:20:00', 'chunk 1')").executeUpdate();
+			session.createSQLQuery("insert into time_chunk(chunkid, eventid, position, starttime, duration, description)" + 
+					" values(2, 1, 2, '13:00:00', '00:30:00', 'chunk 2')").executeUpdate();
+			session.createSQLQuery("insert into time_chunk(chunkid, eventid, position, starttime, duration, description)" + 
+					" values(3, 1, 3, '13:30:00', '00:45:00', 'chunk 3')").executeUpdate();
 			System.out.println("done creating chunks");
 			session.getTransaction().commit();
 		}

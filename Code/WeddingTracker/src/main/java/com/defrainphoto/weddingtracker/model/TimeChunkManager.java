@@ -342,25 +342,25 @@ public class TimeChunkManager {
 		
 		TimeChunk foundTimeChunkConflict = null;
 		
-		// if updating the startTime, check if the new startTime already exists
-		if (updateStartTime) {
-			foundTimeChunkConflict = new TimeChunk(timeChunk.getChunkId(), timeChunk.getTimeline(), timeChunk.getPosition(),
-					newStartTime, timeChunk.getLocation(), timeChunk.getDuration(), timeChunk.getDescription(), 
-					timeChunk.getClient(), timeChunk.getPhotographers());
-			
-			foundTimeChunkConflict = findTimeChunk(foundTimeChunkConflict, false, true, true);
-			
-			if (foundTimeChunkConflict != null) {
-				throw new EntityExistsException("Cannot have tow chunks at the same time, add code to offe user to shift all timechunks: " + foundTimeChunkConflict.toString());
-				/*
-				 * set offset time to the difference in overlap
-				 * 
-				 * get all chunks by timeline id for the timeline
-				 * 
-				 * starting at the latest chunk, add the offest to the chunk's starttime. 
-				 */
-			}
-		}
+//		// if updating the startTime, check if the new startTime already exists
+//		if (updateStartTime) {
+//			foundTimeChunkConflict = new TimeChunk(timeChunk.getChunkId(), timeChunk.getTimeline(), timeChunk.getPosition(),
+//					newStartTime, timeChunk.getLocation(), timeChunk.getDuration(), timeChunk.getDescription(), 
+//					timeChunk.getClient(), timeChunk.getPhotographers());
+//			
+//			foundTimeChunkConflict = findTimeChunk(foundTimeChunkConflict, false, true, true);
+//			
+//			if (foundTimeChunkConflict != null) {
+//				throw new EntityExistsException("Cannot have tow chunks at the same time, add code to offe user to shift all timechunks: " + foundTimeChunkConflict.toString());
+//				/*
+//				 * set offset time to the difference in overlap
+//				 * 
+//				 * get all chunks by timeline id for the timeline
+//				 * 
+//				 * starting at the latest chunk, add the offest to the chunk's starttime. 
+//				 */
+//			}
+//		}
 		
 		// If the Timechunk exists, Update the timeChunk and set old parameters to new parameters
 		try {

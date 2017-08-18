@@ -31,9 +31,7 @@ public class EventManager {
 
 	public void addLocation(Event locationEvent, Location location) {
 		openSession();
-		if (session == null) {
-			System.out.println("NULL IN HERE!!!");
-		}
+
 		session.beginTransaction();
 		
 		// save the location

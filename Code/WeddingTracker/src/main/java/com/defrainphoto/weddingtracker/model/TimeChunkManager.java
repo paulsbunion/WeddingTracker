@@ -19,10 +19,10 @@ import org.hibernate.Session;
 import main.java.com.defrainphoto.weddingtracker.model.HibernateUtil;;
 
 public class TimeChunkManager {
+	private LocationManager locationManager = new LocationManager();
 	Session session;
 
 	public TimeChunk addTimeChunk(TimeChunk newChunk) {
-		System.out.println("adding a timechunk: " + newChunk.toString());
 		boolean found = false;
 		TimeChunk temp = null;
 		
@@ -70,7 +70,6 @@ public class TimeChunkManager {
 			buildQuery(queryString, false, true, false);
 			
 			Query query = session.createQuery(queryString.toString());
-			System.out.println(query.toString());
 			setQueryVariables(newChunk, query, false, true, false);
 
 			List list = query.list();
@@ -109,7 +108,6 @@ public class TimeChunkManager {
 			buildQuery(queryString, false, true, false);
 			
 			Query query = session.createQuery(queryString.toString());
-			System.out.println(query.toString());
 			setQueryVariables(timeline, query);
 
 			List list = query.list();
@@ -131,6 +129,11 @@ public class TimeChunkManager {
 			for (TimeChunk chunk : foundChunks) {
 				Hibernate.initialize(chunk.getPhotographers());
 				Hibernate.initialize(chunk.getClient());
+				Hibernate.initialize(chunk.getLocation());
+				Hibernate.initialize(chunk.getStartTime());
+				Hibernate.initialize(chunk.getPosition());
+				Hibernate.initialize(chunk.getDuration());
+				Hibernate.initialize(chunk.getDescription());
 			}
 			closeSession();
 		}
@@ -147,54 +150,107 @@ public class TimeChunkManager {
 	
 	public TimeChunk getTimeChunkByIdAndTimeline(TimeChunk timeChunk) {
 		TimeChunk result;
-		System.out.println("timeline and id: " + timeChunk.getTimeline().getEventId() + " " + timeChunk.getChunkId());
 		result = findTimeChunk(timeChunk, true, true, false);
-//		System.out.println("found it: " + result.toString());
 		return result; 
 	}
 	
 	public TimeChunk setTimeChunkPosition(TimeChunk timeChunk, int newPosition) {
 		return setTimeChunkHelper(timeChunk, newPosition, null, null, null, null, null, null, 
-				true, false, false, false, false, false, false);
+				true, false, false, false, false, false, false, false);
 	}
 	
 	public TimeChunk setTimeChunkStartTime(TimeChunk timeChunk, Time newStartTime) {
 		return setTimeChunkHelper(timeChunk, null, newStartTime, null, null, null, null, null, 
-				false, true, false, false, false, false, false);
+				false, true, false, false, false, false, false, false);
 	}
 	
 	public TimeChunk setTimeChunkLocation(TimeChunk timeChunk, Location newLocation) {
 		return setTimeChunkHelper(timeChunk, null, null, newLocation, null, null, null, null, 
-				false, false, true, false, false, false, false);
+				false, false, true, false, false, false, false, false);
 	}
 	
 	public TimeChunk setTimeChunkDuration(TimeChunk timeChunk, Time newDuration) {
 		return setTimeChunkHelper(timeChunk, null, null, null, newDuration, null, null, null, 
-				false, false, false, true, false, false, false);
+				false, false, false, true, false, false, false, false);
 	}
 	
 	public TimeChunk setTimeChunkDescription(TimeChunk timeChunk, String newDescription) {
 		return setTimeChunkHelper(timeChunk, null, null, null, null, newDescription, null, null, 
-				false, false, false, false, true, false, false);
+				false, false, false, false, true, false, false, false);
 	}
 	
 	public TimeChunk setTimeChunkClient(TimeChunk timeChunk, Client newClient) {
 		return setTimeChunkHelper(timeChunk, null, null, null, null, null, newClient, null, 
-				false, false, false, false, false, true, false);
+				false, false, false, false, false, true, false, false);
 	}
 	
-	public TimeChunk setPhotographer(TimeChunk timeChunk, Photographer newPhotographer) {
-		Set<Photographer> newPhotographers = new HashSet<Photographer>();
-		newPhotographers.add(newPhotographer);
-		System.out.println("The glip");
-		System.out.println(timeChunk.toString());
+	public TimeChunk setPhotographer(TimeChunk timeChunk, Photographer setPhotographer) {
+		Set<Photographer> setPhotographers = new HashSet<Photographer>();
+		setPhotographers.add(setPhotographer);
 		
-		return setPhotographer(timeChunk, newPhotographers); 
+		return setPhotographers(timeChunk, setPhotographers); 
 	}
 	
-	public TimeChunk setPhotographer(TimeChunk timeChunk, Set<Photographer> newPhotographers) {
+	public TimeChunk setPhotographers(TimeChunk timeChunk, Set<Photographer> setPhotographers) {
+		return setTimeChunkHelper(timeChunk, null, null, null, null, null, null, setPhotographers, 
+				false, false, false, false, false, false, true, false);
+	}
+	
+	public TimeChunk addPhotographer(TimeChunk timeChunk, Photographer newPhotographer) {
+		Set<Photographer> addPhotographers = new HashSet<Photographer>();
+		addPhotographers.add(newPhotographer);
+		
+		return addPhotographers(timeChunk, addPhotographers); 
+	}
+	
+	public TimeChunk addPhotographers(TimeChunk timeChunk, Set<Photographer> newPhotographers) {
 		return setTimeChunkHelper(timeChunk, null, null, null, null, null, null, newPhotographers, 
-				false, false, false, false, false, false, true);
+				false, false, false, false, false, false, false, true);
+	}
+	
+	public TimeChunk deletePhotographer(TimeChunk timeChunk, Photographer deletePhotoprapher) {
+		
+		Set<Photographer> deletePhotographers = new HashSet<Photographer>();
+		deletePhotographers.add(deletePhotoprapher);
+		
+		return deletePhotographers(timeChunk, deletePhotographers); 
+	}
+	
+	public TimeChunk deletePhotographers(TimeChunk timeChunk, Set<Photographer> deletePhotopraphers) {
+		
+		// first try to find the timeChunk
+		TimeChunk foundTimeChunk = findTimeChunk(timeChunk, false, true, true);
+		if (foundTimeChunk != null) {
+			
+			// keep old data for reset on fail
+			Set<Photographer> oldPhotographers = foundTimeChunk.getPhotographers();
+			
+			try {
+				Set<Photographer> updatedPhotogs = new HashSet<Photographer>(oldPhotographers);
+				
+				openSession();
+				
+				session.beginTransaction();
+				
+				updatedPhotogs.removeAll(deletePhotopraphers);
+				foundTimeChunk.setPhotographers(updatedPhotogs);
+				
+				session.saveOrUpdate(foundTimeChunk);
+				
+				Hibernate.initialize(foundTimeChunk);
+				session.getTransaction().commit();
+			}
+			catch (HibernateException e) {
+				session.getTransaction().rollback();
+				foundTimeChunk.setPhotographers(oldPhotographers);
+			}
+			
+			finally {
+				session.close();
+			}
+		}
+		
+		return foundTimeChunk;
 	}
 	
 	private TimeChunk findTimeChunk(TimeChunk timeChunk, boolean byChunkId, boolean byEventId, boolean byDescription) {
@@ -207,22 +263,23 @@ public class TimeChunkManager {
 			
 			StringBuilder queryString = new StringBuilder("from TimeChunk where ");
 			buildQuery(queryString, byChunkId, byEventId, byDescription);
-			System.out.println("before open");
 			Query query = session.createQuery(queryString.toString());
-			System.out.println("after open 1");
-			System.out.println(query.toString());
-			System.out.println("after open 2");
 			setQueryVariables(timeChunk, query, byChunkId, byEventId, byDescription);
 
-			System.out.println("after open 3");
 			List list = query.list();
-			System.out.println("after open 4");
 			session.getTransaction().commit();
-			System.out.println("after open");
 			
 			if (list != null && !list.isEmpty()) {
 				TimeChunk temp = (TimeChunk) list.get(0);
-				System.out.println("found one: " + temp.toString());
+				Hibernate.initialize(temp);
+				Hibernate.initialize(temp.getClient());
+				Hibernate.initialize(temp.getDescription());
+				Hibernate.initialize(temp.getDuration());
+				Hibernate.initialize(temp.getLocation());
+				Hibernate.initialize(temp.getPhotographers());
+				Hibernate.initialize(temp.getPosition());
+				Hibernate.initialize(temp.getStartTime());
+//				System.out.println("found one: " + temp.toString());
 				timeChunk = temp;
 				found = true;
 			}
@@ -270,30 +327,24 @@ public class TimeChunkManager {
 	
 	private void setQueryVariables(TimeChunk timeChunk, Query query, boolean byChunkId, boolean byEventId, boolean byDescription) {
 		if (byChunkId) {
-			System.out.println("Setting chunkid");
 			query.setParameter("chunkid", timeChunk.getChunkId());
 		}
 		if (byEventId) {
-			System.out.println("Setting eventid");
-			System.out.println(timeChunk.getTimeline().getEventId());
 			query.setParameter("eventid", timeChunk.getTimeline().getEventId());
 		}
 		if (byDescription) {
-			System.out.println("Setting description");
 			query.setParameter("description", timeChunk.getDescription());
 		}
 		
 	}
 	
 	private void setQueryVariables(Timeline timeline, Query query) {
-		System.out.println("Setting eventid");
-		System.out.println(timeline.getEventId());
 		query.setParameter("eventid", timeline.getEventId());
 	}
 	
 	private TimeChunk setTimeChunkHelper(TimeChunk timeChunk, Integer newPosition, Time newStartTime, Location newLocation, Time newDuration,
 			String newDescription, Client newClient, Set<Photographer> newPhotographers, boolean updatePosition, boolean updateStartTime, boolean updateLocation, boolean updateDuration,
-			boolean updateDescription, boolean updateClient, boolean updatePhotographers) {
+			boolean updateDescription, boolean updateClient, boolean setPhotographers, boolean addPhotographers) {
 		
 		// if any new value to update is null and should not be, throw exception
 //		if (updatePosition && newPosition == null) {
@@ -351,8 +402,18 @@ public class TimeChunkManager {
 			newClient = oldClient;
 		}
 		
-		if (!updatePhotographers) {
-			newPhotographers = oldPhotographers;
+		if (!setPhotographers || !addPhotographers) {
+			if (addPhotographers) {
+				// add old to new
+				newPhotographers.addAll(oldPhotographers);
+			}
+			
+			else if (setPhotographers) {
+				// do nothing
+			}
+			else {
+				newPhotographers = oldPhotographers;
+			}
 		}
 		
 		// first try to find the timeChunk
@@ -405,21 +466,19 @@ public class TimeChunkManager {
 				openSession();
 					
 				session.beginTransaction();
-				if (updateClient) {
-					System.out.println("the new client added:");
-					System.out.println(newClient.toString());
-					System.out.println(foundTimeChunk);
-				}
-				System.out.println("the error chunk");
-				
 				Hibernate.initialize(foundTimeChunk);
-				System.out.println(foundTimeChunk.toString());
+				
+				// if adding a location, first check if it already exists
+				if (updateLocation) {
+					Location foundLocation = locationManager.getLocationByAddress(newLocation);
+					if (foundLocation != null) {
+						timeChunk.setLocation(foundLocation);
+						foundTimeChunk.setLocation(foundLocation);
+					}
+				}
 				
 				session.saveOrUpdate(foundTimeChunk);
-				if (foundTimeChunk.getStartTime() == null ||
-						timeChunk.getStartTime() == null) {
-					System.out.println("SHOULD NOT BE NULL HERE");
-				}
+
 				session.getTransaction().commit();
 				
 				// persist to avoid lazy error
@@ -428,6 +487,10 @@ public class TimeChunkManager {
 				if (updateClient) {
 					Hibernate.initialize(timeChunk.getClient());
 				}
+//				if (updateLocation) {
+					Hibernate.initialize(timeChunk.getLocation());
+					Hibernate.initialize(foundTimeChunk.getLocation());
+//				}
 				closeSession();
 				
 				valid = true;

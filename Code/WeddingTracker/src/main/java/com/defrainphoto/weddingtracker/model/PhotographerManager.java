@@ -23,10 +23,7 @@ public class PhotographerManager {
 		
 		// else, open session, save, and commit
 		else {
-			System.out.println("Startin photoh save session");
 			openSession();
-			
-			System.out.println(newPhotographer.toString());
 			
 			session.beginTransaction();
 			session.save(newPhotographer);
@@ -66,7 +63,6 @@ public class PhotographerManager {
 		buildQuery(queryString, byID, byFName, byLname);
 		
 		Query query = session.createQuery(queryString.toString());
-		System.out.println(query.toString());
 		setQueryVariables(photog, query, byID, byFName, byLname);
 		
 		List list = query.list();

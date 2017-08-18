@@ -18,8 +18,6 @@ public class TimelineManager {
 	
 	public Timeline addTimeline(Timeline newTimeline) {
 		boolean found = false;
-		System.out.println("the ole goodie");
-		System.out.println(newTimeline.toString());
 		Timeline temp = findTimeline(newTimeline, true);
 		
 		// if already in DB, throw exception
@@ -30,15 +28,12 @@ public class TimelineManager {
 		// else, open session, save, and commit
 		else {
 			openSession();
-			System.out.println("now adding the dang thing");
 			session.beginTransaction();
-			System.out.println(newTimeline.toString());
 			session.save(newTimeline);
 			session.getTransaction().commit();
 			Hibernate.initialize(newTimeline);
 			closeSession();
 			
-			System.out.println("going to find");
 			temp = findTimeline(newTimeline, true);
 			newTimeline.setEvent(temp.getEvent()); 
 			
@@ -108,7 +103,6 @@ public class TimelineManager {
 //		}
 //		
 //		timeChunks.add(newChunk);
-//		System.out.println("not null here: " + newChunk.toString());
 //		openSession();
 //		try {
 //			session.beginTransaction();
@@ -182,8 +176,6 @@ public class TimelineManager {
 		
 	public Timeline DeleteTimelineByEventId(Timeline timeline) {
 		boolean deleted = false;
-		System.out.println("in the delete timeline method");
-		System.out.println(timeline.toString());
 		Timeline foundTimeline = null;
 		// check if in database
 		foundTimeline = findTimeline(timeline, true);
@@ -216,43 +208,26 @@ public class TimelineManager {
 	
 	private Timeline findTimeline(Timeline timeline, boolean byEventId) {
 		boolean found = false;
-		System.out.println("IN HERE");
 		openSession();
 		
 		session.beginTransaction();
-		System.out.println("preQuery");
 		StringBuilder queryString = new StringBuilder("from Timeline where ");
 		buildQuery(queryString, byEventId);
-		System.out.println("QueryBuilt");
 		Query query = session.createQuery(queryString.toString());
-		System.out.println("queryCreated");
-		System.out.println(query.toString());
-		System.out.println("setting variables");
 		setQueryVariables(timeline, query, byEventId);
-		System.out.println("variables set");
-		System.out.println(byEventId);
-		System.out.println("should be true");
-		System.out.println(timeline.getEvent().getEventId());
-		System.out.println("IN HERE");
-		System.out.println(queryString.toString());
 		
 		List list = query.list();
 		
 		session.getTransaction().commit();
 		Hibernate.initialize(timeline.getTimeChunks());
 		
-		System.out.println("found one? ");
-		
 		if (list != null && !list.isEmpty()) {
-			System.out.println("converting");
 			Timeline temp = (Timeline) list.get(0);
-			System.out.println("found one: " + temp.toString());
 			timeline = temp;
 			found = true;
 		}
 		
 		else {
-			System.out.println("not found");
 			found = false;
 		}
 		
@@ -263,12 +238,8 @@ public class TimelineManager {
 	}
 	
 	private void setQueryVariables(Timeline timeline, Query query, boolean byEventId) {
-		System.out.println("YO:" + byEventId);
 		if (byEventId) {
-			System.out.println(timeline.toString());
-			System.out.println("in set variables: " + timeline.getEventId());
 			query.setParameter("eventid", timeline.getEventId());
-			System.out.println("done in set variables");
 		}
 		
 	}

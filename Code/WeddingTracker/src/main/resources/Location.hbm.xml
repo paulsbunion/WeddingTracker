@@ -21,8 +21,8 @@
         	<column name="ZIP"/>
         </property>
         
-        <property name="address">
-        	<column name="ADDRESS"/>
+        <property name="street">
+        	<column name="STREET"/>
         </property>
         
         <property name="description">

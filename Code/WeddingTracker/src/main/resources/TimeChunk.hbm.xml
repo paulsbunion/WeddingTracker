@@ -29,8 +29,8 @@
             <column name="STARTTIME"/>
         </property>
         
-        <many-to-one name="Location" >
-        	<column name="LOCATIONID" not-null="false" />
+        <many-to-one name="Location" cascade="save-update" fetch="select">
+        	<column name="LOCATIONID" not-null="false"/>
         </many-to-one>
 <!--         <set name="location" table="Location" inverse="true" fetch="select"> -->
 <!--         	<key> -->

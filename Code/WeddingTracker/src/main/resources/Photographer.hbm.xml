@@ -6,7 +6,7 @@
 <hibernate-mapping>
     <class name="main.java.com.defrainphoto.weddingtracker.model.Photographer" table="Photographer" >
         <id name="staffId" column="STAFFID">
-            <generator class="identity"/>
+            <generator class="native"/>
         </id>
         
         <property name="firstName">
@@ -18,12 +18,12 @@
         </property>
         
 <!--         <set name="events" table="EVENT_PHOTOGRAPHERS" fetch="select" cascade="all"> -->
-			<set name="events" table="EVENT_PHOTOGRAPHERS" fetch="select">
-            <key>
+			<set name="events" table="EVENT_PHOTOGRAPHERS" fetch="select" cascade="save-update">
+            <key >
                 <column name="STAFFID" not-null="true" />
             </key>
 <!--             <one-to-many class="main.java.com.defrainphoto.weddingtracker.model.EventPhotographers"/> -->
-            <many-to-many entity-name="main.java.com.defrainphoto.weddingtracker.model.Event">
+            <many-to-many entity-name="main.java.com.defrainphoto.weddingtracker.model.Event" >
                 <column name="EVENTID" not-null="true" />
             </many-to-many>
 

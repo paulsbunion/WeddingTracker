@@ -19,7 +19,7 @@ public class ClientManager {
 		
 		// if already in DB, throw exception
 		if (temp != null) {
-			throw new EntityExistsException("Entity already Exists:  " + newClient .toString());
+			throw new EntityExistsException("Entity already Exists:  " + newClient.toString());
 		}
 		
 		// else, open session, save, and commit
@@ -382,7 +382,4 @@ public class ClientManager {
 		
 		return success;
 	}
-
-	
-
 }

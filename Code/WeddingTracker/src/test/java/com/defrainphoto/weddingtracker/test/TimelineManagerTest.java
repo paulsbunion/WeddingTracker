@@ -27,6 +27,8 @@ import main.java.com.defrainphoto.weddingtracker.model.ClientManager;
 import main.java.com.defrainphoto.weddingtracker.model.Event;
 import main.java.com.defrainphoto.weddingtracker.model.EventManager;
 import main.java.com.defrainphoto.weddingtracker.model.HibernateUtil;
+import main.java.com.defrainphoto.weddingtracker.model.Photographer;
+import main.java.com.defrainphoto.weddingtracker.model.PhotographerManager;
 import main.java.com.defrainphoto.weddingtracker.model.TimeChunk;
 import main.java.com.defrainphoto.weddingtracker.model.Timeline;
 import main.java.com.defrainphoto.weddingtracker.model.TimelineManager;
@@ -35,6 +37,7 @@ public class TimelineManagerTest {
 	TimelineManager timelineManager;
 	EventManager eventManager;
 	ClientManager clientManager;
+	PhotographerManager photogManager;
 	
 	Timeline timeline;
 	Event event;
@@ -51,6 +54,7 @@ public class TimelineManagerTest {
 	public void setUp() {
 		timelineManager = new TimelineManager();
 		clientManager = new ClientManager();
+		photogManager = new PhotographerManager();
 		createEvent();
 		createTimeline();
 		createTimeChunks();
@@ -62,6 +66,7 @@ public class TimelineManagerTest {
 		deleteTimeline();
 		deleteTimeChunks();
 		deleteClients();
+		deletePhotographers();
 	}
 	
 //	@Test
@@ -298,35 +303,58 @@ public class TimelineManagerTest {
 //		assertEquals("Did not get correct position", newPosition, data.get(0).getPosition());
 //	}
 	
+//	@Test
+//	public void testSetClient() {
+//		Client newClient = new Client("1", "Kevin", "Bacon", "123 E Main St.", "1-614-322-4545", "kevin@Bacon.com", "n");
+//		newClient = clientManager.addClient(newClient);
+//		
+//		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+//		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+//		Client oldClient = null;
+//		
+//		// ensure correct Client
+//		assertEquals("Did not get correct Client", oldClient, data.get(0).getClient());		
+//		
+//		timelineManager.timeChunkManager.setTimeChunkClient(data.get(0), newClient);
+//
+//		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
+//		
+//		//ensure correct updated client
+//		data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
+//		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
+//		Client foundClient = new Client(data.get(0).getClient());
+//		assertEquals("Did not get correct Client", newClient, foundClient);
+//	}
+	
+	
 	@Test
-	public void testSetClient() {
-		Client newClient = new Client("1", "Kevin", "Bacon", "123 E Main St.", "1-614-322-4545", "kevin@Bacon.com", "n");
-		newClient = clientManager.addClient(newClient);
+	public void testSetPhotographer() {
+		Photographer newPhotographer = new Photographer("1", "Kyle", "Bergun");
+		System.out.println("pp photog:");
+		System.out.println(newPhotographer.toString());
+		
+		newPhotographer = photogManager.addPhotographer(newPhotographer);
 		
 		ArrayList<TimeChunk> data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
 		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
-		Client oldClient = null;
+		Photographer oldPhotog = null;
 		
-		// ensure correct Client
-		assertEquals("Did not get correct Client", oldClient, data.get(0).getClient());		
-		
-		timelineManager.timeChunkManager.setTimeChunkClient(data.get(0), newClient);
+		// ensure correct Photographer
+		assertEquals("Did not get correct Photographer", 0, data.get(0).getPhotographers().size());		
 
+		System.out.println("the timeChnk");
+		System.out.println(data.get(0));
+
+		timelineManager.timeChunkManager.setPhotographer(data.get(0), newPhotographer);
 		Timeline eventTimeline = timelineManager.getTimelineByEventId(timeline);
 		
-		//ensure correct updated client
+		//ensure correct updated Photographer
 		data = new ArrayList<TimeChunk>(timelineManager.getTimeChunks(timeline));
 		Collections.sort(data, timelineManager.timeChunkManager.chunkIdComparator);
-		Client foundClient = new Client(data.get(0).getClient());
-		assertEquals("Did not get correct Client", newClient, foundClient);
+		Photographer foundPhotographer = (Photographer)data.get(0).getPhotographers().toArray()[0];
+		assertEquals("Did not get correct Photographer", newPhotographer, foundPhotographer);
 	}
 	
-//	
-//	@Test
-//	public void testSetPhotographer() {
-//		fail("Not yet implemented");
-//	}
-//	
 	
 //	
 //	@Test
@@ -478,6 +506,16 @@ public class TimelineManagerTest {
 		session.getTransaction().commit();
 
 		closeSession();		
+	}
+	
+	private void deletePhotographers() {
+		openSession();
+		
+		session.beginTransaction();
+		session.createQuery("delete from " + Photographer.class.getName()).executeUpdate();
+		session.getTransaction().commit();
+
+		closeSession();	
 	}
 	
 	private void openSession() {

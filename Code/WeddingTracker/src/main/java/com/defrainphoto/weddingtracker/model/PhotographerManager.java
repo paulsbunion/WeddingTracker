@@ -23,7 +23,10 @@ public class PhotographerManager {
 		
 		// else, open session, save, and commit
 		else {
+			System.out.println("Startin photoh save session");
 			openSession();
+			
+			System.out.println(newPhotographer.toString());
 			
 			session.beginTransaction();
 			session.save(newPhotographer);

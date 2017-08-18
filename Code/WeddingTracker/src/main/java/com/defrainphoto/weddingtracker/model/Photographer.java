@@ -56,9 +56,6 @@ public class Photographer implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((events == null) ? 0 : events.hashCode());
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((staffId == null) ? 0 : staffId.hashCode());
 		return result;
 	}
@@ -71,21 +68,6 @@ public class Photographer implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Photographer other = (Photographer) obj;
-		if (events == null) {
-			if (other.events != null)
-				return false;
-		} else if (!events.equals(other.events))
-			return false;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
 		if (staffId == null) {
 			if (other.staffId != null)
 				return false;

@@ -183,6 +183,15 @@ public class TimeChunkManager {
 				false, false, false, false, false, true, false);
 	}
 	
+	public TimeChunk setPhotographer(TimeChunk timeChunk, Photographer newPhotographer) {
+		Set<Photographer> newPhotographers = new HashSet<Photographer>();
+		newPhotographers.add(newPhotographer);
+		System.out.println("The glip");
+		System.out.println(timeChunk.toString());
+		
+		return setPhotographer(timeChunk, newPhotographers); 
+	}
+	
 	public TimeChunk setPhotographer(TimeChunk timeChunk, Set<Photographer> newPhotographers) {
 		return setTimeChunkHelper(timeChunk, null, null, null, null, null, null, newPhotographers, 
 				false, false, false, false, false, false, true);
@@ -401,11 +410,21 @@ public class TimeChunkManager {
 					System.out.println(newClient.toString());
 					System.out.println(foundTimeChunk);
 				}
+				System.out.println("the error chunk");
+				
+				Hibernate.initialize(foundTimeChunk);
+				System.out.println(foundTimeChunk.toString());
+				
 				session.saveOrUpdate(foundTimeChunk);
+				if (foundTimeChunk.getStartTime() == null ||
+						timeChunk.getStartTime() == null) {
+					System.out.println("SHOULD NOT BE NULL HERE");
+				}
 				session.getTransaction().commit();
 				
 				// persist to avoid lazy error
 				Hibernate.initialize(timeChunk);
+				Hibernate.initialize(timeChunk.getStartTime());
 				if (updateClient) {
 					Hibernate.initialize(timeChunk.getClient());
 				}

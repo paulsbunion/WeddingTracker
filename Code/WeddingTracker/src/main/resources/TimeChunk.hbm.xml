@@ -9,6 +9,7 @@
     		<key-many-to-one name="timeline" class="main.java.com.defrainphoto.weddingtracker.model.Timeline" column="EVENTID" />
     		<key-property name="chunkId" column="CHUNKID"/>
     	</composite-id>
+    	
 <!--         <id name="chunkId" column="CHUNKID"> -->
 <!--             <generator class="identity"/> -->
 <!--         </id> -->
@@ -66,7 +67,6 @@
             <many-to-many entity-name="main.java.com.defrainphoto.weddingtracker.model.Photographer">
                 <column name="STAFFID" not-null="true" />
             </many-to-many>
-
         </set>
         
     </class>

@@ -4,7 +4,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
-    <class name="main.java.com.defrainphoto.weddingtracker.model.Event" table="Event" >
+    <class name="com.defrainphoto.weddingtracker.model.Event" table="Event" >
         <id name="eventId" column="EVENTID">
             <generator class="assigned"/>
         </id>
@@ -15,7 +15,7 @@
         
         <many-to-one name="eventType" 
         			 column="TYPE" 
-        			 class="main.java.com.defrainphoto.weddingtracker.model.EventType"/>
+        			 class="com.defrainphoto.weddingtracker.model.EventType"/>
         
         <property name="eventDate">
         	<column name="EVENTDATE"/>
@@ -30,7 +30,7 @@
         </property>
         
         <one-to-one name="timeline" 
-        			class="main.java.com.defrainphoto.weddingtracker.model.Timeline" cascade="all"/>
+        			class="com.defrainphoto.weddingtracker.model.Timeline" cascade="all"/>
         
         <property name="multiClient">
         	<column name="MULTICLIENT"/>
@@ -51,14 +51,14 @@
 		<set name="photographers" table="EVENT_PHOTOGRAPHERS" fetch="select" cascade="save-update">
         	<key column="EVENTID" not-null="true"/>
         	<many-to-many column="STAFFID"
-        				  class="main.java.com.defrainphoto.weddingtracker.model.Photographer" />
+        				  class="com.defrainphoto.weddingtracker.model.Photographer" />
         </set>
         
 		<set name="clients" table="EVENT_CLIENTS" fetch="select">
         	<key column="EVENTID"/>
         	<many-to-many column="CLIENTID" 
         				  unique="true" 
-        				  class="main.java.com.defrainphoto.weddingtracker.model.Client"/>
+        				  class="com.defrainphoto.weddingtracker.model.Client"/>
         </set>
         
     </class>

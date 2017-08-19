@@ -1,4 +1,4 @@
-package main.java.com.defrainphoto.weddingtracker.model;
+package com.defrainphoto.weddingtracker.model;
 
 import java.util.List;
 

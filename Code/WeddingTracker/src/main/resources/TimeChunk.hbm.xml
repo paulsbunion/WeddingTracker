@@ -4,9 +4,9 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
-    <class name="main.java.com.defrainphoto.weddingtracker.model.TimeChunk" table="TIME_CHUNK" >
+    <class name="com.defrainphoto.weddingtracker.model.TimeChunk" table="TIME_CHUNK" >
     	<composite-id>
-    		<key-many-to-one name="timeline" class="main.java.com.defrainphoto.weddingtracker.model.Timeline" column="EVENTID" />
+    		<key-many-to-one name="timeline" class="com.defrainphoto.weddingtracker.model.Timeline" column="EVENTID" />
     		<key-property name="chunkId" column="CHUNKID"/>
     	</composite-id>
     	
@@ -18,7 +18,7 @@
 <!--             <column name="TIMELINEID"/> -->
 <!--         </property> -->
         
-        <many-to-one name="timeline" class="main.java.com.defrainphoto.weddingtracker.model.Timeline" column="EVENTID" insert="false" update="false" />
+        <many-to-one name="timeline" class="com.defrainphoto.weddingtracker.model.Timeline" column="EVENTID" insert="false" update="false" />
 <!-- 		<many-to-one name="timeline" class="main.java.com.defrainphoto.weddingtracker.model.Timeline" column="TIMELINEID"/> -->
         
         <property name="position">
@@ -64,7 +64,7 @@
                 <column name="EVENTID" not-null="true" />
             </key>
 <!-- 			<one-to-many class="main.java.com.defrainphoto.weddingtracker.model.Photographer"/> -->
-            <many-to-many entity-name="main.java.com.defrainphoto.weddingtracker.model.Photographer">
+            <many-to-many entity-name="com.defrainphoto.weddingtracker.model.Photographer">
                 <column name="STAFFID" not-null="true" />
             </many-to-many>
         </set>

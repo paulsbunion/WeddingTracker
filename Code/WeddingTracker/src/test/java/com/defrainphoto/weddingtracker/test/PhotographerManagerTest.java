@@ -1,4 +1,4 @@
-package test.java.com.defrainphoto.weddingtracker.test;
+package com.defrainphoto.weddingtracker.test;
 
 import static org.junit.Assert.*;
 
@@ -7,9 +7,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.com.defrainphoto.weddingtracker.model.HibernateUtil;
-import main.java.com.defrainphoto.weddingtracker.model.Photographer;
-import main.java.com.defrainphoto.weddingtracker.model.PhotographerManager;
+import com.defrainphoto.weddingtracker.model.HibernateUtil;
+import com.defrainphoto.weddingtracker.model.Photographer;
+import com.defrainphoto.weddingtracker.model.PhotographerManager;
 
 public class PhotographerManagerTest {
 

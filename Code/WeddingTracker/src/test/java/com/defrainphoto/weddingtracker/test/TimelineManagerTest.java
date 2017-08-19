@@ -1,4 +1,4 @@
-package test.java.com.defrainphoto.weddingtracker.test;
+package com.defrainphoto.weddingtracker.test;
 
 import static org.junit.Assert.*;
 
@@ -22,17 +22,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.com.defrainphoto.weddingtracker.model.Client;
-import main.java.com.defrainphoto.weddingtracker.model.ClientManager;
-import main.java.com.defrainphoto.weddingtracker.model.Event;
-import main.java.com.defrainphoto.weddingtracker.model.EventManager;
-import main.java.com.defrainphoto.weddingtracker.model.HibernateUtil;
-import main.java.com.defrainphoto.weddingtracker.model.Location;
-import main.java.com.defrainphoto.weddingtracker.model.Photographer;
-import main.java.com.defrainphoto.weddingtracker.model.PhotographerManager;
-import main.java.com.defrainphoto.weddingtracker.model.TimeChunk;
-import main.java.com.defrainphoto.weddingtracker.model.Timeline;
-import main.java.com.defrainphoto.weddingtracker.model.TimelineManager;
+import com.defrainphoto.weddingtracker.model.Client;
+import com.defrainphoto.weddingtracker.model.ClientManager;
+import com.defrainphoto.weddingtracker.model.Event;
+import com.defrainphoto.weddingtracker.model.EventManager;
+import com.defrainphoto.weddingtracker.model.HibernateUtil;
+import com.defrainphoto.weddingtracker.model.Location;
+import com.defrainphoto.weddingtracker.model.Photographer;
+import com.defrainphoto.weddingtracker.model.PhotographerManager;
+import com.defrainphoto.weddingtracker.model.TimeChunk;
+import com.defrainphoto.weddingtracker.model.Timeline;
+import com.defrainphoto.weddingtracker.model.TimelineManager;
 
 public class TimelineManagerTest {
 	TimelineManager timelineManager;
@@ -43,7 +43,7 @@ public class TimelineManagerTest {
 	Timeline timeline;
 	Event event;
 	TimeChunk timeChunk;
-	main.java.com.defrainphoto.weddingtracker.model.EventType eventType;
+	com.defrainphoto.weddingtracker.model.EventType eventType;
 	Date date;
 	Time startTime;
 	Time duration;
@@ -519,7 +519,7 @@ public class TimelineManagerTest {
 		Time duration = new Time(0, 0, 0);
 		String extraCost = "";
 		
-		 eventType = new main.java.com.defrainphoto.weddingtracker.model.EventType
+		 eventType = new com.defrainphoto.weddingtracker.model.EventType
 				("1", "basic Event", "$50");
 		event = new Event("1", "the big Event", eventType, date, startTime, duration, null, "n", extraCost, "", "n", null, null);
 		

@@ -1,4 +1,4 @@
-package main.java.com.defrainphoto.weddingtracker.model;
+package com.defrainphoto.weddingtracker.model;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

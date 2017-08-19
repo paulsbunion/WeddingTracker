@@ -1,4 +1,4 @@
-package main.java.com.defrainphoto.weddingtracker.model;
+package com.defrainphoto.weddingtracker.model;
 
 import java.io.Serializable;
 import java.util.Set;

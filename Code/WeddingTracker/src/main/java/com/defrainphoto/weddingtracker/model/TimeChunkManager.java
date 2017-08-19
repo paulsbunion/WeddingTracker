@@ -1,4 +1,4 @@
-package main.java.com.defrainphoto.weddingtracker.model;
+package com.defrainphoto.weddingtracker.model;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import main.java.com.defrainphoto.weddingtracker.model.HibernateUtil;;
+import com.defrainphoto.weddingtracker.model.HibernateUtil;;
 
 public class TimeChunkManager {
 	private LocationManager locationManager = new LocationManager();

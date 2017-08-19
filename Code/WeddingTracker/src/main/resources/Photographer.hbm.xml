@@ -4,7 +4,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
-    <class name="main.java.com.defrainphoto.weddingtracker.model.Photographer" table="Photographer" >
+    <class name="com.defrainphoto.weddingtracker.model.Photographer" table="Photographer" >
         <id name="staffId" column="STAFFID">
             <generator class="native"/>
         </id>
@@ -23,7 +23,7 @@
                 <column name="STAFFID" not-null="true" />
             </key>
 <!--             <one-to-many class="main.java.com.defrainphoto.weddingtracker.model.EventPhotographers"/> -->
-            <many-to-many entity-name="main.java.com.defrainphoto.weddingtracker.model.Event" >
+            <many-to-many entity-name="com.defrainphoto.weddingtracker.model.Event" >
                 <column name="EVENTID" not-null="true" />
             </many-to-many>
 

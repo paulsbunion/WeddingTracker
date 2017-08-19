@@ -1,4 +1,4 @@
-package test.java.com.defrainphoto.weddingtracker.test;
+package com.defrainphoto.weddingtracker.test;
 
 import static org.junit.Assert.*;
 
@@ -11,9 +11,9 @@ import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.com.defrainphoto.weddingtracker.model.Client;
-import main.java.com.defrainphoto.weddingtracker.model.ClientManager;
-import main.java.com.defrainphoto.weddingtracker.model.HibernateUtil;
+import com.defrainphoto.weddingtracker.model.Client;
+import com.defrainphoto.weddingtracker.model.ClientManager;
+import com.defrainphoto.weddingtracker.model.HibernateUtil;
 
 public class ClientManagerTest {
 	Session session;

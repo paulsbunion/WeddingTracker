@@ -1,4 +1,4 @@
-package test.java.com.defrainphoto.weddingtracker.test;
+package com.defrainphoto.weddingtracker.test;
 
 import static org.junit.Assert.*;
 
@@ -11,9 +11,9 @@ import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.com.defrainphoto.weddingtracker.model.Location;
-import main.java.com.defrainphoto.weddingtracker.model.LocationManager;
-import main.java.com.defrainphoto.weddingtracker.model.HibernateUtil;
+import com.defrainphoto.weddingtracker.model.Location;
+import com.defrainphoto.weddingtracker.model.LocationManager;
+import com.defrainphoto.weddingtracker.model.HibernateUtil;
 
 public class LocationManagerTest {
 	Session session;
@@ -98,8 +98,6 @@ public class LocationManagerTest {
 		Location updatedLocation = null;
 
 		try {
-			System.out.println("old location");
-			System.out.println(location);
 			updatedLocation = locationManager.setLocationState(location, "MI");
 			locationList.add(updatedLocation);
 		}

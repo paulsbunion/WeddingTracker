@@ -6,14 +6,15 @@ import java.sql.Time;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.validation.constraints.NotNull;
+//import javax.validation.constraints.NotNull;
 
 public class Event implements Serializable{
 	private String eventId;
 	private String eventName;
 	private EventType eventType;
 	private Date eventDate;
-	private Time startTime;
+	private Integer startTimeHr;
+	private Integer startTimeMn;
 	private Time duration;
 	private Timeline timeline;
 	private String multiClient;
@@ -21,29 +22,31 @@ public class Event implements Serializable{
 	private String notes;
 	private String multiStaff;
 	
-	private Set<Photographer> photographers;	
-	private Set<Client> clients;
+//	private Set<Photographer> photographers;	
+//	private Set<Client> clients;
 
 	public Event() {}
 	
-	public Event(String eventId, String eventName, EventType eventType, Date eventDate, Time startTime, Time duration,
-			Timeline timeline, String multiClient, String extraCost, String notes, String multiStaff,
-			Set<Photographer> photographers, Set<Client> clients) {
+	public Event(String eventId, String eventName, EventType eventType, Date eventDate, Integer startTimeHr,
+			Integer startTimeMn, Time duration, Timeline timeline, String multiClient, String extraCost, String notes,
+			String multiStaff, Set<Photographer> photographers, Set<Client> clients) {
 		super();
 		this.eventId = eventId;
 		this.eventName = eventName;
 		this.eventType = eventType;
 		this.eventDate = eventDate;
-		this.startTime = startTime;
+		this.startTimeHr = startTimeHr;
+		this.startTimeMn = startTimeMn;
 		this.duration = duration;
 		this.timeline = timeline;
 		this.multiClient = multiClient;
 		this.extraCost = extraCost;
 		this.notes = notes;
 		this.multiStaff = multiStaff;
-		this.photographers = photographers;
-		this.clients = clients;
+//		this.photographers = photographers;
+//		this.clients = clients;
 	}
+	
 
 	public String getEventId() {
 		return eventId;
@@ -77,12 +80,20 @@ public class Event implements Serializable{
 		this.eventDate = eventDate;
 	}
 
-	public Time getStartTime() {
-		return startTime;
+	public Integer getStartTimeHr() {
+		return startTimeHr;
 	}
 
-	public void setStartTime(Time startTime) {
-		this.startTime = startTime;
+	public void setStartTimeHr(Integer startTimeHr) {
+		this.startTimeHr = startTimeHr;
+	}
+	
+	public Integer getStartTimeMn() {
+		return startTimeMn;
+	}
+
+	public void setStartTimeMn(Integer startTimeMn) {
+		this.startTimeMn = startTimeMn;
 	}
 
 	public Time getDuration() {
@@ -136,45 +147,46 @@ public class Event implements Serializable{
 		this.multiStaff = multiStaff;
 	}
 
-	public Set<Photographer> getPhotographers() {
-		return photographers;
-	}
+//	public Set<Photographer> getPhotographers() {
+//		return photographers;
+//	}
 
-	@NotNull
-	public void setPhotographers(Set<Photographer> photographers) {
-		if (photographers == null) {
-			photographers = new HashSet<Photographer>();
-		}
-		this.photographers.addAll(photographers);
-	}
+//	@NotNull
+//	public void setPhotographers(Set<Photographer> photographers) {
+//		if (photographers == null) {
+//			return;
+////			photographers = new HashSet<Photographer>();
+//		}
+//		this.photographers.addAll(photographers);
+//	}
 	
 	// internal method, not hibernate for setting a photographer
-	public void setPhotographers(Photographer newPhotographer) {
-		if (photographers == null) {
-			photographers = new HashSet<Photographer>();
-		}
-		this.photographers.add(newPhotographer);
-	}
+//	public void setPhotographers(Photographer newPhotographer) {
+//		if (photographers == null) {
+//			photographers = new HashSet<Photographer>();
+//		}
+//		this.photographers.add(newPhotographer);
+//	}
 
-	public Set<Client> getClients() {
-		return clients;
-	}
-
-	@NotNull
-	public void setClients(Set<Client> clients) {
-		if (this.clients == null) {
-			clients = new HashSet<Client>();
-		}
-		this.clients.addAll(clients);
-	}
-	
-	// internal method to set clients, not hibernate
-	public void setClients(Client client) {
-		if (this.clients == null) {
-			clients = new HashSet<Client>();
-		}
-		this.clients.add(client);
-	}
+//	public Set<Client> getClients() {
+//		return clients;
+//	}
+//
+////	@NotNull
+//	public void setClients(Set<Client> clients) {
+//		if (this.clients == null) {
+//			clients = new HashSet<Client>();
+//		}
+//		this.clients.addAll(clients);
+//	}
+//	
+//	// internal method to set clients, not hibernate
+//	public void setClients(Client client) {
+//		if (this.clients == null) {
+//			clients = new HashSet<Client>();
+//		}
+//		this.clients.add(client);
+//	}
 
 	@Override
 	public int hashCode() {
@@ -204,7 +216,7 @@ public class Event implements Serializable{
 	@Override
 	public String toString() {
 		return "Event [eventId=" + eventId + ", eventName=" + eventName + ", eventType=" + eventType + ", eventDate="
-				+ eventDate + ", startTime=" + startTime + ", duration=" + duration + ", timeline=" + timeline
+				+ eventDate + ", startTime=" + startTimeHr + ":" + startTimeMn + ", duration=" + duration + ", timeline=" + timeline
 				+ ", extraCost=" + extraCost + ", notes=" + notes + "]";
 	}
 }

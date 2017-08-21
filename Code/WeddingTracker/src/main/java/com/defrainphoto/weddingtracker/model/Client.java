@@ -3,7 +3,7 @@ package com.defrainphoto.weddingtracker.model;
 import java.io.Serializable;
 import java.util.Set;
 
-import javax.validation.constraints.NotNull;
+//import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Email;
 
@@ -44,7 +44,7 @@ public class Client implements Serializable{
 		return clientId;
 	}
 	
-	@NotNull
+//	@NotNull
 	public void setClientId(String clientId) {
 		this.clientId = clientId;
 	}
@@ -53,7 +53,7 @@ public class Client implements Serializable{
 		return firstName;
 	}
 	
-	@NotNull
+//	@NotNull
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
@@ -62,7 +62,7 @@ public class Client implements Serializable{
 		return lastName;
 	}
 	
-	@NotNull
+//	@NotNull
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
@@ -71,7 +71,7 @@ public class Client implements Serializable{
 		return address;
 	}
 	
-	@NotNull
+//	@NotNull
 	public void setAddress(String address) {
 		this.address = address;
 	}
@@ -80,7 +80,7 @@ public class Client implements Serializable{
 		return phoneNumber;
 	}
 	
-	@NotNull
+//	@NotNull
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
@@ -89,8 +89,8 @@ public class Client implements Serializable{
 		return email;
 	}
 	
-	@NotNull
-	@Email
+//	@NotNull
+//	@Email
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -99,7 +99,7 @@ public class Client implements Serializable{
 		return autoRemind;
 	}
 	
-	@NotNull
+//	@NotNull
 	public void setAutoRemind(String autoRemind) {
 		this.autoRemind = autoRemind;
 	}

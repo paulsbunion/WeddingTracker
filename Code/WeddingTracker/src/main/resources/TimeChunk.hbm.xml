@@ -6,8 +6,8 @@
 <hibernate-mapping>
     <class name="com.defrainphoto.weddingtracker.model.TimeChunk" table="TIME_CHUNK" >
     	<composite-id>
-    		<key-many-to-one name="timeline" class="com.defrainphoto.weddingtracker.model.Timeline" column="EVENTID" />
     		<key-property name="chunkId" column="CHUNKID"/>
+    		<key-many-to-one name="timeline" class="com.defrainphoto.weddingtracker.model.Timeline" column="EVENTID" />
     	</composite-id>
     	
 <!--         <id name="chunkId" column="CHUNKID"> -->
@@ -58,7 +58,7 @@
 <!--             <column name="CLIENTID"/> -->
 <!--         </property> -->
         
-		<set name="photographers" table="TIMECHUNKPHOTOGRAPHER" fetch="select">
+		<set name="photographers" table="TIMECHUNKPHOTOGRAPHER" inverse="false" >
             <key>
                 <column name="CHUNKID" not-null="true" />
                 <column name="EVENTID" not-null="true" />

@@ -78,7 +78,7 @@ public class EventType implements Serializable{
 
 	@Override
 	public String toString() {
-		return "EventType [eventTypeId=" + eventTypeId + ", eventType=" + eventType + ", baseCost=" + baseCost + "]";
+		return "" + eventTypeId + " " + eventType + " " + baseCost;
 	}
 	
 }

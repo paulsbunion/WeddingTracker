@@ -6,7 +6,7 @@
 <hibernate-mapping>
     <class name="com.defrainphoto.weddingtracker.model.Event" table="Event" >
         <id name="eventId" column="EVENTID">
-            <generator class="assigned"/>
+            <generator class="native"/>
         </id>
         
         <property name="eventName">
@@ -14,15 +14,19 @@
         </property>
         
         <many-to-one name="eventType" 
-        			 column="TYPE" 
+        			 column="EVENTTYPEID" 
         			 class="com.defrainphoto.weddingtracker.model.EventType"/>
         
         <property name="eventDate">
         	<column name="EVENTDATE"/>
         </property>
         
-        <property name="startTime">
-        	<column name="STARTTIME"/>
+        <property name="startTimeHr">
+        	<column name="STARTTIMEHR"/>
+        </property>
+        
+        <property name="startTimeMn">
+        	<column name="STARTTIMEMN"/>
         </property>
         
         <property name="duration">
@@ -48,18 +52,18 @@
         	<column name="MULTISTAFF"/>
         </property>
                 
-		<set name="photographers" table="EVENT_PHOTOGRAPHERS" fetch="select" cascade="save-update">
-        	<key column="EVENTID" not-null="true"/>
-        	<many-to-many column="STAFFID"
-        				  class="com.defrainphoto.weddingtracker.model.Photographer" />
-        </set>
+<!-- 		<set name="photographers" table="EVENT_PHOTOGRAPHERS" fetch="select" cascade="save-update" > -->
+<!--         	<key column="EVENTID" not-null="true" /> -->
+<!--         	<many-to-many column="STAFFID" -->
+<!--         				  class="com.defrainphoto.weddingtracker.model.Photographer" not-found="ignore"/> -->
+<!--         </set> -->
         
-		<set name="clients" table="EVENT_CLIENTS" fetch="select">
-        	<key column="EVENTID"/>
-        	<many-to-many column="CLIENTID" 
-        				  unique="true" 
-        				  class="com.defrainphoto.weddingtracker.model.Client"/>
-        </set>
+<!-- 		<set name="clients" table="EVENT_CLIENTS" fetch="select"> -->
+<!--         	<key column="EVENTID"/> -->
+<!--         	<many-to-many column="CLIENTID"  -->
+<!--         				  unique="true"  -->
+<!--         				  class="com.defrainphoto.weddingtracker.model.Client"/> -->
+<!--         </set> -->
         
     </class>
 </hibernate-mapping>

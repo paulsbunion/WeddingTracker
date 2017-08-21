@@ -16,13 +16,17 @@ import org.springframework.web.servlet.mvc.AbstractController;
 @Controller
 public class HelloController {
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String printWelcome(ModelMap model) {
-		model.addAttribute("message", "Spring Hello World Test");
-		
-		return "hello";
-	}
+//	@RequestMapping(value = "/", method = RequestMethod.GET)
+//	public String printWelcome(ModelMap model) {
+//		model.addAttribute("message", "Spring Hello World Test");
+//		
+//		return "entry";
+//	}
 	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String printWelcome() {
+		return "entry";
+	}
 	
 	@RequestMapping(value = "/hello/{name:.+}", method = RequestMethod.GET)
 	public ModelAndView hello(@PathVariable("name") String name) {

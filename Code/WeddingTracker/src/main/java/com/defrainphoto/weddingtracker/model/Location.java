@@ -2,7 +2,7 @@ package com.defrainphoto.weddingtracker.model;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotNull;
+//import javax.validation.constraints.NotNull;
 
 public class Location implements Serializable{
 	private String locationId;
@@ -26,7 +26,7 @@ public class Location implements Serializable{
 		return locationId;
 	}
 	
-	@NotNull
+//	@NotNull
 	public void setLocationId(String locationId) {
 		this.locationId = locationId;
 	}
@@ -35,7 +35,7 @@ public class Location implements Serializable{
 		return city;
 	}
 	
-	@NotNull
+//	@NotNull
 	public void setCity(String city) {
 		this.city = city;
 	}
@@ -44,7 +44,7 @@ public class Location implements Serializable{
 		return state;
 	}
 	
-	@NotNull
+//	@NotNull
 	public void setState(String state) {
 		this.state = state;
 	}
@@ -53,7 +53,7 @@ public class Location implements Serializable{
 		return zip;
 	}
 	
-	@NotNull
+//	@NotNull
 	public void setZip(String zip) {
 		this.zip = zip;
 	}
@@ -62,7 +62,7 @@ public class Location implements Serializable{
 		return street;
 	}
 	
-	@NotNull
+//	@NotNull
 	public void setStreet(String street) {
 		this.street = street;
 	}

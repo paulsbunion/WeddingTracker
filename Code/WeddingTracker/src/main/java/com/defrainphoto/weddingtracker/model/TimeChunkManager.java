@@ -478,7 +478,6 @@ public class TimeChunkManager {
 				}
 				
 				session.saveOrUpdate(foundTimeChunk);
-
 				session.getTransaction().commit();
 				
 				// persist to avoid lazy error

@@ -53,8 +53,7 @@ public class EventController {
 		model.addAttribute("eventName", 	event.getEventName());
 		model.addAttribute("eventType",		event.getEventType());
 		model.addAttribute("eventDate", 	event.getEventDate());
-		model.addAttribute("startTimeHr",	event.getStartTimeHr());
-		model.addAttribute("startTimeMn",	event.getStartTimeMn());
+		model.addAttribute("startTime",		event.getStartTime());
 		model.addAttribute("duration",		event.getDuration());
 		model.addAttribute("extraCost",		event.getExtraCost());
 		model.addAttribute("notes", 		event.getNotes());
@@ -62,8 +61,9 @@ public class EventController {
 		event.setEventId("");
 		event.setMultiClient("");
 		event.setMultiStaff("");
-		eventManager.addEvent(event);
+		event = eventManager.addEvent(event);
 		
+		model.addAttribute("eventId", event.getEventId());
 		return "addEvent";
 	}
 	

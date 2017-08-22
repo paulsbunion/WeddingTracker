@@ -21,12 +21,8 @@
         	<column name="EVENTDATE"/>
         </property>
         
-        <property name="startTimeHr">
-        	<column name="STARTTIMEHR"/>
-        </property>
-        
-        <property name="startTimeMn">
-        	<column name="STARTTIMEMN"/>
+        <property name="startTime">
+        	<column name="STARTTIME"/>
         </property>
         
         <property name="duration">

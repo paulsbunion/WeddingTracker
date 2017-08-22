@@ -46,8 +46,8 @@ public class TimelineManagerTest {
 	com.defrainphoto.weddingtracker.model.EventType eventType;
 	Date date;
 	Time startTime;
-	Integer startTimeHr;
-	Integer startTimeMn;
+//	Integer startTimeHr;
+//	Integer startTimeMn;
 	Time duration;
 	String extraCost;
 	
@@ -78,13 +78,13 @@ public class TimelineManagerTest {
 	public void testAddTimeline() {
 		List<Timeline> timelineList = new LinkedList<Timeline>();
 		date = new Date(2017, 06, 15);
-		startTime = new Time(0, 0, 0);
-		startTimeHr = 0;
-		startTimeMn = 0;
-		duration =  new Time(0, 0, 0);
+		startTime = Time.valueOf("0:0:0");
+//		startTimeHr = 0;
+//		startTimeMn = 0;
+		duration =  Time.valueOf("0:0:0");
 		extraCost = "";
 		
-		event = new Event("2", "the 2nd big Event", eventType, date, startTimeHr, startTimeMn, duration, null, "n", extraCost, "", "n", null, null);
+		event = new Event("2", "the 2nd big Event", eventType, date, startTime, duration, null, "n", extraCost, "", "n", null, null);
 		openSession();
 		session.beginTransaction();
 		session.save(event);
@@ -547,12 +547,12 @@ public class TimelineManagerTest {
 	
 	private void createEvent() {
 		Date date = Date.valueOf("2017-10-5");
-		Integer startTimeHr = 12;
-		Integer startTimeMn = 30;
+//		Integer startTimeHr = 12;
+//		Integer startTimeMn = 30;
 		Time duration = new Time(0, 0, 0);
 		String extraCost = "";
 		
-		event = new Event("1", "the big Event", eventType, date, startTimeHr, startTimeMn, duration, null, "n", extraCost, "", "n", null, null);
+		event = new Event("1", "the big Event", eventType, date, startTime, duration, null, "n", extraCost, "", "n", null, null);
 		
 		try {
 			openSession();
@@ -578,8 +578,8 @@ public class TimelineManagerTest {
 	
 	private void createTimeline() {		
 		//create a timeline
-		startTime = new Time(11, 0, 0);
-		duration = new Time(0, 0, 0);
+		startTime = Time.valueOf("11:0:0");
+		duration = Time.valueOf("0:0:0");
 		timeline = new Timeline(event.getEventId(), event, null, startTime, duration);
 		try {
 			openSession();

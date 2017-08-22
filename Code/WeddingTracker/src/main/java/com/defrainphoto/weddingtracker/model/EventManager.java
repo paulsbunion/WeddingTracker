@@ -40,6 +40,13 @@ public class EventManager {
 		return found ? newEvent : null;
 	}
 	
+	public Event getEventById(Event event) {
+		Event result;
+		
+		result = findEvent(event, true, false);
+		return result; 
+	}
+	
 	private Event findEvent(Event event, boolean byID, boolean byName) {
 		boolean found = false;
 		openSession();

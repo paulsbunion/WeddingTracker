@@ -13,8 +13,7 @@ public class Event implements Serializable{
 	private String eventName;
 	private EventType eventType;
 	private Date eventDate;
-	private Integer startTimeHr;
-	private Integer startTimeMn;
+	private Time startTime;
 	private Time duration;
 	private Timeline timeline;
 	private String multiClient;
@@ -27,16 +26,15 @@ public class Event implements Serializable{
 
 	public Event() {}
 	
-	public Event(String eventId, String eventName, EventType eventType, Date eventDate, Integer startTimeHr,
-			Integer startTimeMn, Time duration, Timeline timeline, String multiClient, String extraCost, String notes,
+	public Event(String eventId, String eventName, EventType eventType, Date eventDate, Time startTime,
+			Time duration, Timeline timeline, String multiClient, String extraCost, String notes,
 			String multiStaff, Set<Photographer> photographers, Set<Client> clients) {
 		super();
 		this.eventId = eventId;
 		this.eventName = eventName;
 		this.eventType = eventType;
 		this.eventDate = eventDate;
-		this.startTimeHr = startTimeHr;
-		this.startTimeMn = startTimeMn;
+		this.startTime = startTime;
 		this.duration = duration;
 		this.timeline = timeline;
 		this.multiClient = multiClient;
@@ -80,22 +78,14 @@ public class Event implements Serializable{
 		this.eventDate = eventDate;
 	}
 
-	public Integer getStartTimeHr() {
-		return startTimeHr;
+	public Time getStartTime() {
+		return startTime;
 	}
 
-	public void setStartTimeHr(Integer startTimeHr) {
-		this.startTimeHr = startTimeHr;
+	public void setStartTime(Time startTime) {
+		this.startTime = startTime;
 	}
 	
-	public Integer getStartTimeMn() {
-		return startTimeMn;
-	}
-
-	public void setStartTimeMn(Integer startTimeMn) {
-		this.startTimeMn = startTimeMn;
-	}
-
 	public Time getDuration() {
 		return duration;
 	}
@@ -216,7 +206,7 @@ public class Event implements Serializable{
 	@Override
 	public String toString() {
 		return "Event [eventId=" + eventId + ", eventName=" + eventName + ", eventType=" + eventType + ", eventDate="
-				+ eventDate + ", startTime=" + startTimeHr + ":" + startTimeMn + ", duration=" + duration + ", timeline=" + timeline
+				+ eventDate + ", startTime=" + startTime + ", duration=" + duration + ", timeline=" + timeline
 				+ ", extraCost=" + extraCost + ", notes=" + notes + "]";
 	}
 }

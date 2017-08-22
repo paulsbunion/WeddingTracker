@@ -15,6 +15,7 @@ import org.hibernate.Session;
 public class TimelineManager {
 	private Session session;
 	public TimeChunkManager timeChunkManager = new TimeChunkManager();
+	public EventManager eventManager = new EventManager();
 	
 	public Timeline addTimeline(Timeline newTimeline) {
 		boolean found = false;
@@ -24,9 +25,11 @@ public class TimelineManager {
 		if (temp != null) {
 			throw new EntityExistsException("Entity already Exists:  " + newTimeline.toString());
 		}
-		
 		// else, open session, save, and commit
 		else {
+			// make sure not null event in timeline
+			updateEventInTimeline(newTimeline);
+			
 			openSession();
 			session.beginTransaction();
 			session.save(newTimeline);
@@ -36,13 +39,19 @@ public class TimelineManager {
 			
 			temp = findTimeline(newTimeline, true);
 			newTimeline.setEvent(temp.getEvent()); 
-			
 			found = true;
 		}
 		
 		return found ? newTimeline : null;
 	}
 	
+	private void updateEventInTimeline(Timeline newTimeline) {
+		Event event = new Event();
+		event.setEventId(newTimeline.getEventId());
+		event = eventManager.getEventById(event);
+		newTimeline.setEvent(event);
+	}
+
 	public Timeline getTimelineByEventId(Timeline timeline) {
 		Timeline result;
 		
@@ -232,6 +241,7 @@ public class TimelineManager {
 		}
 		
 		Hibernate.initialize(timeline);
+		Hibernate.initialize(timeline.getTimeChunks());
 		closeSession();
 		
 		return found ? timeline : null;

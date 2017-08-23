@@ -53,6 +53,33 @@ public class PhotographerManager {
 		return result; 
 	}
 	
+	public List<Photographer> getAllPhotographers() {
+		boolean found = false;
+		List<Photographer> result = null;
+		openSession();
+		
+		session.beginTransaction();
+		StringBuilder queryString = new StringBuilder("from Photographer");
+		Query query = session.createQuery(queryString.toString());
+		
+		List list = query.list();
+		
+		session.getTransaction().commit();
+		
+		if (list != null && !list.isEmpty()) {
+			result  = (List<Photographer>) list;
+			found = true;
+		}
+		
+		else {
+			found = false;
+		}
+		Hibernate.initialize(list);
+		closeSession();
+		
+		return found ? list : null;
+	}
+	
 	private Photographer findPhotographer(Photographer photog, boolean byID, boolean byFName, boolean byLname) {
 		boolean found = false;
 		openSession();

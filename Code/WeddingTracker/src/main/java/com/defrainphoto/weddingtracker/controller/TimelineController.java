@@ -31,14 +31,13 @@ public class TimelineController {
 		timeline.setEventId(eventId);
 		timeline.setStartTime(Time.valueOf(startTime));
 //		timeline.setTotalTime(Time.valueOf("0:0:0"));
-		System.out.println("the eventId in get");
-		System.out.println(eventId);
+		
 		ModelAndView model = new ModelAndView("createTimeline", "command", timeline);
 		return model;
 	}
 	
 	@RequestMapping(value = "/addTimeline", method = RequestMethod.POST)
-	public String addEvent(@ModelAttribute("WeddingTracker")Timeline timeline, ModelMap model) {
+	public String addEvent(@ModelAttribute("timeline")Timeline timeline, ModelMap model) {
 		
 		timeline.setTotalTime(Time.valueOf("0:0:0"));
 		model.addAttribute("startTime", 	timeline.getStartTime());

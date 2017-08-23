@@ -68,6 +68,33 @@ public class ClientManager {
 		return result; 
 	}
 	
+	public List<Client> getAllClients() {
+		boolean found = false;
+		List<Client> result = null;
+		openSession();
+		
+		session.beginTransaction();
+		StringBuilder queryString = new StringBuilder("from Client");
+		Query query = session.createQuery(queryString.toString());
+		
+		List list = query.list();
+		
+		session.getTransaction().commit();
+		
+		if (list != null && !list.isEmpty()) {
+			result  = (List<Client>) list;
+			found = true;
+		}
+		
+		else {
+			found = false;
+		}
+		Hibernate.initialize(list);
+		closeSession();
+		
+		return found ? list : null;
+	}
+	
 	private Client findClient(Client client, boolean byID, boolean byFName, boolean byLname, boolean byPhoneNumber, boolean byEmail) {
 		boolean found = false;
 		openSession();

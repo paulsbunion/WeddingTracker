@@ -9,8 +9,10 @@
 
 	<body>
 		<div>
-			<a href="/WeddingTracker/createEventType">Add an EventType</a>
-			<a href="/WeddingTracker/createEvent">Add an Event</a>
+			<ul>
+				<li><a href="/WeddingTracker/createEventType">Add an EventType</a></li> 
+				<li><a href="/WeddingTracker/createEvent">Add an Event</a></li>
+			</ul>
 		</div>
 	</body>
 </html>

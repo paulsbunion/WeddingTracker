@@ -19,7 +19,10 @@
 		</div>
 		
 		<div>
-			<a href="/WeddingTracker/CreateTimeChunk/${eventId}">Add a timeline occurrence</a>
+		<ul>
+			<li><a href="/WeddingTracker/createTimeSlice/${eventId}">Add a time slice</a></li>
+			<li><a href="/WeddingTracker">Home</a></li>
+		</ul>
 		</div>
 	</body>
 </html>

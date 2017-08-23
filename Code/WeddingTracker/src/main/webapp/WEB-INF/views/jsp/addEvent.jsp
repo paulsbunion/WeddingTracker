@@ -46,7 +46,10 @@
       
       	<div>
       	<p>Eventid: ${eventId}</p>
-      		<a href="/WeddingTracker/createTimeline/${eventId}/${startTime}">Add a Timeline</a>      	
+      	<ul>
+      		<li><a href="/WeddingTracker/createTimeline/${eventId}/${startTime}">Add a Timeline</a></li>    
+      		<li><a href="/WeddingTracker">Home</a></li>
+      	</ul>
       	</div>
 	</body>
 </html>

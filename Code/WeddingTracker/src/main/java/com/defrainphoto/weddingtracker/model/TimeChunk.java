@@ -16,6 +16,16 @@ public class TimeChunk implements Serializable {
 	private Client client;
 	private Set<Photographer> photographers;
 	
+	private String eventId;
+	
+	public String getEventId() {
+		return eventId;
+	}
+
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
+	}
+
 	public TimeChunk() {}
 		
 	public TimeChunk(String chunkId, Timeline timeline, int position, Time startTime, Location location, Time duration,
@@ -145,7 +155,7 @@ public class TimeChunk implements Serializable {
 	public String toString() {
 		return "TimeChunk [chunkId=" + chunkId + ", position=" + position + ", startTime="
 				+ startTime + ", location=" + location + ", duration=" + duration + ", description=" + description
-				+ ", client=" + client + ", photographers=" + photographers + "]";
+				+ ", client=" + client + ", photographers=" + photographers + ", eventId=" + eventId + "]";
 	}
 
 	

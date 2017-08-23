@@ -14,7 +14,7 @@ import org.hibernate.Session;
 
 public class TimelineManager {
 	private Session session;
-	public TimeChunkManager timeChunkManager = new TimeChunkManager();
+	public TimeChunkManager timeChunkManager = new TimeChunkManager(this);
 	public EventManager eventManager = new EventManager();
 	
 	public Timeline addTimeline(Timeline newTimeline) {

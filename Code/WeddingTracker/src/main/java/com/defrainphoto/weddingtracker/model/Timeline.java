@@ -92,14 +92,13 @@ public class Timeline implements Serializable{
 
 	@Override
 	public String toString() {
-		if (timeChunks == null) {
-			return "Timeline [eventId=" + eventId + ", timeChunks= null" + ", startTime=" + startTime
-					+ ", totalTime=" + totalTime + "]";
-		}
-		else {
-			return "Timeline [eventId=" + eventId + ", timeChunks=" + timeChunks + ", startTime=" + startTime
-					+ ", totalTime=" + totalTime + "]";
-		}
+//		if (timeChunks == null) {
+			return "" + eventId + " " + startTime + " " + totalTime;
+//		}
+//		else {
+//			return "Timeline [eventId=" + eventId + ", timeChunks=" + timeChunks + ", startTime=" + startTime
+//					+ ", totalTime=" + totalTime + "]";
+//		}
 	}
 	
 	

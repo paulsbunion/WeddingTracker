@@ -7,6 +7,7 @@
    </head>
 
    <body>
+   	<div>
       <h2>Submitted EventType Information</h2>
       <table>
          <tr>
@@ -17,7 +18,12 @@
             <td>Base Cost</td>
             <td>${baseCost}</td>
          </tr>
-      </table>  
+      </table>
+      </div>  
+      
+      <div>
+      	<a href="/WeddingTracker/">Home</a>
+      </div>
    </body>
    
 </html>

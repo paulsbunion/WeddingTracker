@@ -20,23 +20,38 @@ import com.defrainphoto.weddingtracker.model.HibernateUtil;;
 
 public class TimeChunkManager {
 	private LocationManager locationManager = new LocationManager();
+	private TimelineManager timelineManager;
 	Session session;
 
+	public TimeChunkManager(TimelineManager timelineManager) {
+		this.timelineManager = timelineManager;
+	}
+	
+	public TimeChunkManager() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public TimeChunk addTimeChunk(TimeChunk newChunk) {
+		System.out.println("adding a timechunk");
 		boolean found = false;
 		TimeChunk temp = null;
 		
+		// make sure not null timeline in timechunk
+		updateTimelineInTimeChunk(newChunk);
+		System.out.println("done updating timeline");
+					
 		// if already in DB, throw exception
 		temp = findTimeChunk(newChunk, false, true, true);
 		
-		if (temp != null) {
+//		if (temp != null) {
 //			throw new EntityExistsException("Entity already Exists:  " + newChunk .toString());
-			}
-		
-		
-		// else, open session, save, and commit
-		else {
-			
+//			}
+//		
+//		
+//		// else, open session, save, and commit
+//		else {
+			System.out.println("adding a timechunk part 2");
+			System.out.println(newChunk.getTimeline());
 			String newId = getNextId(newChunk);
 			newChunk.setChunkId(newId);
 			
@@ -51,10 +66,17 @@ public class TimeChunkManager {
 			Hibernate.initialize(newChunk);
 			closeSession();
 			found = true;
-		}
+//		}
 		
 		return found ? newChunk : null;
 		
+	}
+	
+	private void updateTimelineInTimeChunk(TimeChunk newTimeChunk) {
+		Timeline timeline = new Timeline();
+		timeline.setEventId(newTimeChunk.getEventId());
+		timeline = timelineManager.getTimelineByEventId(timeline);
+		newTimeChunk.setTimeline(timeline);
 	}
 	
 	private String getNextId(TimeChunk newChunk) {
@@ -286,6 +308,7 @@ public class TimeChunkManager {
 			
 			else {
 				found = false;
+				System.out.println("no chunk exists");
 			}
 		}
 		

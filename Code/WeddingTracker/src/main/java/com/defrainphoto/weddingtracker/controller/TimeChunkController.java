@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.defrainphoto.weddingtracker.editors.ClientEditor;
 import com.defrainphoto.weddingtracker.editors.SqlTimeEditor;
 import com.defrainphoto.weddingtracker.model.Client;
 import com.defrainphoto.weddingtracker.model.ClientManager;
@@ -89,6 +90,7 @@ public class TimeChunkController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder) { 
 		binder.registerCustomEditor(Time.class, new SqlTimeEditor());
+		binder.registerCustomEditor(Client.class, new ClientEditor());
 //		binder.registerCustomEditor(Timeline.class, new TimelineEditor());
 	}
 }

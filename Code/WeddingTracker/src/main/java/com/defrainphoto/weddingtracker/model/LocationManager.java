@@ -169,7 +169,8 @@ public class LocationManager {
 		List list = query.list();
 		
 		session.getTransaction().commit();
-		
+		System.out.println("In locationManager");
+		System.out.println(list);
 		if (list != null && !list.isEmpty()) {
 			Location temp = (Location) list.get(0);
 			location.setLocationId(temp.getLocationId());

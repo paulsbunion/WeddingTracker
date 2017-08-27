@@ -30,15 +30,30 @@
 					</tr>
 					<tr>
 						<td><form:label path = "location">Location</form:label></td>
-						<td><form:select path = "location" items = "${locationList}" /> </td>
+						<td>
+							<form:select path = "location">
+								<form:option value="">&nbsp;</form:option>
+								<form:options items = "${locationList}" />
+							</form:select> 
+						</td>
 					</tr>
 					<tr>
 						<td><form:label path = "client">Client</form:label></td>
-						<td><form:select path = "client" items = "${clientList}"/></td>
+						<td>
+							<form:select path = "client">
+								<form:option value="">&nbsp;</form:option>
+								<form:options items = "${clientList}"/>
+							</form:select>
+						</td>
+							
 					</tr>
 					<tr>
 						<td><form:label path = "photographers">Photographers</form:label></td>
-						<td><form:select path = "photographers" items = "${photographerList}" /></td>
+						<td>
+							<ul>
+								<form:checkboxes element="li" path = "photographers" items = "${photographerList}" />
+							</ul>
+						</td>
 					</tr>
 
 					<form:input type="hidden" path="position"/>

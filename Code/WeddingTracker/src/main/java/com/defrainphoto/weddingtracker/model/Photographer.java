@@ -78,6 +78,6 @@ public class Photographer implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Photographer [staffId=" + staffId + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+		return "" + firstName + " " + lastName;
 	}
 }

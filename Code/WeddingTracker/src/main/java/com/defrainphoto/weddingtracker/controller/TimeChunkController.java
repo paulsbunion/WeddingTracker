@@ -2,6 +2,7 @@ package com.defrainphoto.weddingtracker.controller;
 
 import java.sql.Time;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.defrainphoto.weddingtracker.editors.ClientEditor;
+import com.defrainphoto.weddingtracker.editors.LocationEditor;
+import com.defrainphoto.weddingtracker.editors.PhotographerEditor;
 import com.defrainphoto.weddingtracker.editors.SqlTimeEditor;
 import com.defrainphoto.weddingtracker.model.Client;
 import com.defrainphoto.weddingtracker.model.ClientManager;
@@ -53,7 +56,7 @@ public class TimeChunkController {
 		
 		model.addObject("locationList", locationList);
 		model.addObject("clientList", clientList);
-		model.addObject("PhotographerList", photographerList);
+		model.addObject("photographerList", photographerList);
 		model.addObject("timeline", timeline);
 		
 		System.out.println("before POST");
@@ -61,11 +64,13 @@ public class TimeChunkController {
 	}
 	
 	@RequestMapping(value = "/addTimeSlice", method = RequestMethod.POST)
-	public void addTimeChunk(@ModelAttribute("timeChunk") TimeChunk timeChunk, ModelMap model
-			) {
-		
-		System.out.println("the model");
-		System.out.println(model);
+	public void addTimeChunk(@ModelAttribute("timeChunk") TimeChunk timeChunk, ModelMap model,
+			@ModelAttribute("location") String location, 
+			@ModelAttribute("client") Client client) {
+//		System.out.println("the location");
+//		System.out.println(location);
+//		System.out.println("the model");
+//		System.out.println(model);
 		model.addAttribute("client", timeChunk.getClient());
 		model.addAttribute("description", timeChunk.getDescription());
 		model.addAttribute("duration", timeChunk.getDuration());
@@ -84,6 +89,9 @@ public class TimeChunkController {
 		System.out.println("the added chunk");
 		System.out.println(timeChunk);
 		
+		System.out.println("The client");
+		System.out.println(timeChunk.getClient());
+		
 		model.addAttribute("chunkId", timeChunk.getChunkId());
 	}
 	
@@ -92,5 +100,7 @@ public class TimeChunkController {
 		binder.registerCustomEditor(Time.class, new SqlTimeEditor());
 		binder.registerCustomEditor(Client.class, new ClientEditor());
 //		binder.registerCustomEditor(Timeline.class, new TimelineEditor());
+		binder.registerCustomEditor(Location.class, new LocationEditor());
+		binder.registerCustomEditor(Set.class, new PhotographerEditor());
 	}
 }

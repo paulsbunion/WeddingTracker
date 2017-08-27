@@ -13,7 +13,7 @@ public class Location implements Serializable{
 	private String description;
 	
 	public Location() {};
-	public Location(String locationId, String city, String state, String zip, String street, String description) {
+	public Location(String locationId, String street, String city, String state, String zip, String description) {
 		this.locationId = locationId;
 		this.city = city;
 		this.state = state;
@@ -99,8 +99,11 @@ public class Location implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "Location [locationId=" + locationId + ", city=" + city + ", state=" + state + ", zip=" + zip
-				+ ", street=" + street + ", description=" + description + "]";
+		String space = "";
+		if (description != null && description.length() > 0) {
+			space = ", ";
+		}
+		return "" + street + ", " + city + ", " + state + ", " + zip + space + description;
 	}
 	
 

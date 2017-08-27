@@ -13,6 +13,8 @@
 				<li><a href="/WeddingTracker/createEventType">Add an EventType</a></li> 
 				<li><a href="/WeddingTracker/createEvent">Add an Event</a></li>
 				<li><a href="/WeddingTracker/createClient">Add a Client</a></li>
+				<li><a href="/WeddingTracker/createPhotographer">Add a Photographer</a></li>
+				<li><a href="/WeddingTracker/createLocation">Add a Location</a></li>
 			</ul>
 		</div>
 	</body>

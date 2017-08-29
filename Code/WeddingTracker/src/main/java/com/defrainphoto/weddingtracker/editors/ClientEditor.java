@@ -14,11 +14,10 @@ public class ClientEditor extends PropertyEditorSupport{
 	@Override
 	public void setAsText(String text) throws IllegalArgumentException {
 		if (StringUtils.hasText(text)) {
-			System.out.println("editing a Client");
-			System.out.println(text);
 			String[] data = text.split(" ");
+			// remove client email parenthesis
 			data[2] = data[2].substring(1, data[2].length() - 1);
-			System.out.println(data[2]);
+			
 			Client client = new Client("", data[0], data[1], null, null, data[2], null);
 			client = clientManager.getClientByEmail(client);
 			setValue(client);

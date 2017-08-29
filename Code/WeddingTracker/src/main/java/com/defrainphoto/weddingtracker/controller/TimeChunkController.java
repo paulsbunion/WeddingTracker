@@ -59,7 +59,7 @@ public class TimeChunkController {
 		model.addObject("photographerList", photographerList);
 		model.addObject("timeline", timeline);
 		
-		System.out.println("before POST");
+//		System.out.println("before POST");
 		return model;
 	}
 	
@@ -67,10 +67,7 @@ public class TimeChunkController {
 	public void addTimeChunk(@ModelAttribute("timeChunk") TimeChunk timeChunk, ModelMap model,
 			@ModelAttribute("location") String location, 
 			@ModelAttribute("client") Client client) {
-//		System.out.println("the location");
-//		System.out.println(location);
-//		System.out.println("the model");
-//		System.out.println(model);
+		
 		model.addAttribute("client", timeChunk.getClient());
 		model.addAttribute("description", timeChunk.getDescription());
 		model.addAttribute("duration", timeChunk.getDuration());
@@ -81,16 +78,9 @@ public class TimeChunkController {
 		model.addAttribute("eventId", timeChunk.getEventId());
 //		model.addAttribute("timeline", timeChunk.getTimeline());
 		
-		System.out.println("the timechunk timeline event id");
-//		System.out.println(model.get(timeChunk));
-		System.out.println(model.get("eventId"));
-		System.out.println(model.get("timeline"));
 		timeChunk = timelineManager.timeChunkManager.addTimeChunk(timeChunk);
 		System.out.println("the added chunk");
 		System.out.println(timeChunk);
-		
-		System.out.println("The client");
-		System.out.println(timeChunk.getClient());
 		
 		model.addAttribute("chunkId", timeChunk.getChunkId());
 	}

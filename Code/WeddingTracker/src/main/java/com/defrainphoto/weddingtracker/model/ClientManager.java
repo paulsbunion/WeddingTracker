@@ -3,6 +3,7 @@ package com.defrainphoto.weddingtracker.model;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
@@ -38,6 +39,32 @@ public class ClientManager {
 		}
 		
 		return found ? newClient : null;
+	}
+	
+	public Client updateClient(Client client) {
+		
+		boolean found = false;
+		Client temp = findClient(client, true, false, false, false, false);
+		
+		// if not in DB, throw exception
+		if (temp == null) {
+			throw new EntityNotFoundException("Entity not Found:  " + client.toString());
+		}
+		
+		// else, open session, save, and commit
+		else {
+			openSession();
+			
+			session.beginTransaction();
+			session.saveOrUpdate(client);
+			session.getTransaction().commit();
+			
+			Hibernate.initialize(client);
+			closeSession();
+			found = true;
+		}
+		
+		return found ? client : null;
 	}
 
 	public Client getClientByName(Client client) {
@@ -106,14 +133,14 @@ public class ClientManager {
 		
 		Query query = session.createQuery(queryString.toString());
 		setQueryVariables(client, query, byID, byFName, byLname, byPhoneNumber, byEmail);
-		
 		List list = query.list();
 		
 		session.getTransaction().commit();
-		
+		System.out.println(list.toString());
 		if (list != null && !list.isEmpty()) {
 			Client temp = (Client) list.get(0);
-			client.setClientId(temp.getClientId());
+			//client.setClientId(temp.getClientId());
+			client = temp;
 			found = true;
 		}
 		
@@ -122,7 +149,10 @@ public class ClientManager {
 		}
 		Hibernate.initialize(client);
 		closeSession();
-		
+		if (found) {
+			System.out.println("found");
+			System.out.println(client);
+		}
 		return found ? client : null;
 	}
 	

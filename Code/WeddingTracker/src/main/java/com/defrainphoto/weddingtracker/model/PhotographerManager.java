@@ -98,7 +98,8 @@ public class PhotographerManager {
 		
 		if (list != null && !list.isEmpty()) {
 			Photographer temp = (Photographer) list.get(0);
-			photog.setStaffId(temp.getStaffId());
+//			photog.setStaffId(temp.getStaffId());
+			photog = temp;
 			found = true;
 		}
 		

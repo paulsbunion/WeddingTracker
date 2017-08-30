@@ -25,6 +25,9 @@
         <mapping resource="EventType.hbm.xml"/>
         <mapping resource="TimeChunk.hbm.xml"/>
         <mapping resource="Timeline.hbm.xml"/>
+        
+        <mapping class="com.defrainphoto.weddingtracker.model.EventPhotographer" />
+        
 <!--         <mapping resource="EventPhotographers.hbm.xml"/> -->
         
     </session-factory>

@@ -16,6 +16,7 @@
 				<li><a href="/WeddingTracker/createPhotographer">Add a Photographer</a></li>
 				<li><a href="/WeddingTracker/createLocation">Add a Location</a></li>
 				<li><a href="/WeddingTracker/listClients">List Clients</a></li>
+				<li><a href="/WeddingTracker/listPhotographers">List Photographers</a></li>
 			</ul>
 		</div>
 	</body>

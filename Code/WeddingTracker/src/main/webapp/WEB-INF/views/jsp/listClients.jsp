@@ -13,7 +13,8 @@
 		<div>
 			<h2>List of Clients</h2>
 			
-			<button></button>
+			<spring:url value="/createClient" var="createClientUrl" />
+			<button onclick="location.href='${createClientUrl}'">New Client</button>
 			
 			<table>
 				<thead>
@@ -35,9 +36,9 @@
 					<td><c:out value="${client.autoRemind}"/></td>
 					
 					<td>
-					<spring:url value="/editClient/${client.clientId}" var="clientUrl" />
+					<spring:url value="/editClient/${client.clientId}" var="editClientUrl" />
 						<nobr>
-							<button onclick="location.href='${clientUrl}'">Edit</button>
+							<button onclick="location.href='${editClientUrl}'">Edit</button>
 						</nobr>
 				</tr>
 				</c:forEach>

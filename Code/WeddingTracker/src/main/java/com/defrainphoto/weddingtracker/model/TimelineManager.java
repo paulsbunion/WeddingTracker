@@ -1,8 +1,10 @@
 package com.defrainphoto.weddingtracker.model;
 
 import java.sql.Time;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityExistsException;
@@ -43,6 +45,39 @@ public class TimelineManager {
 		}
 		
 		return found ? newTimeline : null;
+	}
+	
+	public Map<String, String> getallTimelineIds() {
+
+		boolean found = false;
+		List<Timeline> result = null;
+		Map<String, String> timelineIds = new HashMap<String, String>();
+		openSession();
+		
+		session.beginTransaction();
+		StringBuilder queryString = new StringBuilder("from Timeline");
+		Query query = session.createQuery(queryString.toString());
+		
+		List list = query.list();
+		
+		session.getTransaction().commit();
+		
+		if (list != null && !list.isEmpty()) {
+			result  = (List<Timeline>) list;
+			found = true;
+		}
+		
+		else {
+			found = false;
+		}
+		Hibernate.initialize(list);
+		closeSession();
+		
+		// put the list in the map
+		for (Timeline t : result) {
+			timelineIds.put(t.getEventId(), t.getEventId());
+		}
+		return found ? timelineIds : null;
 	}
 	
 	private void updateEventInTimeline(Timeline newTimeline) {

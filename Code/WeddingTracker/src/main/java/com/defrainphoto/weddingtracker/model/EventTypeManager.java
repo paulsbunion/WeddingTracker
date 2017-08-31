@@ -3,6 +3,7 @@ package com.defrainphoto.weddingtracker.model;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
@@ -37,6 +38,32 @@ Session session;
 		}
 		
 		return found ? newEventType : null;
+	}
+	
+	public EventType updateEventType(EventType eventType) {
+		
+		boolean found = false;
+		EventType temp = findEventType(eventType, true, false);
+		
+		// if not in DB, throw exception
+		if (temp == null) {
+			throw new EntityNotFoundException("Entity not Found:  " + eventType.toString());
+		}
+		
+		// else, open session, save, and commit
+		else {
+			openSession();
+			
+			session.beginTransaction();
+			session.saveOrUpdate(eventType);
+			session.getTransaction().commit();
+			
+			Hibernate.initialize(eventType);
+			closeSession();
+			found = true;
+		}
+		
+		return found ? eventType : null;
 	}
 
 	public EventType getEventTypeByName(EventType eventType) {
@@ -75,10 +102,13 @@ Session session;
 		else {
 			found = false;
 		}
+		for (int i = 0; i < list.size(); i++) {
+			Hibernate.initialize(list.get(i));
+		}
 		Hibernate.initialize(list);
 		closeSession();
 		
-		return found ? list : null;
+		return found ? result : null;
 	}
 	
 	private EventType findEventType(EventType eventType, boolean byID, boolean byName) {
@@ -99,7 +129,7 @@ Session session;
 		
 		if (list != null && !list.isEmpty()) {
 			EventType temp = (EventType) list.get(0);
-			eventType.setEventTypeId(temp.getEventTypeId());
+			eventType = temp;
 			found = true;
 		}
 		

@@ -84,7 +84,7 @@ public class TimelineManagerTest {
 		duration =  Time.valueOf("0:0:0");
 		extraCost = "";
 		
-		event = new Event("2", "the 2nd big Event", eventType, date, startTime, duration, null, "n", extraCost, "", "n", null, null);
+		event = new Event("2", "the 2nd big Event", eventType, date, startTime, duration, null, extraCost, "", null, null);
 		openSession();
 		session.beginTransaction();
 		session.save(event);
@@ -552,7 +552,7 @@ public class TimelineManagerTest {
 		Time duration = new Time(0, 0, 0);
 		String extraCost = "";
 		
-		event = new Event("1", "the big Event", eventType, date, startTime, duration, null, "n", extraCost, "", "n", null, null);
+		event = new Event("1", "the big Event", eventType, date, startTime, duration, null, extraCost, "n", null, null);
 		
 		try {
 			openSession();

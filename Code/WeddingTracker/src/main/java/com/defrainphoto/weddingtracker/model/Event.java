@@ -16,10 +16,8 @@ public class Event implements Serializable{
 	private Time startTime;
 	private Time duration;
 	private Timeline timeline;
-	private String multiClient;
 	private String extraCost;
 	private String notes;
-	private String multiStaff;
 	
 //	private Set<Photographer> photographers;	
 //	private Set<Client> clients;
@@ -27,8 +25,8 @@ public class Event implements Serializable{
 	public Event() {}
 	
 	public Event(String eventId, String eventName, EventType eventType, Date eventDate, Time startTime,
-			Time duration, Timeline timeline, String multiClient, String extraCost, String notes,
-			String multiStaff, Set<Photographer> photographers, Set<Client> clients) {
+			Time duration, Timeline timeline, String extraCost, String notes,
+			Set<Photographer> photographers, Set<Client> clients) {
 		super();
 		this.eventId = eventId;
 		this.eventName = eventName;
@@ -37,10 +35,8 @@ public class Event implements Serializable{
 		this.startTime = startTime;
 		this.duration = duration;
 		this.timeline = timeline;
-		this.multiClient = multiClient;
 		this.extraCost = extraCost;
 		this.notes = notes;
-		this.multiStaff = multiStaff;
 //		this.photographers = photographers;
 //		this.clients = clients;
 	}
@@ -105,14 +101,6 @@ public class Event implements Serializable{
 		this.timeline = timeline;
 	}
 
-	public String getMultiClient() {
-		return multiClient;
-	}
-
-	public void setMultiClient(String multiClient) {
-		this.multiClient = multiClient;
-	}
-
 	public String getExtraCost() {
 		return extraCost;
 	}
@@ -127,14 +115,6 @@ public class Event implements Serializable{
 
 	public void setNotes(String notes) {
 		this.notes = notes;
-	}
-
-	public String getMultiStaff() {
-		return multiStaff;
-	}
-
-	public void setMultiStaff(String multiStaff) {
-		this.multiStaff = multiStaff;
 	}
 
 //	public Set<Photographer> getPhotographers() {

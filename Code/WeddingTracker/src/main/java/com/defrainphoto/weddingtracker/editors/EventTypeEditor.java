@@ -20,6 +20,8 @@ public class EventTypeEditor extends PropertyEditorSupport{
     public String getAsText() {
         EventType eventType = (EventType) getValue();
         if (eventType != null) {
+        	System.out.println("In the editor");
+        	System.out.println(eventType.toString());
             return eventType.toString();
         } else {
             return "";

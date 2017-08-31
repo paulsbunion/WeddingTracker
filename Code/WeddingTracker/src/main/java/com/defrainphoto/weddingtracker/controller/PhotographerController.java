@@ -92,6 +92,12 @@ private EventPhotographerManager eventPhotographerManager = new EventPhotographe
 		if (photographerEvents != null) {
 			model.addAttribute("photographer", photographerEvents.get(0).getPhotographer());
 		}
+		else {
+			Photographer temp = new Photographer(staffId, "", "");
+			
+			temp = photographerManager.getPhotographerById(temp);
+			model.addAttribute("photographer", temp);
+		}
 		
 		return "photographerEvents";
 	}

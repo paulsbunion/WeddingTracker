@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -40,6 +41,60 @@ public class EventManager {
 		return found ? newEvent : null;
 	}
 	
+	public Event updateEvent(Event event) {
+		
+		boolean found = false;
+		Event temp = findEvent(event, true, false);
+		
+		// if not in DB, throw exception
+		if (temp == null) {
+			throw new EntityNotFoundException("Entity not Found:  " + event.toString());
+		}
+		
+		// else, open session, save, and commit
+		else {
+			openSession();
+			
+			session.beginTransaction();
+			System.out.println("in the update");
+			session.saveOrUpdate(event);
+			session.getTransaction().commit();
+			
+			Hibernate.initialize(event);
+			closeSession();
+			found = true;
+		}
+		
+		return found ? event : null;
+	}
+	
+	public List<Event> getAllEvents() {
+		boolean found = false;
+		List<Event> result = null;
+		openSession();
+		
+		session.beginTransaction();
+		StringBuilder queryString = new StringBuilder("from Event");
+		Query query = session.createQuery(queryString.toString());
+		
+		List list = query.list();
+		
+		session.getTransaction().commit();
+		
+		if (list != null && !list.isEmpty()) {
+			result  = (List<Event>) list;
+			found = true;
+		}
+		
+		else {
+			found = false;
+		}
+		Hibernate.initialize(list);
+		closeSession();
+		
+		return found ? list : null;
+	}
+	
 	public Event getEventById(Event event) {
 		Event result;
 		
@@ -65,7 +120,7 @@ public class EventManager {
 		
 		if (list != null && !list.isEmpty()) {
 			Event temp = (Event) list.get(0);
-			event.setEventId(temp.getEventId());
+			event = temp;
 			found = true;
 		}
 		
@@ -73,6 +128,7 @@ public class EventManager {
 			found = false;
 		}
 		Hibernate.initialize(event);
+		Hibernate.initialize(event.getEventType());
 		closeSession();
 		
 		return found ? event : null;

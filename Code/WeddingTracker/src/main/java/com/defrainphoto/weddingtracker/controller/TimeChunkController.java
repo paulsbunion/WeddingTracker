@@ -1,6 +1,7 @@
 package com.defrainphoto.weddingtracker.controller;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -51,8 +52,17 @@ public class TimeChunkController {
 		
 		// add the lists
 		List<Location> locationList = locationManager.getAllLocations();
+		if (locationList == null) {
+			locationList = new ArrayList<>();
+		}
 		List<Client> clientList = clientManager.getAllClients();
+		if (clientList == null) {
+			clientList = new ArrayList<>();
+		}
 		List<Photographer> photographerList = photographerManager.getAllPhotographers();
+		if (photographerList == null) {
+			photographerList = new ArrayList<>();
+		}
 		
 		model.addObject("locationList", locationList);
 		model.addObject("clientList", clientList);

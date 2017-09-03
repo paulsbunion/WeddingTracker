@@ -30,11 +30,21 @@
 					<td><c:out value="${event.startTime}"/></td>
 					
 					<td>
-<%-- 					<spring:url value="/editPhotographer/${photographer.staffId}" var="editPhotographerUrl" /> --%>
+					<spring:url value="/editEvent/${event.eventId}" var="editEventUrl" />
+					<spring:url value="/listTimeSlices/${event.eventId}" var="viewTimelineUrl" />
+					<spring:url value="/createTimeline/${event.eventId}/${event.startTime}" var="createTimelineUrl" />
 						<nobr>
-<%-- 							<button onclick="location.href='${editPhotographerUrl}'">Edit</button> --%>
-							<button >View</button>
+							<button onclick="location.href='${editEventUrl}'">Edit</button>
 						</nobr>
+						<nobr>
+							<c:if test="${not empty timelineIdMap[event.eventId]}">
+								<button onclick="location.href='${viewTimelineUrl}'">View Timeline</button>
+							</c:if>
+							<c:if test="${empty timelineIdMap[event.eventId]}">
+								<button onclick="location.href='${createTimelineUrl}'">Add Timeline</button>
+							</c:if>
+						</nobr>
+					</td>
 				</tr>
 				</c:forEach>
 				

@@ -86,13 +86,61 @@ public class TimeChunkController {
 		model.addAttribute("position", timeChunk.getPosition());
 		model.addAttribute("startTime", timeChunk.getStartTime());
 		model.addAttribute("eventId", timeChunk.getEventId());
-//		model.addAttribute("timeline", timeChunk.getTimeline());
 		
 		timeChunk = timelineManager.timeChunkManager.addTimeChunk(timeChunk);
-		System.out.println("the added chunk");
-		System.out.println(timeChunk);
 		
 		model.addAttribute("chunkId", timeChunk.getChunkId());
+	}
+	
+	@RequestMapping(value="/editTimeSlice/{eventId}/{chunkId}", method = RequestMethod.GET)
+	public ModelAndView editTimeSlice(@PathVariable("eventId") String eventId, 
+		 @PathVariable("chunkId") String chunkId) {
+		
+		Timeline timeline = new Timeline(eventId, null, null, null, null);
+		timeline = timelineManager.getTimelineByEventId(timeline);
+		
+		TimeChunk timeChunk = new TimeChunk(chunkId, timeline, 0, null, null, null, "", null, null);
+		timeChunk = timelineManager.timeChunkManager.getTimeChunkByIdAndTimeline(timeChunk);
+		
+		System.out.println("here");
+		System.out.println(timeChunk);
+		
+		ModelAndView model = new ModelAndView("editTimeSlice", "command", timeChunk);
+		
+		// add the lists
+		List<Location> locationList = locationManager.getAllLocations();
+		if (locationList == null) {
+			locationList = new ArrayList<>();
+		}
+		List<Client> clientList = clientManager.getAllClients();
+		if (clientList == null) {
+			clientList = new ArrayList<>();
+		}
+		List<Photographer> photographerList = photographerManager.getAllPhotographers();
+		if (photographerList == null) {
+			photographerList = new ArrayList<>();
+		}
+		
+		model.addObject("locationList", locationList);
+		model.addObject("clientList", clientList);
+		model.addObject("photographerList", photographerList);
+		model.addObject("timeline", timeline);
+
+		return model;
+	}
+	
+	@RequestMapping(value="/editTimeSlice", method = RequestMethod.POST)
+	public String editTimeSliceSaved(@ModelAttribute("TimeChunk")TimeChunk timeChunk, ModelMap model) {
+		model.addAttribute("chunkId", timeChunk.getChunkId());
+		model.addAttribute("eventId", timeChunk.getEventId());
+		model.addAttribute("position", timeChunk.getPosition());
+		model.addAttribute("location", timeChunk.getLocation());
+		model.addAttribute("description", timeChunk.getDescription());
+		model.addAttribute("client", timeChunk.getClient());
+		
+		System.out.println("the chunk");
+		System.out.println(timeChunk);
+		return "editTimeSliceSaved";
 	}
 	
 	@InitBinder

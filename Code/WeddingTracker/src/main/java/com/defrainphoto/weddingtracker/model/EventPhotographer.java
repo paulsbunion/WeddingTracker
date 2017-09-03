@@ -19,7 +19,7 @@ public class EventPhotographer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "EVENTID", updatable = false, nullable = false)
-	private String id;
+	private String eventId;
 	
 	@Column(name = "EVENTNAME")
 	private String eventName;
@@ -33,12 +33,12 @@ public class EventPhotographer {
 	@Column(name = "PHOTOGRAPHER")
 	private String photographer;
 
-	public String getId() {
-		return id;
+	public String geteventId() {
+		return eventId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void seteventId(String eventId) {
+		this.eventId = eventId;
 	}
 
 	public String getEventName() {
@@ -75,7 +75,7 @@ public class EventPhotographer {
 
 	@Override
 	public String toString() {
-		return "EventPhotographers [id=" + id + ", eventName=" + eventName + ", eventDate=" + eventDate + ", startTime="
+		return "EventPhotographers [eventId=" + eventId + ", eventName=" + eventName + ", eventDate=" + eventDate + ", startTime="
 				+ startTime + ", photographer=" + photographer + "]";
 	}
 	

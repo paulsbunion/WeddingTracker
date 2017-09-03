@@ -32,13 +32,11 @@ public class TimeChunkManager {
 	}
 
 	public TimeChunk addTimeChunk(TimeChunk newChunk) {
-		System.out.println("adding a timechunk");
 		boolean found = false;
 		TimeChunk temp = null;
 		
 		// make sure not null timeline in timechunk
 		updateTimelineInTimeChunk(newChunk);
-		System.out.println("done updating timeline");
 					
 		// if already in DB, throw exception
 		temp = findTimeChunk(newChunk, false, true, true);
@@ -50,8 +48,6 @@ public class TimeChunkManager {
 //		
 //		// else, open session, save, and commit
 //		else {
-			System.out.println("adding a timechunk part 2");
-			System.out.println(newChunk.getTimeline());
 			String newId = getNextId(newChunk);
 			newChunk.setChunkId(newId);
 			
@@ -70,6 +66,67 @@ public class TimeChunkManager {
 		
 		return found ? newChunk : null;
 		
+	}
+	
+	public List<TimeChunk> getAllChunksByEventId (String eventId) {
+		boolean found = false;
+		List<TimeChunk> result = null;
+		openSession();
+		
+		session.beginTransaction();
+		StringBuilder queryString = new StringBuilder("from TimeChunk where ");
+		
+		buildQuery(queryString, true, false);
+		
+		Query query = session.createQuery(queryString.toString());
+		setQueryVariables(eventId, query, true, false);
+		
+		List list = query.list();
+		
+		session.getTransaction().commit();
+		
+		if (list != null && !list.isEmpty()) {
+			List<TimeChunk> temp = (List<TimeChunk>) list;
+			result = temp;
+			found = true;
+		}
+		
+		else {
+			found = false;
+		}
+		Hibernate.initialize(result);
+		for (TimeChunk tc : result) {
+			Hibernate.initialize(tc.getClient());
+		}
+		closeSession();
+		
+		return found ? result : null;
+	}
+	
+	private void setQueryVariables(String id, Query query, boolean byEventID, boolean byChunkId) {
+		if (byEventID) {
+			query.setParameter("eventId", id);
+		}
+		if (byChunkId) {
+			query.setParameter("chunkId", id);
+		}
+	}
+	
+	private void buildQuery(StringBuilder queryString, boolean byEventID, boolean byChunkId) {
+		
+		boolean moreThanOne = false;
+		
+		if (byEventID) {
+			queryString.append("eventId = :eventId ");
+			moreThanOne = true;
+		}
+		if (byChunkId) {
+			if (moreThanOne) {
+				queryString.append("AND ");
+			}
+			queryString.append("chunkId = :chunkId ");
+			moreThanOne = true;			
+		}
 	}
 	
 	private void updateTimelineInTimeChunk(TimeChunk newTimeChunk) {

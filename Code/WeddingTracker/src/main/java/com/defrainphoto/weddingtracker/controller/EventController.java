@@ -52,7 +52,7 @@ public class EventController {
 //		return new ModelAndView("createEvent", "command", models);
 	}
 	
-	@RequestMapping(value = "/addEvent", method = RequestMethod.POST)
+	@RequestMapping(value = "/addEvent")
 	public String addEvent(@ModelAttribute("WeddingTracker")Event event, ModelMap model) {
 		
 		model.addAttribute("eventName", 	event.getEventName());

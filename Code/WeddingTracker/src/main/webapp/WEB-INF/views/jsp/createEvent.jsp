@@ -2,6 +2,9 @@
 <html>
 	<head>
 		<title>Wedding Tracker - Create an Event</title>
+		<!-- date picker -->
+		<link type="text/css" href="/resources/timePicker/bootstrap-timepicker/css/bootstrap-timepicker.min.css" />
+		<script type="text/javascript" src="/resources/timePicker/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
 	</head>
 	
 	<body>
@@ -18,10 +21,6 @@
 						<td>Event Type</td>
 						<td><form:select path = "eventType" items = "${eventTypeList}" /> </td>
 					</tr>
-<!-- 					<tr> -->
-<%-- 						<td><form:label path = "type">Event Type</form:label></td> --%>
-<%-- 						<td><form:input path = "type" /></td> --%>
-<!-- 					</tr> -->
 					<tr>
 						<td><form:label path = "eventDate">Date</form:label></td>
 						<td><form:input path = "eventDate" type="date"/></td>

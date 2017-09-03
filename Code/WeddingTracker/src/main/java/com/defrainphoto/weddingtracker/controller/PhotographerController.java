@@ -16,11 +16,13 @@ import com.defrainphoto.weddingtracker.model.EventPhotographer;
 import com.defrainphoto.weddingtracker.model.EventPhotographerManager;
 import com.defrainphoto.weddingtracker.model.Photographer;
 import com.defrainphoto.weddingtracker.model.PhotographerManager;
+import com.defrainphoto.weddingtracker.model.TimelineManager;
 
 @Controller
 public class PhotographerController {
 private PhotographerManager photographerManager  = new PhotographerManager();
 private EventPhotographerManager eventPhotographerManager = new EventPhotographerManager();
+private TimelineManager timelineManager = new TimelineManager();
 	
 	@RequestMapping(value = "/createPhotographer", method = RequestMethod.GET)
 	public ModelAndView createPhotographer() {
@@ -87,6 +89,9 @@ private EventPhotographerManager eventPhotographerManager = new EventPhotographe
 	public String getPhotographerEvents(@PathVariable("staffId")String staffId, Model model) {
 		
 		List<EventPhotographer> photographerEvents = eventPhotographerManager.getPhotographerEvents(staffId);
+		
+		// get timeline id's
+		model.addAttribute("timelineIdMap", timelineManager.getallTimelineIds());
 		
 		model.addAttribute("photographerEvents", photographerEvents);
 		if (photographerEvents != null) {

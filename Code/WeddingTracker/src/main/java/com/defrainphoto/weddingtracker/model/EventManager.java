@@ -249,6 +249,39 @@ public class EventManager {
 		
 	}
 	
+	public Event deleteEventById(Event event) {
+		boolean deleted = false;
+		
+		Event foundEvent = null;
+		// check if in database
+		foundEvent = findEvent(event, true, false);
+		
+		if (foundEvent != null) {
+			deleted = deleteEvent(foundEvent);
+		}
+
+		return deleted? foundEvent : null;
+	}
+	
+	// helper method to delete from database. returns success / failure status
+	private boolean deleteEvent(Event eventToDelete) {
+		boolean success = false;
+		try {
+			openSession();
+			
+			session.beginTransaction();
+			session.delete(eventToDelete);
+			session.getTransaction().commit();
+			closeSession();
+			success = true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return success;
+	}
+	
 	private void openSession() {
 		session = HibernateUtil.getSessionFactory().openSession();
 	}

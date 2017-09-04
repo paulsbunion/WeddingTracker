@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
    <head>
-      <title>Wedding Tracker - Location Added</title>
+      <title>Wedding Tracker - Location Updated</title>
    </head>
 
    <body>
@@ -11,8 +11,20 @@
       <h2>Submitted Location Information</h2>
       <table>
          <tr>
-            <td>Address</td>
-            <td>${street}, ${city}, ${state}, ${zip}</td>
+            <td>Street Address</td>
+            <td>${street}</td>
+         </tr>
+         <tr>
+            <td>City</td>
+            <td>${city}</td>
+         </tr>
+         <tr>
+            <td>State</td>
+            <td>${state}</td>
+         </tr>
+         <tr>
+            <td>Zip</td>
+            <td>${zip}</td>
          </tr>
          <tr>
             <td>Description</td>
@@ -22,8 +34,10 @@
       </div>  
       
       <div>
-      	<a href="/WeddingTracker/">Home</a>
-      	<a href="/WeddingTracker/listLocations">Locations</a>
+      <ul>
+      	<li><a href="/WeddingTracker/listLocations">Location List</a></li>
+      	<li><a href="/WeddingTracker/">Home</a></li>
+      </ul>
       </div>
    </body>
    

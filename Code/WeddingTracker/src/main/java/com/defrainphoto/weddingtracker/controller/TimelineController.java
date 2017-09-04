@@ -30,17 +30,33 @@ public class TimelineController {
 	private TimelineManager timelineManager = new TimelineManager();
 	private EventManager eventManager = new EventManager();
 	
-	@RequestMapping(value = "/createTimeline/{eventId}/{startTime}", method = RequestMethod.GET)
-	public ModelAndView createTimeline(@PathVariable(value="eventId") String eventId,
+//	@RequestMapping(value = "/createTimeline/{eventId}/{startTime}", method = RequestMethod.GET)
+//	public ModelAndView createTimeline(@PathVariable(value="eventId") String eventId,
+//			@PathVariable(value="startTime") String startTime) {
+//		
+//		Timeline timeline = new Timeline();
+//		timeline.setEventId(eventId);
+//		timeline.setStartTime(Time.valueOf(startTime));
+////		timeline.setTotalTime(Time.valueOf("0:0:0"));
+//		
+//		ModelAndView model = new ModelAndView("createTimeline", "command", timeline);
+//		return model;
+//	}
+	
+	@RequestMapping(value = "/createTimeline/{eventId}/{startTime}")
+	public String createTimeline(@PathVariable(value="eventId") String eventId,
 			@PathVariable(value="startTime") String startTime) {
 		
 		Timeline timeline = new Timeline();
 		timeline.setEventId(eventId);
 		timeline.setStartTime(Time.valueOf(startTime));
-//		timeline.setTotalTime(Time.valueOf("0:0:0"));
+		timeline.setTotalTime(Time.valueOf("0:0:0"));
 		
-		ModelAndView model = new ModelAndView("createTimeline", "command", timeline);
-		return model;
+		timelineManager.addTimeline(timeline);
+		
+//		ModelAndView model = new ModelAndView("createTimeline", "command", timeline);
+
+		return "listTimeSlices";
 	}
 	
 	@RequestMapping(value = "/addTimeline", method = RequestMethod.POST)

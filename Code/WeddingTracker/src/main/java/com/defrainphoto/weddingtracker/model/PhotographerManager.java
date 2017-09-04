@@ -3,6 +3,7 @@ package com.defrainphoto.weddingtracker.model;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
@@ -51,6 +52,33 @@ public class PhotographerManager {
 		
 		result = findPhotographer(photog, true, false, false);
 		return result; 
+	}
+	
+public Photographer updatePhotographer(Photographer photographer) {
+		
+		boolean found = false;
+		Photographer temp = findPhotographer(photographer, true, false, false);
+		
+		// if not in DB, throw exception
+		if (temp == null) {
+			throw new EntityNotFoundException("Entity not Found:  " + photographer.toString());
+		}
+		
+		// else, open session, save, and commit
+		else {
+			openSession();
+			
+			session.beginTransaction();
+			System.out.println("in the update");
+			session.saveOrUpdate(photographer);
+			session.getTransaction().commit();
+			
+			Hibernate.initialize(photographer);
+			closeSession();
+			found = true;
+		}
+		
+		return found ? photographer : null;
 	}
 	
 	public List<Photographer> getAllPhotographers() {

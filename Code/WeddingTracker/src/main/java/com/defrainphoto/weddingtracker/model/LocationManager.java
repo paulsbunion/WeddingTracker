@@ -3,6 +3,7 @@ package com.defrainphoto.weddingtracker.model;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
@@ -37,6 +38,32 @@ public class LocationManager {
 		}
 		
 		return found ? newLocation : null;
+	}
+	
+	public Location updateLocation(Location location) {
+		
+		boolean found = false;
+		Location temp = findLocation(location, true, false);
+		
+		// if not in DB, throw exception
+		if (temp == null) {
+			throw new EntityNotFoundException("Entity not Found:  " + location.toString());
+		}
+		
+		// else, open session, save, and commit
+		else {
+			openSession();
+			
+			session.beginTransaction();
+			session.saveOrUpdate(location);
+			session.getTransaction().commit();
+			
+			Hibernate.initialize(location);
+			closeSession();
+			found = true;
+		}
+		
+		return found ? location : null;
 	}
 	
 	public Location getLocationById(Location location) {
@@ -173,7 +200,9 @@ public class LocationManager {
 		System.out.println(list);
 		if (list != null && !list.isEmpty()) {
 			Location temp = (Location) list.get(0);
-			location.setLocationId(temp.getLocationId());
+			location = temp;
+//			location.setLocationId(temp.getLocationId());
+			System.out.println(location);
 			found = true;
 		}
 		

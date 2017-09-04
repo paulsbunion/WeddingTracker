@@ -5,14 +5,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
-		<title>Wedding Tracker - Edit an Event</title>
+		<title>Wedding Tracker - Edit a Time Slice</title>
 	</head>
 	
 	<body>
 		<div>
-			<h2>Edit an Event</h2>
+			<h2>Edit a Time Slice</h2>
 			
-			<form:form method="POST" action="/WeddingTracker/editEvent">
+			<form:form method="POST" action="/WeddingTracker/editTimeSlice">
 				<table>
 					<tr>
 						<td><form:label path = "description">Notes / Description</form:label></td>
@@ -60,6 +60,7 @@
 						<td><form:hidden path="eventId"/></td>
 						<td><form:hidden path="position"/></td>
 						<td><form:hidden path="chunkId"/></td>
+						<td><form:hidden path="timeline"/></td>
 					</tr>	
 					<tr>
 						<td colspan="2">

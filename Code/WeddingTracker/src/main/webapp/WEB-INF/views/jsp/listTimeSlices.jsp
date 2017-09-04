@@ -48,6 +48,12 @@
 							</nobr>
 							
 						</td>
+						<td>
+						<spring:url value="/deleteTimeSlice/${eventId}/${timeSlice.chunkId}" var="deleteTimeSliceUrl" />
+							<nobr>
+								<button onclick="location.href='${deleteTimeSliceUrl}'">Delete</button>
+							</nobr>
+						</td>
 					</tr>
 					</c:forEach>
 				</c:if>

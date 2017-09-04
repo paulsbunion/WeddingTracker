@@ -72,6 +72,8 @@ private TimelineManager timelineManager = new TimelineManager();
 		model.addAttribute("lastName", photographer.getLastName());
 		model.addAttribute("staffId", photographer.getStaffId());
 		
+		photographerManager.updatePhotographer(photographer);
+		
 		System.out.println("the photog");
 		System.out.println(photographer);
 		return "editPhotographerSaved";

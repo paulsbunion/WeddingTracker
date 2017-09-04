@@ -11,6 +11,10 @@
 	
 	<body>
 		<div>
+		<div>
+      	<a href="/WeddingTracker/">Home</a>
+      	<a href="/WeddingTracker/listPhotographers">Photographers</a>
+      </div>
 			<h2>List of Photographer Events for ${photographer}</h2>
 			
 			
@@ -53,6 +57,7 @@
 		
 		<div>
       	<a href="/WeddingTracker/">Home</a>
+      	<a href="/WeddingTracker/listPhotographers">Photographers</a>
       </div>
 	</body>
 </html>

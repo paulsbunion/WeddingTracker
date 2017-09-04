@@ -50,7 +50,8 @@
       	<div>
       	<p>EventId: ${eventId}</p>
       	<ul>
-      		<li><a href="/WeddingTracker/createTimeSlice/${eventId}">Add another Time Slice</a></li>   
+      		<li><a href="/WeddingTracker/createTimeSlice/${eventId}">Add another Time Slice</a></li>
+      		<li><a href="/WeddingTracker/listTimeSlices/${eventId}">View Timeline</a></li>
       		<li><a href="/WeddingTracker">Home</a></li>
     	</ul>	
       	</div>

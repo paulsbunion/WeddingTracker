@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -20,19 +21,24 @@ import com.defrainphoto.weddingtracker.editors.ClientEditor;
 import com.defrainphoto.weddingtracker.editors.LocationEditor;
 import com.defrainphoto.weddingtracker.editors.PhotographerEditor;
 import com.defrainphoto.weddingtracker.editors.SqlTimeEditor;
+import com.defrainphoto.weddingtracker.editors.TimelineEditor;
 import com.defrainphoto.weddingtracker.model.Client;
 import com.defrainphoto.weddingtracker.model.ClientManager;
+import com.defrainphoto.weddingtracker.model.Event;
+import com.defrainphoto.weddingtracker.model.EventManager;
 import com.defrainphoto.weddingtracker.model.Location;
 import com.defrainphoto.weddingtracker.model.LocationManager;
 import com.defrainphoto.weddingtracker.model.Photographer;
 import com.defrainphoto.weddingtracker.model.PhotographerManager;
 import com.defrainphoto.weddingtracker.model.TimeChunk;
+import com.defrainphoto.weddingtracker.model.TimeChunkManager;
 import com.defrainphoto.weddingtracker.model.Timeline;
 import com.defrainphoto.weddingtracker.model.TimelineManager;
 
 @Controller
 public class TimeChunkController {
 	
+	private EventManager eventManager = new EventManager();
 	private TimelineManager timelineManager = new TimelineManager();
 	private LocationManager locationManager = new LocationManager();
 	private ClientManager clientManager = new ClientManager();
@@ -96,14 +102,21 @@ public class TimeChunkController {
 	public ModelAndView editTimeSlice(@PathVariable("eventId") String eventId, 
 		 @PathVariable("chunkId") String chunkId) {
 		
+		// get the timeline
 		Timeline timeline = new Timeline(eventId, null, null, null, null);
 		timeline = timelineManager.getTimelineByEventId(timeline);
+		
+		System.out.println("not bad");
+		System.out.println(timeline);
 		
 		TimeChunk timeChunk = new TimeChunk(chunkId, timeline, 0, null, null, null, "", null, null);
 		timeChunk = timelineManager.timeChunkManager.getTimeChunkByIdAndTimeline(timeChunk);
 		
+		timeChunk.setEventId(eventId);
+		
 		System.out.println("here");
 		System.out.println(timeChunk);
+		System.out.println(timeChunk.getTimeline());
 		
 		ModelAndView model = new ModelAndView("editTimeSlice", "command", timeChunk);
 		
@@ -124,13 +137,27 @@ public class TimeChunkController {
 		model.addObject("locationList", locationList);
 		model.addObject("clientList", clientList);
 		model.addObject("photographerList", photographerList);
+		
 		model.addObject("timeline", timeline);
+		model.addObject("timelineStart", timeline.getStartTime());
+		model.addObject("timelineTotal", timeline.getTotalTime());
+		model.addObject("chunkId", chunkId);
+		model.addObject("eventId", eventId);
+		model.addObject("timeChunk", timeChunk);
+		
+		System.out.println("Data");
+		System.out.println(timeline);
+		System.out.println(chunkId);
+		System.out.println(eventId);
 
 		return model;
 	}
 	
 	@RequestMapping(value="/editTimeSlice", method = RequestMethod.POST)
-	public String editTimeSliceSaved(@ModelAttribute("TimeChunk")TimeChunk timeChunk, ModelMap model) {
+	public String editTimeSliceSaved(@ModelAttribute("timeChunk")TimeChunk timeChunk,
+			@ModelAttribute("timeline")Timeline timeline,
+			@ModelAttribute("eventId")String eventId, ModelMap model) {
+		
 		model.addAttribute("chunkId", timeChunk.getChunkId());
 		model.addAttribute("eventId", timeChunk.getEventId());
 		model.addAttribute("position", timeChunk.getPosition());
@@ -138,16 +165,57 @@ public class TimeChunkController {
 		model.addAttribute("description", timeChunk.getDescription());
 		model.addAttribute("client", timeChunk.getClient());
 		
+		System.out.println("before error");
+		timeline.setEventId(eventId);
+		System.out.println(eventId);
+//		timeline.setStartTime(start);
+//		timeline.setTotalTime(total);
+		
+		timeChunk.setTimeline(timeline);
+		System.out.println(timeChunk);
+		System.out.println(timeChunk.getTimeline());
+		System.out.println(timeChunk.getTimeline().getEventId());
+		System.out.println(timeline);
+		timelineManager.timeChunkManager.updateTimeChunk(timeChunk);
+		System.out.println("after error");
+		
 		System.out.println("the chunk");
 		System.out.println(timeChunk);
 		return "editTimeSliceSaved";
+	}
+	
+	@RequestMapping(value="/deleteTimeSlice/{eventId}/{chunkId}")
+	public String deleteTimeSlice(@PathVariable("eventId") String eventId, 
+		 @PathVariable("chunkId") String chunkId, Model model) {
+		
+		// get the timeline
+		Timeline timeline = new Timeline(eventId, null, null, null, null);
+		timeline = timelineManager.getTimelineByEventId(timeline);
+		
+		Event event = new Event(eventId, "", null, null, null, null, null, "", "", null, null);
+		event = eventManager.getEventById(event);
+				
+		TimeChunk timeChunk = new TimeChunk(chunkId, timeline, 0, null, null, null, "", null, null);
+		timeChunk = timelineManager.timeChunkManager.getTimeChunkByIdAndTimeline(timeChunk);
+		
+		timeChunk.setEventId(eventId);
+		
+		timelineManager.timeChunkManager.DeleteTimeChunkById(timeChunk);
+		
+		model.addAttribute("timeline", timeline);
+		model.addAttribute("eventId", eventId);
+		
+		model.addAttribute("timeSlices", timelineManager.getTimeChunks(timeline));
+		model.addAttribute("eventName", event.getEventName());
+
+		return "listTimeSlices";
 	}
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) { 
 		binder.registerCustomEditor(Time.class, new SqlTimeEditor());
 		binder.registerCustomEditor(Client.class, new ClientEditor());
-//		binder.registerCustomEditor(Timeline.class, new TimelineEditor());
+		binder.registerCustomEditor(Timeline.class, new TimelineEditor());
 		binder.registerCustomEditor(Location.class, new LocationEditor());
 		binder.registerCustomEditor(Set.class, new PhotographerEditor());
 	}

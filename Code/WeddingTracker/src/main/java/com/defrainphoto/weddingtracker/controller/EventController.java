@@ -10,6 +10,7 @@ import java.util.TimeZone;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -26,6 +27,8 @@ import com.defrainphoto.weddingtracker.model.Event;
 import com.defrainphoto.weddingtracker.model.EventManager;
 import com.defrainphoto.weddingtracker.model.EventType;
 import com.defrainphoto.weddingtracker.model.EventTypeManager;
+import com.defrainphoto.weddingtracker.model.TimeChunk;
+import com.defrainphoto.weddingtracker.model.Timeline;
 import com.defrainphoto.weddingtracker.model.TimelineManager;
 
 @Controller
@@ -119,6 +122,24 @@ public class EventController {
 		
 		return "listEvents";
 	}
+	
+	@RequestMapping(value="/deleteEvent/{eventId}")
+	public String deleteTimeSlice(@PathVariable("eventId") String eventId, Model model, Map<String, Object> map) {
+		
+		// get the event
+		System.out.println("in it");
+		Event event = new Event(eventId, "", null, null, null, null, null, "", "", null, null);
+		event = eventManager.getEventById(event);
+		System.out.println("deleting");
+		eventManager.deleteEventById(event);
+		
+		map.put("eventList", eventManager.getAllEvents());
+		// get timeline id's
+		map.put("timelineIdMap", timelineManager.getallTimelineIds());
+		
+		return "listEvents";
+	}
+	
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {

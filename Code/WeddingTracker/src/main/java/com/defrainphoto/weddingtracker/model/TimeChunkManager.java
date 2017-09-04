@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateError;
@@ -68,6 +69,34 @@ public class TimeChunkManager {
 		
 	}
 	
+	public TimeChunk updateTimeChunk(TimeChunk timeChunk) {
+		
+		boolean found = false;
+		TimeChunk temp = findTimeChunk(timeChunk, true, true, false);
+		
+		// if not in DB, throw exception
+		if (temp == null) {
+			throw new EntityNotFoundException("Entity not Found:  " + timeChunk.toString());
+		}
+		
+		// else, open session, save, and commit
+		else {
+			openSession();
+			
+			session.beginTransaction();
+			System.out.println("in the update");
+			session.saveOrUpdate(timeChunk);
+			session.getTransaction().commit();
+			
+			Hibernate.initialize(timeChunk);
+			Hibernate.initialize(timeChunk.getTimeline());
+			closeSession();
+			found = true;
+		}
+		
+		return found ? timeChunk : null;
+	}
+	
 	public List<TimeChunk> getAllChunksByEventId (String eventId) {
 		boolean found = false;
 		List<TimeChunk> result = null;
@@ -95,8 +124,10 @@ public class TimeChunkManager {
 			found = false;
 		}
 		Hibernate.initialize(result);
-		for (TimeChunk tc : result) {
-			Hibernate.initialize(tc.getClient());
+		if (result != null) {
+			for (TimeChunk tc : result) {
+				Hibernate.initialize(tc.getClient());
+			}
 		}
 		closeSession();
 		
@@ -341,6 +372,9 @@ public class TimeChunkManager {
 			session.beginTransaction();
 			
 			StringBuilder queryString = new StringBuilder("from TimeChunk where ");
+			System.out.println("chunk search data");
+			System.out.println(timeChunk.getChunkId());
+			System.out.println(timeChunk.getTimeline());
 			buildQuery(queryString, byChunkId, byEventId, byDescription);
 			Query query = session.createQuery(queryString.toString());
 			setQueryVariables(timeChunk, query, byChunkId, byEventId, byDescription);
@@ -358,6 +392,7 @@ public class TimeChunkManager {
 				Hibernate.initialize(temp.getPhotographers());
 				Hibernate.initialize(temp.getPosition());
 				Hibernate.initialize(temp.getStartTime());
+				Hibernate.initialize(temp.getTimeline());
 //				System.out.println("found one: " + temp.toString());
 				timeChunk = temp;
 				found = true;
@@ -597,6 +632,39 @@ public class TimeChunkManager {
 			}
 		}
 		return valid ? timeChunk : null;
+	}
+	
+	public TimeChunk DeleteTimeChunkById(TimeChunk timeChunk) {
+		boolean deleted = false;
+		
+		TimeChunk foundTimeChunk = null;
+		// check if in database
+		foundTimeChunk = findTimeChunk(timeChunk, true, true, false);
+		
+		if (foundTimeChunk != null) {
+			deleted = deleteTimeChunk(foundTimeChunk);
+		}
+
+		return deleted? foundTimeChunk : null;
+	}
+	
+	// helper method to delete from database. returns success / failure status
+	private boolean deleteTimeChunk(TimeChunk timeChunkToDelete) {
+		boolean success = false;
+		try {
+			openSession();
+			
+			session.beginTransaction();
+			session.delete(timeChunkToDelete);
+			session.getTransaction().commit();
+			closeSession();
+			success = true;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return success;
 	}
 	
 	private void openSession() {

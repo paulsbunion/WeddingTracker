@@ -13,11 +13,26 @@ import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TimelineManager {
 	private Session session;
-	public TimeChunkManager timeChunkManager = new TimeChunkManager(this);
-	public EventManager eventManager = new EventManager();
+	@Autowired
+	public TimeChunkManager timeChunkManager;
+//	public TimeChunkManager timeChunkManager = new TimeChunkManager(this);	
+	@Autowired
+	public EventManager eventManager;
+//	public EventManager eventManager = new EventManager();
+	
+	public void setTimeChunkManager(TimeChunkManager timechunkManager) {
+		this.timeChunkManager = timechunkManager;
+	}
+	
+	public void setEventManager(EventManager eventManager) {
+		this.eventManager = eventManager;
+	}
 	
 	public Timeline addTimeline(Timeline newTimeline) {
 		boolean found = false;

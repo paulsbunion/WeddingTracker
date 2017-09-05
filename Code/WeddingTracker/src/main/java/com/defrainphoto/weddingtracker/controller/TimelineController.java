@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.defrainphoto.weddingtracker.editors.SqlTimeEditor;
 import com.defrainphoto.weddingtracker.model.Client;
@@ -27,8 +26,12 @@ import com.defrainphoto.weddingtracker.model.TimelineManager;
 
 @Controller
 public class TimelineController {
-	private TimelineManager timelineManager = new TimelineManager();
-	private EventManager eventManager = new EventManager();
+	@Autowired
+	private TimelineManager timelineManager;
+//	private TimelineManager timelineManager = new TimelineManager();
+	@Autowired
+	private EventManager eventManager;
+//	private EventManager eventManager = new EventManager();
 	
 //	@RequestMapping(value = "/createTimeline/{eventId}/{startTime}", method = RequestMethod.GET)
 //	public ModelAndView createTimeline(@PathVariable(value="eventId") String eventId,

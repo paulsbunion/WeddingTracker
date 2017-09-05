@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -38,12 +39,22 @@ import com.defrainphoto.weddingtracker.model.TimelineManager;
 @Controller
 public class TimeChunkController {
 	
-	private EventManager eventManager = new EventManager();
-	private TimelineManager timelineManager = new TimelineManager();
-	private LocationManager locationManager = new LocationManager();
-	private ClientManager clientManager = new ClientManager();
-	private PhotographerManager photographerManager = new PhotographerManager();
-	
+	@Autowired
+	private EventManager eventManager;
+//	private EventManager eventManager = new EventManager();
+	@Autowired
+	private TimelineManager timelineManager;
+//	private TimelineManager timelineManager = new TimelineManager();
+	@Autowired
+	private LocationManager locationManager;
+//	private LocationManager locationManager = new LocationManager();
+	@Autowired
+	private ClientManager clientManager;
+//	private ClientManager clientManager = new ClientManager();
+	@Autowired
+	private PhotographerManager photographerManager;
+//	private PhotographerManager photographerManager = new PhotographerManager();
+
 	@RequestMapping(value ="/createTimeSlice/{eventId}", method = RequestMethod.GET)
 	public ModelAndView createTimeChunk(@PathVariable("eventId") String eventId) {
 
@@ -164,7 +175,9 @@ public class TimeChunkController {
 		model.addAttribute("location", timeChunk.getLocation());
 		model.addAttribute("description", timeChunk.getDescription());
 		model.addAttribute("client", timeChunk.getClient());
+		model.addAttribute("photographers", timeChunk.getPhotographers());
 		
+		System.out.println(timeChunk.getPhotographers());
 		System.out.println("before error");
 		timeline.setEventId(eventId);
 		System.out.println(eventId);

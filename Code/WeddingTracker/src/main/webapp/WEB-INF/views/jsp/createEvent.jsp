@@ -3,8 +3,11 @@
 	<head>
 		<title>Wedding Tracker - Create an Event</title>
 		<!-- date picker -->
-		<link type="text/css" href="/resources/timePicker/bootstrap-timepicker/css/bootstrap-timepicker.min.css" />
-		<script type="text/javascript" src="/resources/timePicker/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+        <script type="text/javascript" src="resources/core/js/jquery-3.2.1.js"></script>
+        <link rel="stylesheet" type="text/css" href="resources/core/css/jquery-ui.css"/>
+        
+        <script type="text/javascript" src="resources/timePicker/js/jquery.ptTimeSelect.js"></script>
+        <link rel="stylesheet" type="text/css" href="resources/timePicker/css/jquery.ptTimeSelect.css"/>
 	</head>
 	
 	<body>
@@ -25,44 +28,16 @@
 						<td><form:label path = "eventDate">Date</form:label></td>
 						<td><form:input path = "eventDate" type="date"/></td>
 					</tr>
-					<tr>
-<%-- 						<td><form:label path = "startTimeHr">Start Time</form:label></td> --%>
-<!-- 						<td> -->
-<!-- 							<select name = "startTimeHr"> -->
-<!-- 								<option value="1">1</option> -->
-<!-- 								<option value="2">2</option> -->
-<!-- 								<option value="3">3</option> -->
-<!-- 								<option value="4">4</option> -->
-<!-- 								<option value="5">5</option> -->
-<!-- 								<option value="6">6</option> -->
-<!-- 								<option value="7">7</option> -->
-<!-- 								<option value="8">8</option> -->
-<!-- 								<option value="9">9</option> -->
-<!-- 								<option value="10">10</option> -->
-<!-- 								<option value="11">11</option> -->
-<!-- 								<option value="12">12</option> -->
-<!-- 								<option value="13">13</option> -->
-<!-- 								<option value="14">14</option> -->
-<!-- 								<option value="15">15</option> -->
-<!-- 								<option value="16">16</option> -->
-<!-- 								<option value="17">17</option> -->
-<!-- 								<option value="18">18</option> -->
-<!-- 								<option value="19">19</option> -->
-<!-- 								<option value="20">20</option> -->
-<!-- 								<option value="21">21</option> -->
-<!-- 								<option value="22">22</option> -->
-<!-- 								<option value="23">23</option> -->
-<!-- 								<option value="24">24</option> -->
-								
-<!-- 							</select>hour -->
-<%-- 							<form:input path = "startTimeMn" size="2" maxlength="2"/>min --%>
-<!-- 						</td> -->
-							
-<!-- 						</select> -->
-						<td><form:label path = "startTime">Start Time</form:label></td>
-						<td><form:input path = "startTime" /></td>
-					</tr>
 					
+					<tr>
+						<td><form:label path = "startTime">Start Time</form:label></td>
+						<td>
+							<div id="sample1" class="ui-widget-content">
+								<form:input name="s1Time2" type="text" path = "startTime" />
+							</div>
+						</td>
+					</tr>
+					 
 					<tr>
 						<td><form:label path = "duration">Duration (optional)</form:label></td>
 						<td><form:input path = "duration" /></td>
@@ -84,6 +59,13 @@
 			</form:form>
 			
 		</div>
+		
+		<script type="text/javascript">
+        $(document).ready(function(){
+            // find the input fields and apply the time select to them.
+            $('#sample1 input').ptTimeSelect();
+        });
+    </script>
 	</body>
 	
 </html>

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,9 +34,15 @@ import com.defrainphoto.weddingtracker.model.TimelineManager;
 
 @Controller
 public class EventController {
-	private EventManager eventManager = new EventManager();
-	private EventTypeManager eventTypeManager = new EventTypeManager();
-	private TimelineManager timelineManager = new TimelineManager();
+	@Autowired
+	private EventManager eventManager;
+//	private EventManager eventManager = new EventManager();
+	@Autowired
+	private EventTypeManager eventTypeManager;
+//	private EventTypeManager eventTypeManager = new EventTypeManager();
+	@Autowired
+	private TimelineManager timelineManager;
+//	private TimelineManager timelineManager = new TimelineManager();
 	
 	@RequestMapping(value = "/createEvent", method = RequestMethod.GET)
 	public ModelAndView createEvent() {
@@ -131,6 +138,8 @@ public class EventController {
 		Event event = new Event(eventId, "", null, null, null, null, null, "", "", null, null);
 		event = eventManager.getEventById(event);
 		System.out.println("deleting");
+		
+		
 		eventManager.deleteEventById(event);
 		
 		map.put("eventList", eventManager.getAllEvents());

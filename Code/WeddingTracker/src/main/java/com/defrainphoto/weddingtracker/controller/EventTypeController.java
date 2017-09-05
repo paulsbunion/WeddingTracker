@@ -2,6 +2,7 @@ package com.defrainphoto.weddingtracker.controller;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.defrainphoto.weddingtracker.model.Client;
 import com.defrainphoto.weddingtracker.model.EventType;
 import com.defrainphoto.weddingtracker.model.EventTypeManager;
 
 @Controller
 public class EventTypeController {
-	
-	private EventTypeManager eventTypeManager = new EventTypeManager();
+	@Autowired
+	private EventTypeManager eventTypeManager;
+//	private EventTypeManager eventTypeManager = new EventTypeManager();
 	
 	@RequestMapping(value = "/createEventType", method = RequestMethod.GET)
 	public ModelAndView createEvent() {

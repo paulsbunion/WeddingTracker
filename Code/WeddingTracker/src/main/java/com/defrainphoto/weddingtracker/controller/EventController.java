@@ -47,7 +47,7 @@ public class EventController {
 	@RequestMapping(value = "/createEvent", method = RequestMethod.GET)
 	public ModelAndView createEvent() {
 		
-		ModelAndView model = new ModelAndView("createEvent", "command", new Event());
+		ModelAndView model = new ModelAndView("event/createEvent", "command", new Event());
 		
 		List<EventType> eventTypeList = eventTypeManager.getAllEventTypes();
 		
@@ -77,7 +77,7 @@ public class EventController {
 		event = eventManager.addEvent(event);
 		
 		model.addAttribute("eventId", event.getEventId());
-		return "addEvent";
+		return "event/addEvent";
 	}
 	
 	@RequestMapping(value ="/editEvent/{eventId}", method=RequestMethod.GET)
@@ -85,7 +85,7 @@ public class EventController {
 		Event event = new Event(eventId, "", null, null, null, null, null, "", "", null, null);
 		event = eventManager.getEventById(event);
 		
-		ModelAndView model = new ModelAndView("editEvent", "command", event);
+		ModelAndView model = new ModelAndView("event/editEvent", "command", event);
 		
 		List<EventType> eventTypeList = eventTypeManager.getAllEventTypes();
 		System.out.println("the list of event Types");
@@ -117,7 +117,7 @@ public class EventController {
 		
 		model.addAttribute("eventId", event.getEventId());
 		
-		return "editEventSaved";
+		return "event/editEventSaved";
 	}
 	
 	@RequestMapping(value="/listEvents")
@@ -127,7 +127,7 @@ public class EventController {
 		// get timeline id's
 		map.put("timelineIdMap", timelineManager.getallTimelineIds());
 		
-		return "listEvents";
+		return "event/listEvents";
 	}
 	
 	@RequestMapping(value="/deleteEvent/{eventId}")
@@ -146,7 +146,7 @@ public class EventController {
 		// get timeline id's
 		map.put("timelineIdMap", timelineManager.getallTimelineIds());
 		
-		return "listEvents";
+		return "event/listEvents";
 	}
 	
 	

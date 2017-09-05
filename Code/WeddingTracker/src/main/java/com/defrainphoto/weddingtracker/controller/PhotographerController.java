@@ -55,7 +55,7 @@ public class PhotographerController {
 		photographer = photographerManager.addPhotographer(photographer);
 		
 		model.addAttribute("staffId", photographer.getStaffId());
-		return "addPhotographer";
+		return "photographer/addPhotographer";
 	}
 	
 	@RequestMapping(value="/editPhotographer/{staffId}", method = RequestMethod.GET)
@@ -68,7 +68,7 @@ public class PhotographerController {
 		System.out.println(staffId);
 		System.out.println(photographer.getStaffId());
 		
-		ModelAndView model = new ModelAndView("editPhotographer", "command", photographer);
+		ModelAndView model = new ModelAndView("photographer/editPhotographer", "command", photographer);
 		
 		return model;
 	}
@@ -83,7 +83,7 @@ public class PhotographerController {
 		
 		System.out.println("the photog");
 		System.out.println(photographer);
-		return "editPhotographerSaved";
+		return "photographer/editPhotographerSaved";
 	}
 	
 	@RequestMapping(value="/listPhotographers")
@@ -91,7 +91,7 @@ public class PhotographerController {
 		
 		map.put("photographerList", photographerManager.getAllPhotographers());
 		
-		return "listPhotographers";
+		return "photographer/listPhotographers";
 	}
 	
 	@RequestMapping(value="/photographerEvents/{staffId}", method = RequestMethod.GET)
@@ -113,7 +113,7 @@ public class PhotographerController {
 			model.addAttribute("photographer", temp);
 		}
 		
-		return "photographerEvents";
+		return "photographer/photographerEvents";
 	}
 	
 //	@InitBinder

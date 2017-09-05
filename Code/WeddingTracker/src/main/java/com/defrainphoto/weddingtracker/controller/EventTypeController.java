@@ -23,7 +23,7 @@ public class EventTypeController {
 	@RequestMapping(value = "/createEventType", method = RequestMethod.GET)
 	public ModelAndView createEvent() {
 		
-		return new ModelAndView("createEventType", "command", new EventType());
+		return new ModelAndView("eventType/createEventType", "command", new EventType());
 	}
 	
 	@RequestMapping(value = "/addEventType", method = RequestMethod.POST)
@@ -36,7 +36,7 @@ public class EventTypeController {
 		System.out.println();
 		eventTypeManager.addEventType(eventType);
 		
-		return "addEventType";
+		return "eventType/addEventType";
 	}
 	
 	@RequestMapping(value="/listEventTypes") 
@@ -44,7 +44,7 @@ public class EventTypeController {
 		
 		map.put("eventTypeList", eventTypeManager.getAllEventTypes());
 		
-		return "listEventTypes";
+		return "eventType/listEventTypes";
 	}
 	
 	@RequestMapping(value ="/editEventType/{eventTypeId}", method=RequestMethod.GET)
@@ -53,7 +53,7 @@ public class EventTypeController {
 		EventType eventType = new EventType(eventTypeId, "", "");
 		eventType = eventTypeManager.getEventTypeById(eventType);
 		
-		ModelAndView model = new ModelAndView("editEventType", "command", eventType);
+		ModelAndView model = new ModelAndView("eventType/editEventType", "command", eventType);
 		model.addObject("eventTypeId", eventTypeId);
 		
 		return model;
@@ -69,6 +69,6 @@ public class EventTypeController {
 		
 		model.addAttribute("eventTypeId", eventType.getEventTypeId());
 		
-		return "editEventTypeSaved";
+		return "eventType/editEventTypeSaved";
 	}
 }

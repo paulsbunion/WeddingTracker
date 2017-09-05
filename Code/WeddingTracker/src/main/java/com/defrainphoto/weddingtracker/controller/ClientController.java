@@ -2,6 +2,7 @@ package com.defrainphoto.weddingtracker.controller;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,7 +16,9 @@ import com.defrainphoto.weddingtracker.model.ClientManager;
 
 @Controller
 public class ClientController {
-	private ClientManager clientManager = new ClientManager();
+	@Autowired
+	private ClientManager clientManager;
+//	private ClientManager clientManager = new ClientManager();
 	
 	@RequestMapping(value = "/createClient", method = RequestMethod.GET)
 	public ModelAndView createClient() {

@@ -10,7 +10,9 @@ import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EventManager {
 	private Session session;
 	

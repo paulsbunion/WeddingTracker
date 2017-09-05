@@ -8,7 +8,9 @@ import javax.persistence.EntityNotFoundException;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LocationManager {
 	
 	Session session;

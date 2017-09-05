@@ -5,13 +5,26 @@ import java.sql.Time;
 
 import org.springframework.util.StringUtils;
 
-import com.defrainphoto.weddingtracker.model.EventType;
-
 public class SqlTimeEditor extends PropertyEditorSupport{
 	@Override
 	public void setAsText(String text) throws IllegalArgumentException {
 		if (StringUtils.hasText(text)) {
+			String[] data = text.split(" ");
+			String[] hrMin = data[0].split(":");
 			
+			if (data[1].equalsIgnoreCase("PM")) {
+				if (!hrMin[0].equals("12")) {
+					hrMin[0] = "" + (Integer.parseInt(hrMin[0]) + 12);
+				}
+			}
+			
+			else {
+				if (hrMin[0].equals("12")) {
+					hrMin[0] = "00";
+				}
+			}
+			text = hrMin[0] + ":" + hrMin[1] + ":00";
+			Time t = Time.valueOf(text);
 			setValue(Time.valueOf(text));
 		}
 	}
@@ -23,7 +36,10 @@ public class SqlTimeEditor extends PropertyEditorSupport{
         String[] data = null;
         
         if (sqlTime != null) {
-        	data = sqlTime.toString().split(":");        	
+        	data = sqlTime.toString().split(":");    
+        	if (data.length < 3) {
+        		data = sqlTime.toString().split(" ");
+        	}
         }
         
         if (data != null) {
@@ -36,12 +52,21 @@ public class SqlTimeEditor extends PropertyEditorSupport{
         	}
         	else {
         		result = sqlTime.toString();
+        		data = sqlTime.toString().split(":");
+        		data[2] = "AM";
+        		if (Integer.parseInt(data[0]) >= 12) {
+        			data[2] = "PM";
+        			data[0] = "" + (Integer.parseInt(data[0]) - 12);
+        		}
+        		else if (data[0].equals("00")) {
+        			data[0] = "12";
+        		}
+        		result = data[0] + ":" + data[1] + " " + data[2];
         	}
         }
         else {
-            result = "00:00:00";
+            result = "00:00 AM";
         }
-        
         return result;
     }
 }

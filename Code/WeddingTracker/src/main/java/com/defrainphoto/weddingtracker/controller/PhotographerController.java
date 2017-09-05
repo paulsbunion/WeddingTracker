@@ -3,6 +3,7 @@ package com.defrainphoto.weddingtracker.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -20,10 +21,16 @@ import com.defrainphoto.weddingtracker.model.TimelineManager;
 
 @Controller
 public class PhotographerController {
-private PhotographerManager photographerManager  = new PhotographerManager();
-private EventPhotographerManager eventPhotographerManager = new EventPhotographerManager();
-private TimelineManager timelineManager = new TimelineManager();
-	
+	@Autowired
+	private PhotographerManager photographerManager;
+//	private PhotographerManager photographerManager  = new PhotographerManager();
+	@Autowired
+	private EventPhotographerManager eventPhotographerManager;
+//	private EventPhotographerManager eventPhotographerManager = new EventPhotographerManager();
+	@Autowired
+	private TimelineManager timelineManager;
+//	private TimelineManager timelineManager = new TimelineManager();
+		
 	@RequestMapping(value = "/createPhotographer", method = RequestMethod.GET)
 	public ModelAndView createPhotographer() {
 		

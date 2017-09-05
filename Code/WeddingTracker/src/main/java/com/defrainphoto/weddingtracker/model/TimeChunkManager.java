@@ -16,15 +16,29 @@ import org.hibernate.HibernateError;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.defrainphoto.weddingtracker.model.HibernateUtil;;
 
+@Component
 public class TimeChunkManager {
-	private LocationManager locationManager = new LocationManager();
+	@Autowired
+	private LocationManager locationManager;
+//	private LocationManager locationManager = new LocationManager();
+	@Autowired
 	private TimelineManager timelineManager;
 	Session session;
 
-	public TimeChunkManager(TimelineManager timelineManager) {
+//	public TimeChunkManager(TimelineManager timelineManager) {
+//		this.timelineManager = timelineManager;
+//	}
+	
+	public void setLocationManager(LocationManager locationManager) {
+		this.locationManager = locationManager;
+	}
+	
+	public void setTimelineManager(TimelineManager timelineManager) {
 		this.timelineManager = timelineManager;
 	}
 	

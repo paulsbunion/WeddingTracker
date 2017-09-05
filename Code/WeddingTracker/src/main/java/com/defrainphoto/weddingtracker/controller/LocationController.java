@@ -2,6 +2,7 @@ package com.defrainphoto.weddingtracker.controller;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
@@ -13,14 +14,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.defrainphoto.weddingtracker.editors.LocationEditor;
-import com.defrainphoto.weddingtracker.model.Client;
 import com.defrainphoto.weddingtracker.model.Location;
 import com.defrainphoto.weddingtracker.model.LocationManager;
 
 @Controller
 public class LocationController {
 
-private LocationManager locationManager  = new LocationManager();
+	@Autowired
+	private LocationManager locationManager;
+//	private LocationManager locationManager  = new LocationManager();
 	
 	@RequestMapping(value = "/createLocation", method = RequestMethod.GET)
 	public ModelAndView createLocation() {

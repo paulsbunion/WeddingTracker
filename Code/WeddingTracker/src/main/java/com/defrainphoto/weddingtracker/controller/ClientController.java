@@ -23,7 +23,7 @@ public class ClientController {
 	@RequestMapping(value = "/createClient", method = RequestMethod.GET)
 	public ModelAndView createClient() {
 		
-		ModelAndView model = new ModelAndView("createClient", "command", new Client());
+		ModelAndView model = new ModelAndView("client/createClient", "command", new Client());
 		
 		String[] yNChoice = {"N", "Y"};
 		
@@ -48,7 +48,7 @@ public class ClientController {
 		client = clientManager.addClient(client);
 		
 		model.addAttribute("clientId", client.getClientId());
-		return "addClient";
+		return "client/addClient";
 	}
 	
 	@RequestMapping(value ="/editClient/{clientId}", method=RequestMethod.GET)
@@ -57,7 +57,7 @@ public class ClientController {
 		Client client = new Client(clientId, "", "", "", "", "", "");
 		client = clientManager.getClientById(client);
 		
-		ModelAndView model = new ModelAndView("editClient", "command", client);
+		ModelAndView model = new ModelAndView("client/editClient", "command", client);
 		model.addObject("clientId", clientId);
 		String[] yNChoice = {"N", "Y"};
 		model.addObject("yNChoice", yNChoice);
@@ -87,7 +87,7 @@ public class ClientController {
 		
 		model.addAttribute("clientId", client.getClientId());
 		
-		return "editClientSaved";
+		return "client/editClientSaved";
 	}
 	
 	
@@ -97,7 +97,7 @@ public class ClientController {
 		
 		map.put("clientList", clientManager.getAllClients());
 		
-		return "listClients";
+		return "client/listClients";
 	}
 	
 //	@InitBinder

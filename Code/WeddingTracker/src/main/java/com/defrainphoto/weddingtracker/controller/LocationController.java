@@ -27,7 +27,7 @@ public class LocationController {
 	@RequestMapping(value = "/createLocation", method = RequestMethod.GET)
 	public ModelAndView createLocation() {
 		
-		ModelAndView model = new ModelAndView("createLocation", "command", new Location());
+		ModelAndView model = new ModelAndView("location/createLocation", "command", new Location());
 		
 //		String[] yNChoice = {"N", "Y"};
 //		
@@ -49,7 +49,7 @@ public class LocationController {
 		location = locationManager.addLocation(location);
 		
 		model.addAttribute("locationId", location.getLocationId());
-		return "addLocation";
+		return "location/addLocation";
 	}
 	
 	@RequestMapping(value="/listLocations")
@@ -57,7 +57,7 @@ public class LocationController {
 		
 		map.put("locationList", locationManager.getAllLocations());
 		
-		return "listLocations";
+		return "location/listLocations";
 	}
 	
 	@RequestMapping(value ="/editLocation/{locationId}", method=RequestMethod.GET)
@@ -67,7 +67,7 @@ public class LocationController {
 		location = locationManager.getLocationById(location);
 		System.out.println("the location 1");
 		System.out.println(location);
-		ModelAndView model = new ModelAndView("editLocation", "command", location);
+		ModelAndView model = new ModelAndView("location/editLocation", "command", location);
 		model.addObject("locationId", locationId);
 		
 		return model;
@@ -90,7 +90,7 @@ public class LocationController {
 		
 		model.addAttribute("locatinId", location.getLocationId());
 		
-		return "editLocationSaved";
+		return "location/editLocationSaved";
 	}
 	
 	@InitBinder

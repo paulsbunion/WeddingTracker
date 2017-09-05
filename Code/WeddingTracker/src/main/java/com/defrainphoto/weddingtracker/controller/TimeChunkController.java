@@ -65,7 +65,7 @@ public class TimeChunkController {
 		timeChunk.setTimeline(timeline);
 		timeChunk.setEventId(eventId);
 		
-		ModelAndView model = new ModelAndView("createTimeSlice", "command", timeChunk);
+		ModelAndView model = new ModelAndView("timeline/createTimeSlice", "command", timeChunk);
 		
 		// add the lists
 		List<Location> locationList = locationManager.getAllLocations();
@@ -91,10 +91,10 @@ public class TimeChunkController {
 	}
 	
 	@RequestMapping(value = "/addTimeSlice", method = RequestMethod.POST)
-	public void addTimeChunk(@ModelAttribute("timeChunk") TimeChunk timeChunk, ModelMap model,
+	public String addTimeChunk(@ModelAttribute("timeChunk") TimeChunk timeChunk, ModelMap model,
 			@ModelAttribute("location") String location, 
 			@ModelAttribute("client") Client client) {
-		
+		System.out.println("hello, me");
 		model.addAttribute("client", timeChunk.getClient());
 		model.addAttribute("description", timeChunk.getDescription());
 		model.addAttribute("duration", timeChunk.getDuration());
@@ -107,6 +107,7 @@ public class TimeChunkController {
 		timeChunk = timelineManager.timeChunkManager.addTimeChunk(timeChunk);
 		
 		model.addAttribute("chunkId", timeChunk.getChunkId());
+		return "timeline/addTimeSlice";
 	}
 	
 	@RequestMapping(value="/editTimeSlice/{eventId}/{chunkId}", method = RequestMethod.GET)
@@ -129,7 +130,7 @@ public class TimeChunkController {
 		System.out.println(timeChunk);
 		System.out.println(timeChunk.getTimeline());
 		
-		ModelAndView model = new ModelAndView("editTimeSlice", "command", timeChunk);
+		ModelAndView model = new ModelAndView("timeline/editTimeSlice", "command", timeChunk);
 		
 		// add the lists
 		List<Location> locationList = locationManager.getAllLocations();
@@ -194,7 +195,7 @@ public class TimeChunkController {
 		
 		System.out.println("the chunk");
 		System.out.println(timeChunk);
-		return "editTimeSliceSaved";
+		return "timeline/editTimeSliceSaved";
 	}
 	
 	@RequestMapping(value="/deleteTimeSlice/{eventId}/{chunkId}")
@@ -221,7 +222,7 @@ public class TimeChunkController {
 		model.addAttribute("timeSlices", timelineManager.getTimeChunks(timeline));
 		model.addAttribute("eventName", event.getEventName());
 
-		return "listTimeSlices";
+		return "timeline/listTimeSlices";
 	}
 	
 	@InitBinder

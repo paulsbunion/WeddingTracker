@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -8,9 +9,13 @@
 	</head>
 
 	<body>
-	<div>
-		<h2>Welcome to the Event Manager</h2>
-	</div>
+		<div>
+			<spring:url value="/logout" var="logoutUrl" />
+			<c:if test="${pageContext.request.userPrincipal.name != null}">
+				<h2>Welcome to the Event Manager, ${pageContext.request.userPrincipal.name} <button onclick="location.href='${logoutUrl}'">Logout</button></h2>
+			</c:if>
+		</div>
+		
 		<div>
 		<table>
 		
@@ -19,6 +24,7 @@
 		<spring:url value="/listPhotographers" var="listPhotographersUrl" />
 		<spring:url value="/listEventTypes" var="listEventTypesUrl" />
 		<spring:url value="/listLocations" var="listLocationsUrl" />
+		
 			
 			<tr>
 				<td><button onclick="location.href='${listEventsUrl}'">Events</button></td>

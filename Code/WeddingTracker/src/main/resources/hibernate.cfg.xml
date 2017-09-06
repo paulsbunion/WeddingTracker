@@ -27,6 +27,8 @@
         <mapping resource="Timeline.hbm.xml"/>
         
         <mapping class="com.defrainphoto.weddingtracker.model.EventPhotographer" />
+        <mapping class="com.defrainphoto.weddingtracker.model.User" />
+        <mapping class="com.defrainphoto.weddingtracker.model.UserRole" />
         
 <!--         <mapping resource="EventPhotographers.hbm.xml"/> -->
         

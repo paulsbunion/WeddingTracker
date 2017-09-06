@@ -2,6 +2,8 @@
 	drop potential conflicting indexes and tables
  --------------------------------------------------------------------------------------- */
 
+DROP	TABLE	IF EXISTS	USERS;
+DROP	TABLE	IF EXISTS	USER_ROLES;
 DROP	TABLE	IF EXISTS	PHOTOGRAPHERLOCATIONS;
 DROP	TABLE	IF EXISTS	TIMECHUNKPHOTOGRAPHER;
 DROP	TABLE	IF EXISTS	TIME_CHUNK;
@@ -21,6 +23,43 @@ DROP 	VIEW	IF EXISTS	EVENTPHOTOGRAPHERS;
 /* ---------------------------------------------------------------------------------------
 	create the database tables
  --------------------------------------------------------------------------------------- */
+
+
+/* ---------------------------------------------------------------------------------------
+	Security tables
+ --------------------------------------------------------------------------------------- */
+CREATE TABLE USERS (
+	USERNAME 		VARCHAR(45)	NOT NULL,
+	PASSWORD 		VARCHAR(100) 	NOT NULL,
+	ENABLED 		TINYINT 	NOT NULL 		DEFAULT 1,
+	EMAIL			VARCHAR(64)	NOT NULL,
+	
+	PRIMARY KEY (USERNAME)
+);
+
+CREATE TABLE USER_ROLES (
+	USER_ROLE_ID 		INT 		NOT NULL		AUTO_INCREMENT,
+	USERNAME		VARCHAR(45)	NOT NULL,
+	ROLE			VARCHAR(45)	NOT NULL,
+	
+	PRIMARY KEY (USER_ROLE_ID),
+	UNIQUE KEY UNI_USERNAME_ROLE (ROLE, USERNAME),
+	FOREIGN KEY FK_USERNAME_IDX (USERNAME) REFERENCES USERS (USERNAME)
+);
+
+CREATE TABLE PERSISTENT_LOGINS (
+	USERNAME 		VARCHAR(64)	NOT NULL,
+	SERIES			VARCHAR(64)	NOT NULL,
+	TOKEN			VARCHAR(64)	NOT NULL,
+	LAST_USED		TIMESTAMP	NOT NULL,
+	
+	PRIMARY KEY (SERIES)
+);
+
+/* ---------------------------------------------------------------------------------------
+	other tables
+ --------------------------------------------------------------------------------------- */
+
 
 CREATE TABLE PHOTOGRAPHER (
 	STAFFID			INT		NOT NULL		AUTO_INCREMENT,
@@ -159,3 +198,25 @@ CREATE VIEW EVENTPHOTOGRAPHERS AS
 SELECT DISTINCT E.EVENTID, E.EVENTNAME, E.EVENTDATE, E.STARTTIME, P.STAFFID, CONCAT_WS(" ", P.FIRSTNAME, P.LASTNAME) AS PHOTOGRAPHER
 FROM EVENT E, TIMECHUNKPHOTOGRAPHER TCP, PHOTOGRAPHER P
 WHERE E.EVENTID = TCP.EVENTID AND TCP.STAFFID = P.STAFFID
+
+
+/* ---------------------------------------------------------------------------------------
+	insert users
+ --------------------------------------------------------------------------------------- */
+
+/* password = 1234 */
+INSERT INTO USERS(USERNAME, PASSWORD, ENABLED)
+VALUES ('christy', '$2a$10$dOal6BQburfnk7BoGb4BGO.mWjX2Sfvz3XB.XMplOpp6e.6Gbw7RG', true);
+
+/* password = password */
+INSERT INTO USERS(USERNAME, PASSWORD, ENABLED)
+VALUES ('user', '$2a$10$5YXXBALvZKT67kMoYxp.T.rSsuRXZKParEPaGWTpprBI5cCklFdkW', true);
+
+INSERT INTO USER_ROLES (USERNAME, ROLE)
+VALUES ('christy', 'ROLE_USER');
+
+INSERT INTO USER_ROLES (USERNAME, ROLE)
+VALUES ('christy', 'ROLE_ADMIN');
+
+INSERT INTO USER_ROLES (USERNAME, ROLE)
+VALUES ('user', 'ROLE_USER');

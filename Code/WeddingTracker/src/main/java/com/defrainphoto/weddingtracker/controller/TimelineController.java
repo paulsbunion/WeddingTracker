@@ -59,7 +59,7 @@ public class TimelineController {
 		
 //		ModelAndView model = new ModelAndView("createTimeline", "command", timeline);
 
-		return "listTimeSlices";
+		return "timeline/listTimeSlices";
 	}
 	
 	@RequestMapping(value = "/addTimeline", method = RequestMethod.POST)
@@ -72,7 +72,7 @@ public class TimelineController {
 		
 		timelineManager.addTimeline(timeline);
 		
-		return "addTimeline";
+		return "timeline/addTimeline";
 	}
 	
 	@RequestMapping(value="/listTimeSlices/{eventId}", method = RequestMethod.GET)
@@ -101,7 +101,7 @@ public class TimelineController {
 		model.addAttribute("eventId", event.getEventId());		
 		model.addAttribute("eventName", event.getEventName());
 		model.addAttribute("clientMap", clientMap);
-		return "listTimeSlices";
+		return "timeline/listTimeSlices";
 	}
 	
 	@InitBinder

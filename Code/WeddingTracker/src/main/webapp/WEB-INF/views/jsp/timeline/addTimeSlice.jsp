@@ -25,7 +25,7 @@
 		         </tr>
 		         <tr>
 		            <td>Duration</td>
-		            <td>${duration}</td>
+		            <td>${durationHr}Hr ${durationMin}Min</td>
 		         </tr>
 		         <tr>
 		            <td>Location</td>

@@ -1,5 +1,6 @@
 package com.defrainphoto.weddingtracker.controller;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.EventListener;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.defrainphoto.weddingtracker.editors.EventTypeEditor;
+import com.defrainphoto.weddingtracker.editors.SqlDateEditor;
 import com.defrainphoto.weddingtracker.editors.SqlTimeEditor;
 import com.defrainphoto.weddingtracker.model.Client;
 import com.defrainphoto.weddingtracker.model.Event;
@@ -149,10 +151,10 @@ public class EventController {
 		return "event/listEvents";
 	}
 	
-	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(EventType.class, new EventTypeEditor());
 		binder.registerCustomEditor(Time.class, new SqlTimeEditor());
+		binder.registerCustomEditor(Date.class, new SqlDateEditor());
 	}
 }

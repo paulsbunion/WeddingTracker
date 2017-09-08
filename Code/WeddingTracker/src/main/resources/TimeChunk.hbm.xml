@@ -45,8 +45,11 @@
 <!--             <column name="LOCATIONDID"/> -->
 <!--         </property> -->
         
-        <property name="duration">
-            <column name="DURATION"/>
+        <property name="durationHr">
+            <column name="DURATIONHR"/>
+        </property>
+        <property name="durationMin">
+            <column name="DURATIONMIN"/>
         </property>
         
         <property name="description">

@@ -3,6 +3,7 @@
 <%@taglib uri = "http://www.springframework.org/tags/form" prefix = "form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
 	<head>
@@ -25,6 +26,7 @@
 			<table>
 				<thead>
 					<tr>
+						<th></th>
 						<th>Event Name</th>
 						<th>Date</th>
 						<th>Start Time</th>
@@ -34,26 +36,30 @@
 				
 				<c:forEach items="${eventList}" var="event">
 				<tr>
+					<td>
+						<nobr>
+							<spring:url value="/editEvent/${event.eventId}" var="editEventUrl" />
+							<button onclick="location.href='${editEventUrl}'">Edit Event</button>
+						</nobr>
+					</td>
 					<td><c:out value="${event.eventName}"/></td>
-					<td><c:out value="${event.eventDate}"/></td>
-					<td><c:out value="${event.startTime}"/></td>
-					<td><c:out value="${event.duration}"/></td>
+					<td><fmt:formatDate pattern="MM/dd/yyy" value="${event.eventDate}"/></td>
+					<td><fmt:formatDate type="time" timeStyle="short" value="${event.startTime}"/></td>
+					<td><c:out value="${event.duration.getHours()} Hr ${event.duration.getMinutes()} Min"/></td>
 					
-					<spring:url value="/editEvent/${event.eventId}" var="editEventUrl" />
-					<spring:url value="/listTimeSlices/${event.eventId}" var="viewTimelineUrl" />
+					
+					<spring:url value="/listTimeSlices/${event.eventId}" var="editTimelineUrl" />
+					<spring:url value="/viewTimeline/${event.eventId}" var="viewTimelineUrl" />
 					<spring:url value="/createTimeline/${event.eventId}/${event.startTime}" var="createTimelineUrl" />
 					<spring:url value="/deleteEvent/${event.eventId}" var="deleteEventUrl" />
 					
 					<td>
 						<nobr>
-							<button onclick="location.href='${editEventUrl}'">Edit</button>
-						</nobr>
-					</td>
-					
-					<td>
-						<nobr>
 							<c:if test="${not empty timelineIdMap[event.eventId]}">
-								<button onclick="location.href='${viewTimelineUrl}'">View Timeline</button>
+								<button onclick="location.href='${editTimelineUrl}'">Edit Timeline</button>
+							</c:if>
+							<c:if test="${not empty timelineIdMap[event.eventId]}">
+								<button onclick="location.href='${viewTimelineUrl}'">Preview</button>
 							</c:if>
 							<c:if test="${empty timelineIdMap[event.eventId]}">
 								<button onclick="location.href='${createTimelineUrl}'">Add Timeline</button>
@@ -63,7 +69,7 @@
 					
 					<td>
 						<nobr>
-							<button onclick="location.href='${deleteEventUrl}'">Delete</button>
+							<button onclick="location.href='${deleteEventUrl}'">Delete Event</button>
 						</nobr>
 					</td>
 				</tr>

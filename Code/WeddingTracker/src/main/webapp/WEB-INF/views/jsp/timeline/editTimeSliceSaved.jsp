@@ -13,7 +13,7 @@
 		         </tr>
 		         <tr>
 		            <td>Duration</td>
-		            <td>${duration}</td>
+		            <td>${timeChunk.durationHr}Hr ${timeChunk.durationMin}Min</td>
 		         </tr>
 		         <tr>
 		            <td>Location</td>

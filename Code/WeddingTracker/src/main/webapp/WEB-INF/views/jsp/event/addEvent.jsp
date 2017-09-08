@@ -1,6 +1,7 @@
 <%@page contentType = "text/html;charset = UTF-8" language = "java" %>
 <%@page isELIgnored = "false" %>
 <%@taglib uri = "http://www.springframework.org/tags/form" prefix = "form"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 		
    <head>
@@ -22,17 +23,19 @@
 		<!--          </tr> -->
 		         <tr>
 		            <td>Date</td>
-		            <td>${eventDate}</td>
+<%-- 		            <td>${eventDate}</td> --%>
+					<td><fmt:formatDate pattern="MM/dd/yyy" value="${eventDate}" /></td>
 		         </tr>
 		         <tr>
 		            <td>Start Time</td>
-		            <td>${startTime}</td>
+		            <td><fmt:formatDate type="time" timeStyle="short" value="${startTime}" /></td>
+<%-- 		            <td>${startTime}</td> --%>
 <%-- 		            <td>${startTimeHr}:${startTimeMn}</td> --%>
 		         </tr>
-		         <tr>
-		            <td>Duration</td>
-		            <td>${duration}</td>
-		         </tr>
+<!-- 		         <tr> -->
+<!-- 		            <td>Duration</td> -->
+<%-- 		            <td>${duration}</td> --%>
+<!-- 		         </tr> -->
 		         <tr>
 		            <td>Extra Cost</td>
 		            <td>${extraCost}</td>

@@ -23,8 +23,9 @@
 						<td><form:input path = "startTime"/></td>
 					</tr>
 					<tr>
-						<td><form:label path = "duration">Duration</form:label></td>
-						<td><form:input path = "duration"/></td>
+						<td>Duration</td>
+						<td><form:select path="durationHr" items = "${hrMap}" /> Hr
+						<form:select path="durationMin" items = "${minMap}"/> Min</td>
 					</tr>
 					
 					<tr>

@@ -201,25 +201,3 @@ CREATE VIEW EVENTPHOTOGRAPHERS AS
 SELECT DISTINCT E.EVENTID, E.EVENTNAME, E.EVENTDATE, E.STARTTIME, P.STAFFID, CONCAT_WS(" ", P.FIRSTNAME, P.LASTNAME) AS PHOTOGRAPHER
 FROM EVENT E, TIMECHUNKPHOTOGRAPHER TCP, PHOTOGRAPHER P
 WHERE E.EVENTID = TCP.EVENTID AND TCP.STAFFID = P.STAFFID;
-
-
-/* ---------------------------------------------------------------------------------------
-	insert users
- --------------------------------------------------------------------------------------- */
-
-/* password = 1234 */
-INSERT INTO USERS(USERNAME, PASSWORD, ENABLED, EMAIL)
-VALUES ('christy', '$2a$10$dOal6BQburfnk7BoGb4BGO.mWjX2Sfvz3XB.XMplOpp6e.6Gbw7RG', true, 'a@b.c');
-
-/* password = password */
-INSERT INTO USERS(USERNAME, PASSWORD, ENABLED, EMAIL)
-VALUES ('user', '$2a$10$5YXXBALvZKT67kMoYxp.T.rSsuRXZKParEPaGWTpprBI5cCklFdkW', true, 'a@c.c');
-
-INSERT INTO USER_ROLES (USERNAME, ROLE)
-VALUES ('christy', 'ROLE_USER');
-
-INSERT INTO USER_ROLES (USERNAME, ROLE)
-VALUES ('christy', 'ROLE_ADMIN');
-
-INSERT INTO USER_ROLES (USERNAME, ROLE)
-VALUES ('user', 'ROLE_USER');

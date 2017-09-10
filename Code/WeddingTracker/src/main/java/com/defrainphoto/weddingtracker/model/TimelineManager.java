@@ -89,8 +89,10 @@ public class TimelineManager {
 		closeSession();
 		
 		// put the list in the map
-		for (Timeline t : result) {
-			timelineIds.put(t.getEventId(), t.getEventId());
+		if  (result != null) {
+			for (Timeline t : result) {
+				timelineIds.put(t.getEventId(), t.getEventId());
+			}
 		}
 		return found ? timelineIds : null;
 	}

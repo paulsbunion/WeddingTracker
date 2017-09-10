@@ -20,7 +20,7 @@ public class ClientController {
 	private ClientManager clientManager;
 //	private ClientManager clientManager = new ClientManager();
 	
-	@RequestMapping(value = "/createClient", method = RequestMethod.GET)
+	@RequestMapping(value = {"/createClient", "/WeddingTracker/createClient" }, method = RequestMethod.GET)
 	public ModelAndView createClient() {
 		
 		ModelAndView model = new ModelAndView("client/createClient", "command", new Client());
@@ -32,7 +32,7 @@ public class ClientController {
 		return model;
 	}
 	
-	@RequestMapping(value = "/addClient", method = RequestMethod.POST)
+	@RequestMapping(value = {"/addClient", "/WeddingTracker/addClient"}, method = RequestMethod.POST)
 	public String addClient(@ModelAttribute("client")Client client, ModelMap model) {
 		
 		model.addAttribute("firstName", 	client.getFirstName());
@@ -51,7 +51,7 @@ public class ClientController {
 		return "client/addClient";
 	}
 	
-	@RequestMapping(value ="/editClient/{clientId}", method=RequestMethod.GET)
+	@RequestMapping(value ={"/editClient/{clientId}", "/WeddingTracker/editClient/{clientId}"}, method=RequestMethod.GET)
 	public ModelAndView editClient(@PathVariable("clientId") String clientId) {
 		
 		Client client = new Client(clientId, "", "", "", "", "", "");
@@ -65,7 +65,7 @@ public class ClientController {
 		return model;
 	}
 	
-	@RequestMapping(value="/editClient", method = RequestMethod.POST)
+	@RequestMapping(value={"/editClient", "/WeddingTracker/editClient"}, method = RequestMethod.POST)
 	public String editClientSaved(@ModelAttribute("client")Client client, ModelMap model) {
 		
 		model.addAttribute("firstName", 	client.getFirstName());
@@ -91,7 +91,7 @@ public class ClientController {
 	}
 	
 	
-	@RequestMapping(value ="/listClients")
+	@RequestMapping(value ={"/listClients", "/WeddingTracker/listClients"})
 	public String listClients(Map<String, Object> map) {
 		
 		

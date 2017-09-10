@@ -2,7 +2,9 @@ package com.defrainphoto.weddingtracker.controller;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +57,7 @@ public class TimeChunkController {
 	private PhotographerManager photographerManager;
 //	private PhotographerManager photographerManager = new PhotographerManager();
 
-	@RequestMapping(value ="/createTimeSlice/{eventId}", method = RequestMethod.GET)
+	@RequestMapping(value ={"/createTimeSlice/{eventId}", "/WeddingTracker/createTimeSlice/{eventId}"}, method = RequestMethod.GET)
 	public ModelAndView createTimeChunk(@PathVariable("eventId") String eventId) {
 
 		// get the timeline for reference
@@ -85,19 +87,22 @@ public class TimeChunkController {
 		model.addObject("clientList", clientList);
 		model.addObject("photographerList", photographerList);
 		model.addObject("timeline", timeline);
+		model.addObject("hrMap", generateHrData());
+		model.addObject("minMap", generateMinData());
 		
 //		System.out.println("before POST");
 		return model;
 	}
 	
-	@RequestMapping(value = "/addTimeSlice", method = RequestMethod.POST)
+	@RequestMapping(value = {"/addTimeSlice", "/WeddingTracker/addTimeSlice"}, method = RequestMethod.POST)
 	public String addTimeChunk(@ModelAttribute("timeChunk") TimeChunk timeChunk, ModelMap model,
 			@ModelAttribute("location") String location, 
 			@ModelAttribute("client") Client client) {
 		System.out.println("hello, me");
 		model.addAttribute("client", timeChunk.getClient());
 		model.addAttribute("description", timeChunk.getDescription());
-		model.addAttribute("duration", timeChunk.getDuration());
+		model.addAttribute("durationHr", timeChunk.getDurationHr());
+		model.addAttribute("durationMin", timeChunk.getDurationMin());
 		model.addAttribute("location", timeChunk.getLocation());
 		model.addAttribute("photographers", timeChunk.getPhotographers());
 		model.addAttribute("position", timeChunk.getPosition());
@@ -110,7 +115,7 @@ public class TimeChunkController {
 		return "timeline/addTimeSlice";
 	}
 	
-	@RequestMapping(value="/editTimeSlice/{eventId}/{chunkId}", method = RequestMethod.GET)
+	@RequestMapping(value={"/editTimeSlice/{eventId}/{chunkId}", "/WeddingTracker/editTimeSlice/{eventId}/{chunkId}"}, method = RequestMethod.GET)
 	public ModelAndView editTimeSlice(@PathVariable("eventId") String eventId, 
 		 @PathVariable("chunkId") String chunkId) {
 		
@@ -121,7 +126,7 @@ public class TimeChunkController {
 		System.out.println("not bad");
 		System.out.println(timeline);
 		
-		TimeChunk timeChunk = new TimeChunk(chunkId, timeline, 0, null, null, null, "", null, null);
+		TimeChunk timeChunk = new TimeChunk(chunkId, timeline, 0, null, null, null, null, "", null, null);
 		timeChunk = timelineManager.timeChunkManager.getTimeChunkByIdAndTimeline(timeChunk);
 		
 		timeChunk.setEventId(eventId);
@@ -155,7 +160,11 @@ public class TimeChunkController {
 		model.addObject("timelineTotal", timeline.getTotalTime());
 		model.addObject("chunkId", chunkId);
 		model.addObject("eventId", eventId);
+		model.addObject("durationHr", timeChunk.getDurationHr());
+		model.addObject("durationMin", timeChunk.getDurationMin());
 		model.addObject("timeChunk", timeChunk);
+		model.addObject("hrMap", generateHrData());
+		model.addObject("minMap", generateMinData());
 		
 		System.out.println("Data");
 		System.out.println(timeline);
@@ -165,7 +174,7 @@ public class TimeChunkController {
 		return model;
 	}
 	
-	@RequestMapping(value="/editTimeSlice", method = RequestMethod.POST)
+	@RequestMapping(value={"/editTimeSlice", "/WeddingTracker/editTimeSlice"}, method = RequestMethod.POST)
 	public String editTimeSliceSaved(@ModelAttribute("timeChunk")TimeChunk timeChunk,
 			@ModelAttribute("timeline")Timeline timeline,
 			@ModelAttribute("eventId")String eventId, ModelMap model) {
@@ -177,6 +186,7 @@ public class TimeChunkController {
 		model.addAttribute("description", timeChunk.getDescription());
 		model.addAttribute("client", timeChunk.getClient());
 		model.addAttribute("photographers", timeChunk.getPhotographers());
+		model.addAttribute("startTime", timeChunk.getStartTime());
 		
 		System.out.println(timeChunk.getPhotographers());
 		System.out.println("before error");
@@ -198,7 +208,7 @@ public class TimeChunkController {
 		return "timeline/editTimeSliceSaved";
 	}
 	
-	@RequestMapping(value="/deleteTimeSlice/{eventId}/{chunkId}")
+	@RequestMapping(value={"/deleteTimeSlice/{eventId}/{chunkId}", "/WeddingTracker/deleteTimeSlice/{eventId}/{chunkId}"})
 	public String deleteTimeSlice(@PathVariable("eventId") String eventId, 
 		 @PathVariable("chunkId") String chunkId, Model model) {
 		
@@ -209,7 +219,7 @@ public class TimeChunkController {
 		Event event = new Event(eventId, "", null, null, null, null, null, "", "", null, null);
 		event = eventManager.getEventById(event);
 				
-		TimeChunk timeChunk = new TimeChunk(chunkId, timeline, 0, null, null, null, "", null, null);
+		TimeChunk timeChunk = new TimeChunk(chunkId, timeline, 0, null, null, null, null, "", null, null);
 		timeChunk = timelineManager.timeChunkManager.getTimeChunkByIdAndTimeline(timeChunk);
 		
 		timeChunk.setEventId(eventId);
@@ -223,6 +233,24 @@ public class TimeChunkController {
 		model.addAttribute("eventName", event.getEventName());
 
 		return "timeline/listTimeSlices";
+	}
+	
+	protected List<String> generateHrData() {
+		List<String> hourChoice = new ArrayList<String>();
+		for (int i = 0; i < 25; i++) {
+			hourChoice.add("" + i);
+		}
+		
+		return hourChoice;
+	}
+	
+	protected List<String> generateMinData() {
+		List<String> minChoice = new ArrayList<String>();
+		for (int i = 0; i < 61; i+= 5) {
+			minChoice.add("" + i);
+		}
+		
+		return minChoice;
 	}
 	
 	@InitBinder

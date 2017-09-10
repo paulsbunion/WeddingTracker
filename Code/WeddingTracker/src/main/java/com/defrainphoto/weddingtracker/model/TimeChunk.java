@@ -11,7 +11,9 @@ public class TimeChunk implements Serializable {
 	private Time startTime;
 //	private int locationId;
 	private Location location;
-	private Time duration;
+//	private Time duration;
+	private String durationHr;
+	private String durationMin;
 	private String description;
 	private Client client;
 	private Set<Photographer> photographers;
@@ -28,14 +30,17 @@ public class TimeChunk implements Serializable {
 
 	public TimeChunk() {}
 		
-	public TimeChunk(String chunkId, Timeline timeline, int position, Time startTime, Location location, Time duration,
+	public TimeChunk(String chunkId, Timeline timeline, int position, Time startTime, Location location, 
+			String durationHr, String durationMin,
 			String description, Client client, Set<Photographer> photographers) {
 		this.chunkId = chunkId;
 		this.timeline = timeline;
 		this.position = position;
 		this.startTime = startTime;
 		this.location = location;
-		this.duration = duration;
+//		this.duration = duration;
+		this.durationHr = durationHr;
+		this.durationMin = durationMin;
 		this.description = description;
 		this.client = client;
 		this.photographers = photographers;
@@ -89,13 +94,29 @@ public class TimeChunk implements Serializable {
 		this.location = location;
 	}
 	
-	public Time getDuration() {
-		return duration;
+	public String getDurationHr() {
+		return durationHr;
 	}
-	
-	public void setDuration(Time duration) {
-		this.duration = duration;
+
+	public void setDurationHr(String durationHr) {
+		this.durationHr = durationHr;
 	}
+
+	public String getDurationMin() {
+		return durationMin;
+	}
+
+	public void setDurationMin(String durationMin) {
+		this.durationMin = durationMin;
+	}
+
+//	public Time getDuration() {
+//		return duration;
+//	}
+//	
+//	public void setDuration(Time duration) {
+//		this.duration = duration;
+//	}
 	
 	public String getDescription() {
 		return description;
@@ -154,7 +175,8 @@ public class TimeChunk implements Serializable {
 	@Override
 	public String toString() {
 		return "TimeChunk [chunkId=" + chunkId + ", position=" + position + ", startTime="
-				+ startTime + ", location=" + location + ", duration=" + duration + ", description=" + description
+				+ startTime + ", location=" + location + ", duration=" + durationHr + ":" + durationMin
+				+ ", description=" + description
 				+ ", client=" + client + ", photographers=" + photographers + ", eventId=" + eventId + "]";
 	}
 

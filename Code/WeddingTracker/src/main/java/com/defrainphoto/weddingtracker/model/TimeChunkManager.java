@@ -256,7 +256,8 @@ public class TimeChunkManager {
 				Hibernate.initialize(chunk.getLocation());
 				Hibernate.initialize(chunk.getStartTime());
 				Hibernate.initialize(chunk.getPosition());
-				Hibernate.initialize(chunk.getDuration());
+				Hibernate.initialize(chunk.getDurationHr());
+				Hibernate.initialize(chunk.getDurationMin());
 				Hibernate.initialize(chunk.getDescription());
 			}
 			closeSession();
@@ -279,32 +280,32 @@ public class TimeChunkManager {
 	}
 	
 	public TimeChunk setTimeChunkPosition(TimeChunk timeChunk, int newPosition) {
-		return setTimeChunkHelper(timeChunk, newPosition, null, null, null, null, null, null, 
+		return setTimeChunkHelper(timeChunk, newPosition, null, null, null, null, null, null, null, 
 				true, false, false, false, false, false, false, false);
 	}
 	
 	public TimeChunk setTimeChunkStartTime(TimeChunk timeChunk, Time newStartTime) {
-		return setTimeChunkHelper(timeChunk, null, newStartTime, null, null, null, null, null, 
+		return setTimeChunkHelper(timeChunk, null, newStartTime, null, null, null, null, null, null, 
 				false, true, false, false, false, false, false, false);
 	}
 	
 	public TimeChunk setTimeChunkLocation(TimeChunk timeChunk, Location newLocation) {
-		return setTimeChunkHelper(timeChunk, null, null, newLocation, null, null, null, null, 
+		return setTimeChunkHelper(timeChunk, null, null, newLocation, null, null, null, null, null, 
 				false, false, true, false, false, false, false, false);
 	}
 	
-	public TimeChunk setTimeChunkDuration(TimeChunk timeChunk, Time newDuration) {
-		return setTimeChunkHelper(timeChunk, null, null, null, newDuration, null, null, null, 
+	public TimeChunk setTimeChunkDuration(TimeChunk timeChunk, String newDurationHr, String newDurationMin) {
+		return setTimeChunkHelper(timeChunk, null, null, null, newDurationHr, newDurationMin, null, null, null, 
 				false, false, false, true, false, false, false, false);
 	}
 	
 	public TimeChunk setTimeChunkDescription(TimeChunk timeChunk, String newDescription) {
-		return setTimeChunkHelper(timeChunk, null, null, null, null, newDescription, null, null, 
+		return setTimeChunkHelper(timeChunk, null, null, null, null, null, newDescription, null, null, 
 				false, false, false, false, true, false, false, false);
 	}
 	
 	public TimeChunk setTimeChunkClient(TimeChunk timeChunk, Client newClient) {
-		return setTimeChunkHelper(timeChunk, null, null, null, null, null, newClient, null, 
+		return setTimeChunkHelper(timeChunk, null, null, null, null, null, null, newClient, null, 
 				false, false, false, false, false, true, false, false);
 	}
 	
@@ -316,7 +317,7 @@ public class TimeChunkManager {
 	}
 	
 	public TimeChunk setPhotographers(TimeChunk timeChunk, Set<Photographer> setPhotographers) {
-		return setTimeChunkHelper(timeChunk, null, null, null, null, null, null, setPhotographers, 
+		return setTimeChunkHelper(timeChunk, null, null, null, null, null, null, null, setPhotographers, 
 				false, false, false, false, false, false, true, false);
 	}
 	
@@ -328,7 +329,7 @@ public class TimeChunkManager {
 	}
 	
 	public TimeChunk addPhotographers(TimeChunk timeChunk, Set<Photographer> newPhotographers) {
-		return setTimeChunkHelper(timeChunk, null, null, null, null, null, null, newPhotographers, 
+		return setTimeChunkHelper(timeChunk, null, null, null, null, null, null, null, newPhotographers, 
 				false, false, false, false, false, false, false, true);
 	}
 	
@@ -401,7 +402,8 @@ public class TimeChunkManager {
 				Hibernate.initialize(temp);
 				Hibernate.initialize(temp.getClient());
 				Hibernate.initialize(temp.getDescription());
-				Hibernate.initialize(temp.getDuration());
+				Hibernate.initialize(temp.getDurationHr());
+				Hibernate.initialize(temp.getDurationMin());
 				Hibernate.initialize(temp.getLocation());
 				Hibernate.initialize(temp.getPhotographers());
 				Hibernate.initialize(temp.getPosition());
@@ -471,7 +473,7 @@ public class TimeChunkManager {
 		query.setParameter("eventid", timeline.getEventId());
 	}
 	
-	private TimeChunk setTimeChunkHelper(TimeChunk timeChunk, Integer newPosition, Time newStartTime, Location newLocation, Time newDuration,
+	private TimeChunk setTimeChunkHelper(TimeChunk timeChunk, Integer newPosition, Time newStartTime, Location newLocation, String newDurationHr, String newDurationMin,
 			String newDescription, Client newClient, Set<Photographer> newPhotographers, boolean updatePosition, boolean updateStartTime, boolean updateLocation, boolean updateDuration,
 			boolean updateDescription, boolean updateClient, boolean setPhotographers, boolean addPhotographers) {
 		
@@ -506,7 +508,9 @@ public class TimeChunkManager {
 		int oldPosition = timeChunk.getPosition();
 		Time oldStartTime = timeChunk.getStartTime();
 		Location oldLocation = timeChunk.getLocation();
-		Time oldDuration = timeChunk.getDuration();
+//		Time oldDuration = timeChunk.getDuration();
+		String oldDurationHr = timeChunk.getDurationHr();
+		String oldDurationMin = timeChunk.getDurationMin();
 		String oldDescription = timeChunk.getDescription();
 		Client oldClient = timeChunk.getClient();
 		Set<Photographer> oldPhotographers = timeChunk.getPhotographers(); 
@@ -522,7 +526,8 @@ public class TimeChunkManager {
 			newLocation = oldLocation;
 		}
 		if (!updateDuration) {
-			newDuration = oldDuration;
+			newDurationHr = oldDurationHr;
+			newDurationMin = oldDurationMin;
 		}
 		if (!updateDescription) {
 			newDescription = oldDescription;
@@ -577,7 +582,8 @@ public class TimeChunkManager {
 				foundTimeChunk.setPosition(newPosition);
 				foundTimeChunk.setStartTime(newStartTime);
 				foundTimeChunk.setLocation(newLocation);
-				foundTimeChunk.setDuration(newDuration);
+				foundTimeChunk.setDurationHr(newDurationHr);
+				foundTimeChunk.setDurationMin(newDurationMin);
 				foundTimeChunk.setDescription(newDescription);
 				foundTimeChunk.setClient(newClient);
 				foundTimeChunk.setPhotographers(newPhotographers);
@@ -586,7 +592,8 @@ public class TimeChunkManager {
 				timeChunk.setPosition(newPosition);
 				timeChunk.setStartTime(newStartTime);
 				timeChunk.setLocation(newLocation);
-				timeChunk.setDuration(newDuration);
+				timeChunk.setDurationHr(newDurationHr);
+				timeChunk.setDurationMin(newDurationMin);
 				timeChunk.setDescription(newDescription);
 				timeChunk.setClient(newClient);
 				timeChunk.setPhotographers(newPhotographers);
@@ -639,7 +646,8 @@ public class TimeChunkManager {
 				timeChunk.setPosition(oldPosition);
 				timeChunk.setStartTime(oldStartTime);
 				timeChunk.setLocation(oldLocation);
-				timeChunk.setDuration(oldDuration);
+				timeChunk.setDurationHr(oldDurationHr);
+				timeChunk.setDurationMin(oldDurationMin);
 				timeChunk.setDescription(oldDescription);
 				timeChunk.setClient(oldClient);
 				timeChunk.setPhotographers(oldPhotographers);

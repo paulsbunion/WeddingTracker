@@ -1,6 +1,7 @@
 <%@page contentType = "text/html;charset = UTF-8" language = "java" %>
 <%@page isELIgnored = "false" %>
 <%@taglib uri = "http://www.springframework.org/tags/form" prefix = "form"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 	<head>
 		<title>Wedding Tracker - added Timeline</title>
@@ -13,7 +14,7 @@
 			<table>
 				<tr>
 					<td>startTime</td>
-					<td>${startTime}</td>
+					<td><fmt:formatDate type="time" timeStyle="short" value="${startTime}" /></td>
 				</tr>
 			</table>
 		</div>

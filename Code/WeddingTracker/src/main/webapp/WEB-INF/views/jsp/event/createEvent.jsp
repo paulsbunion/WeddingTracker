@@ -2,10 +2,15 @@
 <html>
 	<head>
 		<title>Wedding Tracker - Create an Event</title>
-		<!-- date picker -->
+		<!-- core -->
         <script type="text/javascript" src="resources/core/js/jquery-3.2.1.js"></script>
+<!--         <link rel="stylesheet" type="text/css" href="resources/core/css/jquery-ui.css"/> -->
+        
+        <!-- date picker -->
+        <script type="text/javascript" src="resources/core/js/jquery-ui.js"></script>
         <link rel="stylesheet" type="text/css" href="resources/core/css/jquery-ui.css"/>
         
+        <!-- time picker -->
         <script type="text/javascript" src="resources/timePicker/js/jquery.ptTimeSelect.js"></script>
         <link rel="stylesheet" type="text/css" href="resources/timePicker/css/jquery.ptTimeSelect.css"/>
 	</head>
@@ -26,7 +31,7 @@
 					</tr>
 					<tr>
 						<td><form:label path = "eventDate">Date</form:label></td>
-						<td><form:input path = "eventDate" type="date"/></td>
+						<td><form:input id="datepicker" path = "eventDate" type="text"/></td>
 					</tr>
 					
 					<tr>
@@ -38,10 +43,10 @@
 						</td>
 					</tr>
 					 
-					<tr>
-						<td><form:label path = "duration">Duration (optional)</form:label></td>
-						<td><form:input path = "duration" /></td>
-					</tr>
+<!-- 					<tr> -->
+<%-- 						<td><form:label path = "duration">Duration (optional)</form:label></td> --%>
+<%-- 						<td><form:input path = "duration" /></td> --%>
+<!-- 					</tr> -->
 					<tr>
 						<td><form:label path = "extraCost">Additional Cost</form:label></td>
 						<td><form:input path = "extraCost" /></td>
@@ -50,6 +55,7 @@
 						<td><form:label path = "notes">Notes</form:label></td>
 						<td><form:input path = "notes" /></td>
 					</tr>
+					<td><form:hidden path="duration"/></td>
 					<tr>
 						<td colspan="2">
 							<input type="submit" value = "Submit">
@@ -59,13 +65,19 @@
 			</form:form>
 			
 		</div>
-		
-		<script type="text/javascript">
-        $(document).ready(function(){
-            // find the input fields and apply the time select to them.
-            $('#sample1 input').ptTimeSelect();
-        });
-    </script>
-	</body>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			// find the input fields and apply the time select to them.
+			$('#sample1 input').ptTimeSelect();
+		});
+	</script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#datepicker").datepicker();
+		});
+	</script>
+</body>
 	
 </html>

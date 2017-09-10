@@ -23,102 +23,105 @@ import com.defrainphoto.weddingtracker.model.TimelineManager;
 public class PhotographerController {
 	@Autowired
 	private PhotographerManager photographerManager;
-//	private PhotographerManager photographerManager  = new PhotographerManager();
+	// private PhotographerManager photographerManager = new
+	// PhotographerManager();
 	@Autowired
 	private EventPhotographerManager eventPhotographerManager;
-//	private EventPhotographerManager eventPhotographerManager = new EventPhotographerManager();
+	// private EventPhotographerManager eventPhotographerManager = new
+	// EventPhotographerManager();
 	@Autowired
 	private TimelineManager timelineManager;
-//	private TimelineManager timelineManager = new TimelineManager();
-		
-	@RequestMapping(value = "/createPhotographer", method = RequestMethod.GET)
+	// private TimelineManager timelineManager = new TimelineManager();
+
+	@RequestMapping(value = { "/createPhotographer", "/WeddingTracker/createPhotographer" }, method = RequestMethod.GET)
 	public ModelAndView createPhotographer() {
-		
-		ModelAndView model = new ModelAndView("createPhotographer", "command", new Photographer());
-		
-//		String[] yNChoice = {"N", "Y"};
-//		
-//		model.addObject("yNChoice", yNChoice);
-		
+
+		ModelAndView model = new ModelAndView("photographer/createPhotographer", "command", new Photographer());
+
+		// String[] yNChoice = {"N", "Y"};
+		//
+		// model.addObject("yNChoice", yNChoice);
+
 		return model;
 	}
-	
-	@RequestMapping(value = "/addPhotographer", method = RequestMethod.POST)
-	public String addPhotographer(@ModelAttribute("Photographer")Photographer photographer, ModelMap model) {
-		
+
+	@RequestMapping(value = { "/addPhotographer", "/WeddingTracker/addPhotographer" }, method = RequestMethod.POST)
+	public String addPhotographer(@ModelAttribute("Photographer") Photographer photographer, ModelMap model) {
+
 		model.addAttribute("firstName", photographer.getFirstName());
-		model.addAttribute("lastName",	photographer.getLastName());
-		model.addAttribute("events",	photographer.getEvents());
-		
+		model.addAttribute("lastName", photographer.getLastName());
+		model.addAttribute("events", photographer.getEvents());
+
 		photographer.setStaffId("");
 		photographer.setEvents(null);
 		photographer = photographerManager.addPhotographer(photographer);
-		
+
 		model.addAttribute("staffId", photographer.getStaffId());
 		return "photographer/addPhotographer";
 	}
-	
-	@RequestMapping(value="/editPhotographer/{staffId}", method = RequestMethod.GET)
+
+	@RequestMapping(value = { "/editPhotographer/{staffId}",
+			"/WeddingTracker/editPhotographer/{staffId}" }, method = RequestMethod.GET)
 	public ModelAndView editPhotographer(@PathVariable("staffId") String staffId) {
-		
+
 		Photographer photographer = new Photographer(staffId, "", "");
 		photographer = photographerManager.getPhotographerById(photographer);
-		
+
 		System.out.println("here");
 		System.out.println(staffId);
 		System.out.println(photographer.getStaffId());
-		
+
 		ModelAndView model = new ModelAndView("photographer/editPhotographer", "command", photographer);
-		
+
 		return model;
 	}
-	
-	@RequestMapping(value="/editPhotographer", method = RequestMethod.POST)
-	public String editPhotographerSaved(@ModelAttribute("Photographer")Photographer photographer, ModelMap model) {
+
+	@RequestMapping(value = { "/editPhotographer", "/WeddingTracker/editPhotographer" }, method = RequestMethod.POST)
+	public String editPhotographerSaved(@ModelAttribute("Photographer") Photographer photographer, ModelMap model) {
 		model.addAttribute("firstName", photographer.getFirstName());
 		model.addAttribute("lastName", photographer.getLastName());
 		model.addAttribute("staffId", photographer.getStaffId());
-		
+
 		photographerManager.updatePhotographer(photographer);
-		
+
 		System.out.println("the photog");
 		System.out.println(photographer);
 		return "photographer/editPhotographerSaved";
 	}
-	
-	@RequestMapping(value="/listPhotographers")
+
+	@RequestMapping(value = { "/listPhotographers", "/WeddingTracker/listPhotographers" })
 	public String listPhotographers(Map<String, Object> map) {
-		
+
 		map.put("photographerList", photographerManager.getAllPhotographers());
-		
+
 		return "photographer/listPhotographers";
 	}
-	
-	@RequestMapping(value="/photographerEvents/{staffId}", method = RequestMethod.GET)
-	public String getPhotographerEvents(@PathVariable("staffId")String staffId, Model model) {
-		
+
+	@RequestMapping(value = { "/photographerEvents/{staffId}",
+			"/WeddingTracker/photographerEvents/{staffId}" }, method = RequestMethod.GET)
+	public String getPhotographerEvents(@PathVariable("staffId") String staffId, Model model) {
+
 		List<EventPhotographer> photographerEvents = eventPhotographerManager.getPhotographerEvents(staffId);
-		
+
 		// get timeline id's
 		model.addAttribute("timelineIdMap", timelineManager.getallTimelineIds());
-		
+
 		model.addAttribute("photographerEvents", photographerEvents);
 		if (photographerEvents != null) {
 			model.addAttribute("photographer", photographerEvents.get(0).getPhotographer());
-		}
-		else {
+		} else {
 			Photographer temp = new Photographer(staffId, "", "");
-			
+
 			temp = photographerManager.getPhotographerById(temp);
 			model.addAttribute("photographer", temp);
 		}
-		
+
 		return "photographer/photographerEvents";
 	}
-	
-//	@InitBinder
-//	public void initBinder(WebDataBinder binder) {
-//		binder.registerCustomEditor(EventType.class, new EventTypeEditor());
-//		binder.registerCustomEditor(Time.class, new SqlTimeEditor());
-//	}
+
+	// @InitBinder
+	// public void initBinder(WebDataBinder binder) {
+	// binder.registerCustomEditor(EventType.class, new EventTypeEditor());
+	// binder.registerCustomEditor(Time.class, new SqlTimeEditor());
+	// }
 }

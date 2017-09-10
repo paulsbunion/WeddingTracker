@@ -23,7 +23,7 @@ public class HelloController {
 //		return "entry";
 //	}
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = {"/", "/WeddingTracker/"}, method = RequestMethod.GET)
 	public String printWelcome() {
 		return "entry";
 	}

@@ -46,7 +46,7 @@ public class TimelineController {
 //		return model;
 //	}
 	
-	@RequestMapping(value = "/createTimeline/{eventId}/{startTime}")
+	@RequestMapping(value = {"/createTimeline/{eventId}/{startTime}", "/WeddingTracker/createTimeline/{eventId}/{startTime}"})
 	public String createTimeline(@PathVariable(value="eventId") String eventId,
 			@PathVariable(value="startTime") String startTime) {
 		
@@ -62,7 +62,7 @@ public class TimelineController {
 		return "timeline/listTimeSlices";
 	}
 	
-	@RequestMapping(value = "/addTimeline", method = RequestMethod.POST)
+	@RequestMapping(value = {"/addTimeline", "/WeddingTracker/addTimeline"}, method = RequestMethod.POST)
 	public String addEvent(@ModelAttribute("timeline")Timeline timeline, ModelMap model) {
 		
 		timeline.setTotalTime(Time.valueOf("0:0:0"));
@@ -75,7 +75,7 @@ public class TimelineController {
 		return "timeline/addTimeline";
 	}
 	
-	@RequestMapping(value="/listTimeSlices/{eventId}", method = RequestMethod.GET)
+	@RequestMapping(value={"/listTimeSlices/{eventId}", "/WeddingTracker/listTimeSlices/{eventId}"}, method = RequestMethod.GET)
 	public String getTimelineSlices(@PathVariable("eventId")String eventId, Model model) {
 		
 		List<TimeChunk> timeSlices = timelineManager.timeChunkManager.getAllChunksByEventId(eventId);

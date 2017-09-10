@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class LogInOutController {
 	
-	@RequestMapping(value ="/logout")
+	@RequestMapping(value ={"/logout", "/WeddingTracker/logout"})
 	public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
 		
 		System.out.println("logging out");

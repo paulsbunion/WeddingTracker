@@ -108,11 +108,13 @@ public class TimelineManagerTest {
 	@Test
 	public void testAddTimechunk() {
 		Time sTime = new Time(1, 0, 0);
-		Time dur = new Time(0, 30, 0);
+//		Time dur = new Time(0, 30, 0);
+		String durHr = "0";
+		String durMin = "30";
 //		session.close();
 		
 //		 //create a timechunk
-		TimeChunk addedChunk = new TimeChunk("4", timeline, 1, sTime, null, dur, "first chunk", null, null);
+		TimeChunk addedChunk = new TimeChunk("4", timeline, 1, sTime, null, durHr, durMin, "first chunk", null, null);
 		timelineManager.addTimechunk(timeline, addedChunk);
 //		TimeChunk addedChunk = timelineManager.timeChunkManager.addTimeChunk(new TimeChunk("4", 
 //				timeline, 1, sTime, null, dur, "first chunk", null, null));
@@ -142,23 +144,25 @@ public class TimelineManagerTest {
 		
 		// create a set of timechunks
 		Time sTime = new Time(1, 0, 0);
-		Time dur = new Time(0, 30, 0);
+//		Time dur = new Time(0, 30, 0);
+		String durHr = "0";
+		String durMin = "30";
 		
 		//create a timechunk
 		TimeChunk addedChunk = new TimeChunk("1", 
-				timeline, 1, sTime, null, dur, "group chunk 1", null, null);
+				timeline, 1, sTime, null, durHr, durMin, "group chunk 1", null, null);
 		chunksToAdd.add(addedChunk);
 		
 		addedChunk = new TimeChunk("2", 
-				timeline, 1, sTime, null, dur, "group chunk 2", null, null);
+				timeline, 1, sTime, null, durHr, durMin, "group chunk 2", null, null);
 		chunksToAdd.add(addedChunk);
 		
 		addedChunk = new TimeChunk("3", 
-				timeline, 1, sTime, null, dur, "group chunk 3", null, null);
+				timeline, 1, sTime, null, durHr, durMin, "group chunk 3", null, null);
 		chunksToAdd.add(addedChunk);
 		
 		addedChunk = new TimeChunk("4", 
-				timeline, 1, sTime, null, dur, "group chunk 4", null, null);
+				timeline, 1, sTime, null, durHr, durMin, "group chunk 4", null, null);
 		chunksToAdd.add(addedChunk);
 		
 		// add all chunks

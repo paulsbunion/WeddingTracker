@@ -1,0 +1,2 @@
+# ignore the hibernate.cfg.xml file to avoid repo containing password to db
+Code\WeddingTracker\src\main\resources

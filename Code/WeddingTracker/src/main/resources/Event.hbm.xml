@@ -4,7 +4,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
-    <class name="com.defrainphoto.weddingtracker.model.Event" table="Event" >
+    <class name="com.defrainphoto.weddingtracker.model.Event" table="EVENT" >
         <id name="eventId" column="EVENTID">
             <generator class="native"/>
         </id>

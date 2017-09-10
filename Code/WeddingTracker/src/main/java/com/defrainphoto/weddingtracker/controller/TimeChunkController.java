@@ -57,7 +57,7 @@ public class TimeChunkController {
 	private PhotographerManager photographerManager;
 //	private PhotographerManager photographerManager = new PhotographerManager();
 
-	@RequestMapping(value ="/createTimeSlice/{eventId}", method = RequestMethod.GET)
+	@RequestMapping(value ={"/createTimeSlice/{eventId}", "/WeddingTracker/createTimeSlice/{eventId}"}, method = RequestMethod.GET)
 	public ModelAndView createTimeChunk(@PathVariable("eventId") String eventId) {
 
 		// get the timeline for reference
@@ -94,7 +94,7 @@ public class TimeChunkController {
 		return model;
 	}
 	
-	@RequestMapping(value = "/addTimeSlice", method = RequestMethod.POST)
+	@RequestMapping(value = {"/addTimeSlice", "/WeddingTracker/addTimeSlice"}, method = RequestMethod.POST)
 	public String addTimeChunk(@ModelAttribute("timeChunk") TimeChunk timeChunk, ModelMap model,
 			@ModelAttribute("location") String location, 
 			@ModelAttribute("client") Client client) {
@@ -115,7 +115,7 @@ public class TimeChunkController {
 		return "timeline/addTimeSlice";
 	}
 	
-	@RequestMapping(value="/editTimeSlice/{eventId}/{chunkId}", method = RequestMethod.GET)
+	@RequestMapping(value={"/editTimeSlice/{eventId}/{chunkId}", "/WeddingTracker/editTimeSlice/{eventId}/{chunkId}"}, method = RequestMethod.GET)
 	public ModelAndView editTimeSlice(@PathVariable("eventId") String eventId, 
 		 @PathVariable("chunkId") String chunkId) {
 		
@@ -174,7 +174,7 @@ public class TimeChunkController {
 		return model;
 	}
 	
-	@RequestMapping(value="/editTimeSlice", method = RequestMethod.POST)
+	@RequestMapping(value={"/editTimeSlice", "/WeddingTracker/editTimeSlice"}, method = RequestMethod.POST)
 	public String editTimeSliceSaved(@ModelAttribute("timeChunk")TimeChunk timeChunk,
 			@ModelAttribute("timeline")Timeline timeline,
 			@ModelAttribute("eventId")String eventId, ModelMap model) {
@@ -186,6 +186,7 @@ public class TimeChunkController {
 		model.addAttribute("description", timeChunk.getDescription());
 		model.addAttribute("client", timeChunk.getClient());
 		model.addAttribute("photographers", timeChunk.getPhotographers());
+		model.addAttribute("startTime", timeChunk.getStartTime());
 		
 		System.out.println(timeChunk.getPhotographers());
 		System.out.println("before error");
@@ -207,7 +208,7 @@ public class TimeChunkController {
 		return "timeline/editTimeSliceSaved";
 	}
 	
-	@RequestMapping(value="/deleteTimeSlice/{eventId}/{chunkId}")
+	@RequestMapping(value={"/deleteTimeSlice/{eventId}/{chunkId}", "/WeddingTracker/deleteTimeSlice/{eventId}/{chunkId}"})
 	public String deleteTimeSlice(@PathVariable("eventId") String eventId, 
 		 @PathVariable("chunkId") String chunkId, Model model) {
 		

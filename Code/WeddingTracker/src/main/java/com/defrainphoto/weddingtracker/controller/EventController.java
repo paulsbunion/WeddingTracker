@@ -46,7 +46,7 @@ public class EventController {
 	private TimelineManager timelineManager;
 //	private TimelineManager timelineManager = new TimelineManager();
 	
-	@RequestMapping(value = "/createEvent", method = RequestMethod.GET)
+	@RequestMapping(value = {"/createEvent", "/WeddingTracker/createEvent"}, method = RequestMethod.GET)
 	public ModelAndView createEvent() {
 		
 		ModelAndView model = new ModelAndView("event/createEvent", "command", new Event());
@@ -64,7 +64,7 @@ public class EventController {
 //		return new ModelAndView("createEvent", "command", models);
 	}
 	
-	@RequestMapping(value = "/addEvent")
+	@RequestMapping(value = {"/addEvent", "/WeddingTracker/addEvent"})
 	public String addEvent(@ModelAttribute("WeddingTracker")Event event, ModelMap model) {
 		
 		model.addAttribute("eventName", 	event.getEventName());
@@ -82,7 +82,7 @@ public class EventController {
 		return "event/addEvent";
 	}
 	
-	@RequestMapping(value ="/editEvent/{eventId}", method=RequestMethod.GET)
+	@RequestMapping(value ={"/editEvent/{eventId}", "/WeddingTracker/editEvent/{eventId}"}, method=RequestMethod.GET)
 	public ModelAndView editEvent(@PathVariable("eventId") String eventId) {
 		Event event = new Event(eventId, "", null, null, null, null, null, "", "", null, null);
 		event = eventManager.getEventById(event);
@@ -102,7 +102,7 @@ public class EventController {
 		return model;
 	}
 	
-	@RequestMapping(value="/editEvent", method = RequestMethod.POST)
+	@RequestMapping(value={"/editEvent", "/WeddingTracker/editEvent"}, method = RequestMethod.POST)
 	public String editEventSaved(@ModelAttribute("event")Event event,
 			@ModelAttribute("eventType")EventType eventType,
 			@ModelAttribute("duration")Time duration, ModelMap model) {
@@ -122,7 +122,7 @@ public class EventController {
 		return "event/editEventSaved";
 	}
 	
-	@RequestMapping(value="/listEvents")
+	@RequestMapping(value={"/listEvents", "/WeddingTracker/listEvents"})
 	public String listEvents(Map<String, Object> map) {
 		
 		map.put("eventList", eventManager.getAllEvents());
@@ -132,7 +132,7 @@ public class EventController {
 		return "event/listEvents";
 	}
 	
-	@RequestMapping(value="/deleteEvent/{eventId}")
+	@RequestMapping(value={"/deleteEvent/{eventId}", "/WeddingTracker/deleteEvent/{eventId}"})
 	public String deleteTimeSlice(@PathVariable("eventId") String eventId, Model model, Map<String, Object> map) {
 		
 		// get the event

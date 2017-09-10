@@ -24,7 +24,7 @@ public class LocationController {
 	private LocationManager locationManager;
 //	private LocationManager locationManager  = new LocationManager();
 	
-	@RequestMapping(value = "/createLocation", method = RequestMethod.GET)
+	@RequestMapping(value = {"/createLocation", "/WeddingTracker/createLocation"}, method = RequestMethod.GET)
 	public ModelAndView createLocation() {
 		
 		ModelAndView model = new ModelAndView("location/createLocation", "command", new Location());
@@ -36,7 +36,7 @@ public class LocationController {
 		return model;
 	}
 	
-	@RequestMapping(value = "/addLocation", method = RequestMethod.POST)
+	@RequestMapping(value = {"/addLocation", "/WeddingTracker/addLocation"}, method = RequestMethod.POST)
 	public String addLocation(@ModelAttribute("Location")Location location, ModelMap model) {
 		
 		model.addAttribute("city", location.getCity());
@@ -52,7 +52,7 @@ public class LocationController {
 		return "location/addLocation";
 	}
 	
-	@RequestMapping(value="/listLocations")
+	@RequestMapping(value={"/listLocations", "/WeddingTracker/listLocations"})
 	public String listPhotographers(Map<String, Object> map) {
 		
 		map.put("locationList", locationManager.getAllLocations());
@@ -60,7 +60,7 @@ public class LocationController {
 		return "location/listLocations";
 	}
 	
-	@RequestMapping(value ="/editLocation/{locationId}", method=RequestMethod.GET)
+	@RequestMapping(value ={"/editLocation/{locationId}", "/WeddingTracker/editLocation/{locationId}"}, method=RequestMethod.GET)
 	public ModelAndView editLocation(@PathVariable("locationId") String locationId) {
 		
 		Location location = new Location(locationId, "", "", "", "", "");
@@ -73,7 +73,7 @@ public class LocationController {
 		return model;
 	}
 	
-	@RequestMapping(value="/editLocation", method = RequestMethod.POST)
+	@RequestMapping(value={"/editLocation", "/WeddingTracker/editLocation"}, method = RequestMethod.POST)
 	public String editLocationSaved(@ModelAttribute("location")Location location, ModelMap model) {
 		
 		model.addAttribute("street", location.getStreet());

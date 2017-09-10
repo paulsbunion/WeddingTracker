@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <body>
 	   	<div>
 	     	<h2>Submitted Time Slice Information</h2>
@@ -9,7 +10,7 @@
 		         </tr>
 		         <tr>
 		            <td>Start Time</td>
-		            <td>${startTime}</td>
+		            <td><fmt:formatDate type="time" timeStyle="short" value="${startTime}" /></td>
 		         </tr>
 		         <tr>
 		            <td>Duration</td>
@@ -38,7 +39,7 @@
       	<div>
       	<ul>
       		<li><a href="/WeddingTracker/listTimeSlices/${eventId}">View Timeline</a></li>
-      		<li><a href="/WeddingTracker">Home</a></li>
+      		<li><a href="/WeddingTracker/">Home</a></li>
     	</ul>	
       	</div>
 	</body>

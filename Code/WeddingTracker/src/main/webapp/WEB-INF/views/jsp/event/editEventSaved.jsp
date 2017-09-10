@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
    <head>
@@ -20,11 +21,11 @@
 <!--          </tr> -->
          <tr>
             <td>Date</td>
-            <td>${eventDate}</td>
+            <td><fmt:formatDate pattern="MM/dd/yyy" value="${eventDate}" /></td>
          </tr>
          <tr>
             <td>Start Time</td>
-            <td>${startTime}</td>
+            <td><fmt:formatDate type="time" timeStyle="short" value="${startTime}" /></td>
          </tr>
          <tr>
             <td>Notes</td>

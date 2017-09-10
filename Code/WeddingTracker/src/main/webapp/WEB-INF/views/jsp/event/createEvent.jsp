@@ -65,19 +65,19 @@
 			</form:form>
 			
 		</div>
-		
-		<script type="text/javascript">
-        $(document).ready(function(){
-            // find the input fields and apply the time select to them.
-            $('#sample1 input').ptTimeSelect();
-        });
-    </script>
-    
-    <script type="text/javascript">
-    	$(document).ready( function() {
-    		$( "#datepicker" ).datepicker();
-    	});
-    </script>
-	</body>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			// find the input fields and apply the time select to them.
+			$('#sample1 input').ptTimeSelect();
+		});
+	</script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#datepicker").datepicker();
+		});
+	</script>
+</body>
 	
 </html>

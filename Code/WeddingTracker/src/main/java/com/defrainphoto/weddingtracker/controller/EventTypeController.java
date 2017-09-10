@@ -20,13 +20,13 @@ public class EventTypeController {
 	private EventTypeManager eventTypeManager;
 //	private EventTypeManager eventTypeManager = new EventTypeManager();
 	
-	@RequestMapping(value = "/createEventType", method = RequestMethod.GET)
+	@RequestMapping(value = {"/createEventType", "/WeddingTracker/createEventType"}, method = RequestMethod.GET)
 	public ModelAndView createEvent() {
 		
 		return new ModelAndView("eventType/createEventType", "command", new EventType());
 	}
 	
-	@RequestMapping(value = "/addEventType", method = RequestMethod.POST)
+	@RequestMapping(value = {"/addEventType", "/WeddingTracker/addEventType"}, method = RequestMethod.POST)
 	public String addEvent(@ModelAttribute("WeddingTracker")EventType eventType, ModelMap model) {
 		
 		model.addAttribute("eventType", eventType.getEventType());
@@ -39,7 +39,7 @@ public class EventTypeController {
 		return "eventType/addEventType";
 	}
 	
-	@RequestMapping(value="/listEventTypes") 
+	@RequestMapping(value={"/listEventTypes", "/WeddingTracker/listEventTypes"}) 
 	public String listEventTypes(Map<String, Object> map) {
 		
 		map.put("eventTypeList", eventTypeManager.getAllEventTypes());
@@ -47,7 +47,7 @@ public class EventTypeController {
 		return "eventType/listEventTypes";
 	}
 	
-	@RequestMapping(value ="/editEventType/{eventTypeId}", method=RequestMethod.GET)
+	@RequestMapping(value ={"/editEventType/{eventTypeId}", "/WeddingTracker/editEventType/{eventTypeId}"}, method=RequestMethod.GET)
 	public ModelAndView editClient(@PathVariable("eventTypeId") String eventTypeId) {
 		
 		EventType eventType = new EventType(eventTypeId, "", "");
@@ -59,7 +59,7 @@ public class EventTypeController {
 		return model;
 	}
 	
-	@RequestMapping(value="/editEventType", method = RequestMethod.POST)
+	@RequestMapping(value={"/editEventType", "/WeddingTracker/editEventType"}, method = RequestMethod.POST)
 	public String editEventTypeSaved(@ModelAttribute("eventType")EventType eventType, ModelMap model) {
 		
 		model.addAttribute("eventTypeDesc", eventType.getEventType());

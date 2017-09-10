@@ -1,2 +1,11 @@
 # ignore the hibernate.cfg.xml file to avoid repo containing password to db
-Code\WeddingTracker\src\main\resources
+Code\WeddingTracker\src\main\resources\hibernate.cfg.xml
+Code/WeddingTracker/src/main/resources/hibernate.cfg.xml
+\Code\WeddingTracker\src\main\resources\hibernate.cfg.xml
+
+/Code/WeddingTracker/src/main/resources/hibernate.cfg.xml
+
+**/hibernate.cfg.xml
+/**/hibernate.cfg.xml
+**\hibernate.cfg.xml
+\**\hibernate.cfg.xml

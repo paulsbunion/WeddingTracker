@@ -117,10 +117,11 @@ public class TimeChunkManager {
 		openSession();
 		
 		session.beginTransaction();
-		StringBuilder queryString = new StringBuilder("from TimeChunk where ");
+		StringBuilder queryString = new StringBuilder("from TimeChunk tc where ");
 		
 		buildQuery(queryString, true, false);
 		
+		queryString.append(" order by tc.startTime");
 		Query query = session.createQuery(queryString.toString());
 		setQueryVariables(eventId, query, true, false);
 		

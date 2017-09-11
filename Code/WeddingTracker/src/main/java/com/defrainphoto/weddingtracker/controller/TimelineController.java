@@ -104,6 +104,35 @@ public class TimelineController {
 		return "timeline/listTimeSlices";
 	}
 	
+	@RequestMapping(value={"/viewTimeline/{eventId}", "/WeddingTracker/viewTimeline/{eventId}"}, method = RequestMethod.GET)
+	public String viewTimelineSlices(@PathVariable("eventId")String eventId, Model model) {
+		
+		List<TimeChunk> timeSlices = timelineManager.timeChunkManager.getAllChunksByEventId(eventId);
+		
+		Event event = new Event(eventId, "", null, null, null, null, null, "", "", null, null);
+		event = eventManager.getEventById(event);
+		
+		Timeline timeline = new Timeline(eventId, null, null, null, null);
+		timeline = timelineManager.getTimelineByEventId(timeline);
+		
+		Map<String, Client> clientMap = new HashMap<String, Client>();
+		
+		if (timeSlices != null) {
+			for (TimeChunk tc : timeSlices) {
+				tc.setTimeline(timeline);
+				if (tc.getClient() != null) {
+					clientMap.put(tc.getChunkId(), tc.getClient());
+				}
+			}
+		}
+		
+		model.addAttribute("timeSlices", timeSlices);
+		model.addAttribute("eventId", event.getEventId());		
+		model.addAttribute("eventName", event.getEventName());
+		model.addAttribute("clientMap", clientMap);
+		return "timeline/viewTimeline";
+	}
+	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) { 
 		binder.registerCustomEditor(Time.class, new SqlTimeEditor());

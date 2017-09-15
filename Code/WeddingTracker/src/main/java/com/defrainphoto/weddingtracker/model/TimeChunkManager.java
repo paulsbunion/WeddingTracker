@@ -142,6 +142,7 @@ public class TimeChunkManager {
 		if (result != null) {
 			for (TimeChunk tc : result) {
 				Hibernate.initialize(tc.getClient());
+				Hibernate.initialize(tc.getLocation());
 			}
 		}
 		closeSession();

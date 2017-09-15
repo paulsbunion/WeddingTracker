@@ -118,12 +118,19 @@ public class TimelineController {
 		timeline = timelineManager.getTimelineByEventId(timeline);
 		
 		Map<String, Client> clientMap = new HashMap<String, Client>();
+		Map<String, String> notesMap = new HashMap<String, String>();
 		
 		if (timeSlices != null) {
 			for (TimeChunk tc : timeSlices) {
 				tc.setTimeline(timeline);
+				
+				// clients
 				if (tc.getClient() != null) {
 					clientMap.put(tc.getChunkId(), tc.getClient());
+				}
+				// notes
+				if (tc.getClient() != null) {
+					notesMap.put(tc.getChunkId(), tc.getNotes());
 				}
 			}
 		}
@@ -132,6 +139,9 @@ public class TimelineController {
 		model.addAttribute("eventId", event.getEventId());		
 		model.addAttribute("eventName", event.getEventName());
 		model.addAttribute("clientMap", clientMap);
+		model.addAttribute("notes", notesMap);
+		System.out.println("THe notes");
+		System.out.println(notesMap);
 		return "timeline/viewTimeline";
 	}
 	

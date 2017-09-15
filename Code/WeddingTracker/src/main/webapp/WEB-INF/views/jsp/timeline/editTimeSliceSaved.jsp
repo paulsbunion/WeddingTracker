@@ -1,5 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wedding Tracker - Edit Time Slice Saved</title>
+</head>
 <body>
 	   	<div>
 	     	<h2>Submitted Time Slice Information</h2>

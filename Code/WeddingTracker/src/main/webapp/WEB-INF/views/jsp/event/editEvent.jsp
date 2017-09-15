@@ -8,6 +8,7 @@
 
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Wedding Tracker - Edit an Event</title>
 <!-- core -->
         <script type="text/javascript" src="../resources/core/js/jquery-3.2.1.js"></script>

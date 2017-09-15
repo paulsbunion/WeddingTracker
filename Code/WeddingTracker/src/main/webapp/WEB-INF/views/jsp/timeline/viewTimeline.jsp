@@ -1,3 +1,4 @@
+<%@page import="java.util.HashMap"%>
 <%@page import="java.sql.Time"%>
 <%@page contentType = "text/html;charset = UTF-8" language = "java" %>
 <%@page isELIgnored = "false" %>
@@ -8,6 +9,7 @@
 
 <html>
 	<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Wedding Tracker - Timeline for <c:out value="${eventName}"/></title>
 	</head>
 	
@@ -31,7 +33,40 @@
 <!-- 				</thead> -->
 				
 				<c:if test="${not empty timeSlices}">
+					<%
+						// get the notes map
+						HashMap<String, String> notesMap = new HashMap<String, String>();
+					try {
+						notesMap = (HashMap<String, String>)request.getAttribute("notes");
+					}
+					catch (Exception e) {}
+					%>
+					<c:set var = "oldLocation" value =""/>
+					<c:set var = "newLocation" value =""/>
+					<c:set var = "firstRun" value ="true"/>
+					
 					<c:forEach items="${timeSlices}" var="timeSlice">
+					<c:set var = "newLocation" value ="${timeSlice.location}"/>
+					
+					<c:if test="${firstRun == 'false'}">
+						<c:if test="${newLocation ne oldLocation}">
+						<c:set var = "oldLocation" value ="${newLocation}"/>
+						
+						<tr>
+						<td colspan="2">
+						<br>
+						_______________________________________________________________________________
+						<br>
+						</td>
+						</tr>
+					</c:if>
+					
+					</c:if>
+					<c:if test="${firstRun == 'true'}">
+						<c:set var = "firstRun" value ="false"/>
+						<c:set var = "oldLocation" value ="${newLocation}"/>
+					</c:if>
+					
 					<tr>
 						<c:set var = "startTime" value ="${timeSlice.startTime}"/>
 						<c:set var = "durationHr" value ="${timeSlice.durationHr}"/>
@@ -57,10 +92,46 @@
 						<c:if test="${not empty description}">
 							<c:out value=" ${description}"></c:out>
 						</c:if>
-<%-- 							</c:if> --%>
+						
+<!-- 						print a location -->
+						<c:set var = "locDesc" value ="${timeSlice.location.description}"/>
+						<c:set var = "locAddr" value ="${timeSlice.location.street}, ${timeSlice.location.city}, ${timeSlice.location.state}, ${timeSlice.location.zip}"/>
+<%-- 						<c:out value="${timeSlice.location.description}"></c:out> --%>
+						<c:if test="${not empty newLocation}">
+						@ <a href="http://maps.google.com/?q=${locAddr}"> ${locDesc}</a>
+<%-- 							<c:out value="@ <a href ="http://maps.google.com/?q=${locAddr}</a>'"></c:out> --%>
+						</c:if>
 						</td>
 						
 					</tr>
+					
+<!-- 					display notes -->
+					<c:if test="true">
+						<tr>
+							<td></td>
+							<td>
+								<c:set var = "noteLine" value =""/>
+								<c:set var = "noteData" value ="${timeSlice.notes}"/>
+<%-- 								<c:out value="${timeSlice.notes}"></c:out> --%>
+									<%
+									String notes = (String)pageContext.getAttribute("noteData");
+									System.out.println("note data:");
+									System.out.println(notes);
+										if (notes != null && notes.length() > 0) {
+											String[] data = (notes).split("\n");
+											int rows = data.length;
+											for (int i = 0; i < rows; i++) {
+									%>
+									<c:set var="noteLine" value ='<%=data[i] %>' />
+									<c:out value="${noteLine}"/>
+									<br>
+									<%
+											}
+										}
+									%>
+							</td>
+						</tr>
+					</c:if>
 					</c:forEach>
 				</c:if>
 				

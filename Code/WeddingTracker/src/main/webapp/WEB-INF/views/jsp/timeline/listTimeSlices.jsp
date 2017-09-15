@@ -3,9 +3,11 @@
 <%@taglib uri = "http://www.springframework.org/tags/form" prefix = "form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
 	<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Wedding Tracker - List of Time Slices</title>
 	</head>
 	
@@ -30,7 +32,7 @@
 					<c:forEach items="${timeSlices}" var="timeSlice">
 					<tr>
 						<td><c:out value="${timeSlice.description}"/></td>
-						<td><c:out value="${timeSlice.startTime}"/></td>
+						<td><fmt:formatDate type="time" timeStyle="short" value="${timeSlice.startTime}"/></td>
 						
 						<td>
 							<c:if test="${not empty clientMap[timeSlice.chunkId]}">

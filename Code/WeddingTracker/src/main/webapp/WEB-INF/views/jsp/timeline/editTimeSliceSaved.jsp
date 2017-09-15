@@ -33,6 +33,27 @@
 		            		</c:forEach>
 		            </td>
 		         </tr>
+		         <tr>
+					<td>Notes</td>
+<%-- 					<td>${timeChunk.notes}</td> --%>
+					<td>
+					<c:set var = "noteLine" value =""/>
+						<%
+							String str = (String)request.getAttribute("notes");
+							if (str != null) {
+								String[] data = (str).split("\n");
+								int rows = data.length;
+								for (int i = 0; i < rows; i++) {
+						%>
+						<c:set var="noteLine" value ='<%=data[i] %>' />
+						<c:out value="${noteLine}"/>
+						<br>
+						<%
+								}
+							}
+						%>
+					</td>
+				</tr>
 		     </table>  
     	</div>
       

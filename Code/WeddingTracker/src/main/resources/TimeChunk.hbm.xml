@@ -72,5 +72,9 @@
             </many-to-many>
         </set>
         
+        <property name="notes">
+            <column name="NOTES"/>
+        </property>
+        
     </class>
 </hibernate-mapping>

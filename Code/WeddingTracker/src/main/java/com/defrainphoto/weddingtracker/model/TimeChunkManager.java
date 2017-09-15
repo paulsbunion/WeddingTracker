@@ -410,9 +410,12 @@ public class TimeChunkManager {
 				Hibernate.initialize(temp.getPosition());
 				Hibernate.initialize(temp.getStartTime());
 				Hibernate.initialize(temp.getTimeline());
+				Hibernate.initialize(temp.getNotes());
 //				System.out.println("found one: " + temp.toString());
 				timeChunk = temp;
 				found = true;
+				System.out.println("Notes:");
+				System.out.println(temp.getNotes());
 			}
 			
 			else {

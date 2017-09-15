@@ -17,6 +17,7 @@ public class TimeChunk implements Serializable {
 	private String description;
 	private Client client;
 	private Set<Photographer> photographers;
+	private String notes;
 	
 	private String eventId;
 	
@@ -142,6 +143,14 @@ public class TimeChunk implements Serializable {
 		this.photographers = photographers;
 	}
 	
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

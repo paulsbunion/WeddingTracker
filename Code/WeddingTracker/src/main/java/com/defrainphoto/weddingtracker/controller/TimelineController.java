@@ -20,6 +20,7 @@ import com.defrainphoto.weddingtracker.editors.SqlTimeEditor;
 import com.defrainphoto.weddingtracker.model.Client;
 import com.defrainphoto.weddingtracker.model.Event;
 import com.defrainphoto.weddingtracker.model.EventManager;
+import com.defrainphoto.weddingtracker.model.Photographer;
 import com.defrainphoto.weddingtracker.model.TimeChunk;
 import com.defrainphoto.weddingtracker.model.Timeline;
 import com.defrainphoto.weddingtracker.model.TimelineManager;
@@ -87,6 +88,7 @@ public class TimelineController {
 		timeline = timelineManager.getTimelineByEventId(timeline);
 		
 		Map<String, Client> clientMap = new HashMap<String, Client>();
+		Map<String, Photographer> photographerMap = new HashMap<String, Photographer>();
 		
 		if (timeSlices != null) {
 			for (TimeChunk tc : timeSlices) {

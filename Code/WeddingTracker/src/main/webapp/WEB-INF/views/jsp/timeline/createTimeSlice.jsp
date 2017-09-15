@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
     
 <%@taglib uri = "http://www.springframework.org/tags/form" prefix = "form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -32,7 +33,7 @@
 			<form:form method="POST" action="/WeddingTracker/addTimeSlice">
 				<table>
 					<tr>
-						<td><form:label path = "description">Notes / Description</form:label></td>
+						<td><form:label path = "description">Description</form:label></td>
 						<td><form:input path = "description" /></td>
 					</tr>
 					<tr>
@@ -76,6 +77,11 @@
 								<form:checkboxes element="li" path = "photographers" items = "${photographerList}" />
 							</ul>
 						</td>
+					</tr>
+					
+					<tr>
+						<td>Notes</td>
+						<td><form:textarea path="notes"/></td>
 					</tr>
 
 					<form:input type="hidden" path="position"/>

@@ -30,7 +30,7 @@
 		<form:form method="POST" action="/WeddingTracker/editTimeSlice">
 			<table>
 				<tr>
-					<td><form:label path="description">Notes / Description</form:label></td>
+					<td><form:label path="description">Description</form:label></td>
 					<td><form:input path="description" /></td>
 				</tr>
 				<tr>
@@ -72,6 +72,11 @@
 								items="${photographerList}" />
 						</ul>
 					</td>
+				</tr>
+				
+				<tr>
+					<td>Notes</td>
+					<td><form:textarea path="notes"/></td>
 				</tr>
 
 				<tr>

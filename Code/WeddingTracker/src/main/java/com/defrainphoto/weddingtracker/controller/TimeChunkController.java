@@ -108,6 +108,8 @@ public class TimeChunkController {
 		model.addAttribute("position", timeChunk.getPosition());
 		model.addAttribute("startTime", timeChunk.getStartTime());
 		model.addAttribute("eventId", timeChunk.getEventId());
+		model.addAttribute("timeSlice", timeChunk);
+		model.addAttribute("notes", timeChunk.getNotes());
 		
 		timeChunk = timelineManager.timeChunkManager.addTimeChunk(timeChunk);
 		
@@ -165,11 +167,13 @@ public class TimeChunkController {
 		model.addObject("timeChunk", timeChunk);
 		model.addObject("hrMap", generateHrData());
 		model.addObject("minMap", generateMinData());
+		model.addObject("notes", timeChunk.getNotes());
 		
 		System.out.println("Data");
 		System.out.println(timeline);
 		System.out.println(chunkId);
 		System.out.println(eventId);
+		System.out.println(timeChunk.getNotes());
 
 		return model;
 	}
@@ -187,6 +191,7 @@ public class TimeChunkController {
 		model.addAttribute("client", timeChunk.getClient());
 		model.addAttribute("photographers", timeChunk.getPhotographers());
 		model.addAttribute("startTime", timeChunk.getStartTime());
+		model.addAttribute("notes", timeChunk.getNotes());
 		
 		System.out.println(timeChunk.getPhotographers());
 		System.out.println("before error");
@@ -226,13 +231,13 @@ public class TimeChunkController {
 		
 		timelineManager.timeChunkManager.DeleteTimeChunkById(timeChunk);
 		
-		model.addAttribute("timeline", timeline);
-		model.addAttribute("eventId", eventId);
-		
-		model.addAttribute("timeSlices", timelineManager.getTimeChunks(timeline));
-		model.addAttribute("eventName", event.getEventName());
+//		model.addAttribute("timeline", timeline);
+//		model.addAttribute("eventId", eventId);
+//		
+//		model.addAttribute("timeSlices", timelineManager.getTimeChunks(timeline));
+//		model.addAttribute("eventName", event.getEventName());
 
-		return "timeline/listTimeSlices";
+		return "redirect:/listTimeSlices/" + eventId;
 	}
 	
 	protected List<String> generateHrData() {

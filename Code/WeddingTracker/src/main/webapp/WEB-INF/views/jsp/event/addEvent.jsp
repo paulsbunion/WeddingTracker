@@ -49,9 +49,9 @@
     	</div>
       
       	<div>
-      	<p>Eventid: ${eventId}</p>
       	<ul>
-      		<li><a href="/WeddingTracker/createTimeline/${eventId}/${startTime}">Add a Timeline</a></li>    
+      		<li><a href="/WeddingTracker/createTimeline/${eventId}/${startTime}">Add a Timeline</a></li>
+      		<li><a href="/WeddingTracker/listEvents">List Events</a></li>    
       		<li><a href="/WeddingTracker">Home</a></li>
       	</ul>
       	</div>

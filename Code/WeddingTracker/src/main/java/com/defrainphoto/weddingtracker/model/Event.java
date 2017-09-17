@@ -6,12 +6,18 @@ import java.sql.Time;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 //import javax.validation.constraints.NotNull;
 
 public class Event implements Serializable{
 	private String eventId;
+	@NotEmpty(message = "Event must have a name")
 	private String eventName;
 	private EventType eventType;
+	@NotNull(message = "Please pick a Date")
 	private Date eventDate;
 	private Time startTime;
 	private Time duration;

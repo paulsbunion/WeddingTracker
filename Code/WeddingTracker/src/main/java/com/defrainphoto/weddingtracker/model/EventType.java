@@ -2,8 +2,11 @@ package com.defrainphoto.weddingtracker.model;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class EventType implements Serializable{
 	private String eventTypeId;
+	@NotEmpty
 	private String eventType;
 	private String baseCost;
 	

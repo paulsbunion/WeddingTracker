@@ -9,17 +9,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import javax.persistence.EntityExistsException;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.defrainphoto.weddingtracker.editors.EventTypeEditor;
@@ -49,7 +54,7 @@ public class EventController {
 	@RequestMapping(value = {"/createEvent", "/WeddingTracker/createEvent"}, method = RequestMethod.GET)
 	public ModelAndView createEvent() {
 		
-		ModelAndView model = new ModelAndView("event/createEvent", "command", new Event());
+		ModelAndView model = new ModelAndView("event/createEvent", "event", new Event());
 		
 		List<EventType> eventTypeList = eventTypeManager.getAllEventTypes();
 		
@@ -65,21 +70,43 @@ public class EventController {
 	}
 	
 	@RequestMapping(value = {"/addEvent", "/WeddingTracker/addEvent"})
-	public String addEvent(@ModelAttribute("WeddingTracker")Event event, ModelMap model) {
+	public String addEvent(@Valid @ModelAttribute("event")Event event, BindingResult result,
+			@RequestParam(value = "submitCancelParam") String submitCancel, ModelMap model) {
 		
-		model.addAttribute("eventName", 	event.getEventName());
-		model.addAttribute("eventType",		event.getEventType());
-		model.addAttribute("eventDate", 	event.getEventDate());
-		model.addAttribute("startTime",		event.getStartTime());
-		model.addAttribute("duration",		event.getDuration());
-		model.addAttribute("extraCost",		event.getExtraCost());
-		model.addAttribute("notes", 		event.getNotes());
+		String returnValue = "event/addEvent";
 		
-		event.setEventId("");
-		event = eventManager.addEvent(event);
-		
-		model.addAttribute("eventId", event.getEventId());
-		return "event/addEvent";
+		// if cancel, go to list events page
+		if (submitCancel.equalsIgnoreCase("cancel")) {
+			returnValue = "redirect:/listEvents";
+		}
+		else if (result.hasErrors()) {
+			// 
+			model.addAttribute("eventTypeList", eventTypeManager.getAllEventTypes());
+			returnValue = "event/createEvent";
+		}
+		else {
+			model.addAttribute("eventName", 	event.getEventName());
+			model.addAttribute("eventType",		event.getEventType());
+			model.addAttribute("eventDate", 	event.getEventDate());
+			model.addAttribute("startTime",		event.getStartTime());
+			model.addAttribute("duration",		event.getDuration());
+			model.addAttribute("extraCost",		event.getExtraCost());
+			model.addAttribute("notes", 		event.getNotes());
+			
+			event.setEventId("");
+			try {
+				event = eventManager.addEvent(event);
+			}
+			catch (EntityExistsException e) {
+				
+			}
+			
+			model.addAttribute("eventId", event.getEventId());
+		}
+		System.out.println("the value");
+		System.out.println(submitCancel);
+		System.out.println(returnValue);
+			return returnValue;
 	}
 	
 	@RequestMapping(value ={"/editEvent/{eventId}", "/WeddingTracker/editEvent/{eventId}"}, method=RequestMethod.GET)
@@ -87,7 +114,7 @@ public class EventController {
 		Event event = new Event(eventId, "", null, null, null, null, null, "", "", null, null);
 		event = eventManager.getEventById(event);
 		
-		ModelAndView model = new ModelAndView("event/editEvent", "command", event);
+		ModelAndView model = new ModelAndView("event/editEvent", "event", event);
 		
 		List<EventType> eventTypeList = eventTypeManager.getAllEventTypes();
 		System.out.println("the list of event Types");
@@ -103,23 +130,41 @@ public class EventController {
 	}
 	
 	@RequestMapping(value={"/editEvent", "/WeddingTracker/editEvent"}, method = RequestMethod.POST)
-	public String editEventSaved(@ModelAttribute("event")Event event,
+	public String editEventSaved(@Valid @ModelAttribute("event")Event event, BindingResult result,
+			@RequestParam(value = "submitCancelParam") String submitCancel,			
 			@ModelAttribute("eventType")EventType eventType,
 			@ModelAttribute("duration")Time duration, ModelMap model) {
 		
-		model.addAttribute("eventName", event.getEventName());
-//		model.addAttribute("eventType", event.getEventType());
-		model.addAttribute("eventType", eventType);
-		model.addAttribute("eventDate", event.getEventDate());
-		model.addAttribute("startTime", event.getStartTime());
-		model.addAttribute("notes", event.getNotes());
-		model.addAttribute("duration", duration);
+		String returnValue = "event/editEventSaved";
 		
-		eventManager.updateEvent(event);
+		// if cancel, go to list events page
+		if (submitCancel.equalsIgnoreCase("cancel")) {
+			returnValue = "redirect:/listEvents";
+		}
+		else if (result.hasErrors()) {
+			// 
+			model.addAttribute("eventTypeList", eventTypeManager.getAllEventTypes());
+			returnValue = "event/editEvent";
+		}
+		else {		
+			model.addAttribute("eventName", event.getEventName());
+	//		model.addAttribute("eventType", event.getEventType());
+			model.addAttribute("eventType", eventType);
+			model.addAttribute("eventDate", event.getEventDate());
+			model.addAttribute("startTime", event.getStartTime());
+			model.addAttribute("notes", event.getNotes());
+			model.addAttribute("duration", duration);
+			try {
+				eventManager.updateEvent(event);
+			}
+			catch (EntityExistsException e) {
+				
+			}
+			
+			model.addAttribute("eventId", event.getEventId());
+		}
 		
-		model.addAttribute("eventId", event.getEventId());
-		
-		return "event/editEventSaved";
+		return returnValue;
 	}
 	
 	@RequestMapping(value={"/listEvents", "/WeddingTracker/listEvents"})

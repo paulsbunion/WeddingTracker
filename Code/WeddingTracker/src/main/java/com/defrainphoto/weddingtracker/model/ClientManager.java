@@ -58,6 +58,15 @@ public class ClientManager {
 			openSession();
 			
 			session.beginTransaction();
+			
+			// check if the new event name already exists
+			Client findClientName = findClient(temp, false, true, true, false, false);
+			
+			// if already in DB, throw exception
+			if (findClientName != null && findClientName.getClientId() != temp.getClientId()) {
+				throw new EntityExistsException("Entity already Exists:  " + findClientName.toString());
+			}
+			
 			session.saveOrUpdate(client);
 			session.getTransaction().commit();
 			

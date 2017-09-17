@@ -4,9 +4,13 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class Photographer implements Serializable{
 	private String staffId;
+	@NotEmpty
 	private String firstName;
+	@NotEmpty
 	private String lastName;
 	private Set<Event> events;	
 	

@@ -3,14 +3,19 @@ package com.defrainphoto.weddingtracker.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityExistsException;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.defrainphoto.weddingtracker.model.EventPhotographer;
@@ -36,7 +41,7 @@ public class PhotographerController {
 	@RequestMapping(value = { "/createPhotographer", "/WeddingTracker/createPhotographer" }, method = RequestMethod.GET)
 	public ModelAndView createPhotographer() {
 
-		ModelAndView model = new ModelAndView("photographer/createPhotographer", "command", new Photographer());
+		ModelAndView model = new ModelAndView("photographer/createPhotographer", "photographer", new Photographer());
 
 		// String[] yNChoice = {"N", "Y"};
 		//
@@ -46,18 +51,37 @@ public class PhotographerController {
 	}
 
 	@RequestMapping(value = { "/addPhotographer", "/WeddingTracker/addPhotographer" }, method = RequestMethod.POST)
-	public String addPhotographer(@ModelAttribute("Photographer") Photographer photographer, ModelMap model) {
+	public String addPhotographer(@Valid @ModelAttribute("photographer") Photographer photographer, BindingResult result,
+			@RequestParam(value = "submitCancelParam") String submitCancel, ModelMap model) {
 
-		model.addAttribute("firstName", photographer.getFirstName());
-		model.addAttribute("lastName", photographer.getLastName());
-		model.addAttribute("events", photographer.getEvents());
-
-		photographer.setStaffId("");
-		photographer.setEvents(null);
-		photographer = photographerManager.addPhotographer(photographer);
-
-		model.addAttribute("staffId", photographer.getStaffId());
-		return "photographer/addPhotographer";
+		String returnValue = "photographer/addPhotographer";
+		
+		// if cancel, go to list events page
+		if (submitCancel.equalsIgnoreCase("cancel")) {
+			returnValue = "redirect:/listPhotographers";
+		}
+		else if (result.hasErrors()) {
+			// 
+			returnValue = "photographer/createPhotographer";
+		}
+		else {
+			model.addAttribute("firstName", photographer.getFirstName());
+			model.addAttribute("lastName", photographer.getLastName());
+			model.addAttribute("events", photographer.getEvents());
+	
+			photographer.setStaffId("");
+			photographer.setEvents(null);
+			try {
+				photographer = photographerManager.addPhotographer(photographer);
+			}
+			catch (EntityExistsException e) {
+				
+			}
+	
+			model.addAttribute("staffId", photographer.getStaffId());
+		}
+		
+		return returnValue;
 	}
 
 	@RequestMapping(value = { "/editPhotographer/{staffId}",
@@ -71,22 +95,42 @@ public class PhotographerController {
 		System.out.println(staffId);
 		System.out.println(photographer.getStaffId());
 
-		ModelAndView model = new ModelAndView("photographer/editPhotographer", "command", photographer);
+		ModelAndView model = new ModelAndView("photographer/editPhotographer", "photographer", photographer);
 
 		return model;
 	}
 
 	@RequestMapping(value = { "/editPhotographer", "/WeddingTracker/editPhotographer" }, method = RequestMethod.POST)
-	public String editPhotographerSaved(@ModelAttribute("Photographer") Photographer photographer, ModelMap model) {
-		model.addAttribute("firstName", photographer.getFirstName());
-		model.addAttribute("lastName", photographer.getLastName());
-		model.addAttribute("staffId", photographer.getStaffId());
-
-		photographerManager.updatePhotographer(photographer);
-
-		System.out.println("the photog");
-		System.out.println(photographer);
-		return "photographer/editPhotographerSaved";
+	public String editPhotographerSaved(@Valid @ModelAttribute("photographer") Photographer photographer, BindingResult result,
+			@RequestParam(value = "submitCancelParam") String submitCancel, ModelMap model) {
+		
+		String returnValue = "photographer/editPhotographerSaved";
+		
+		// if cancel, go to list events page
+		if (submitCancel.equalsIgnoreCase("cancel")) {
+			returnValue = "redirect:/listPhotographers";
+		}
+		else if (result.hasErrors()) {
+			// 
+			returnValue = "photographer/editPhotographer";
+		}
+		else {		
+			model.addAttribute("firstName", photographer.getFirstName());
+			model.addAttribute("lastName", photographer.getLastName());
+			model.addAttribute("staffId", photographer.getStaffId());
+	
+			try {
+				photographerManager.updatePhotographer(photographer);
+			}
+			catch (EntityExistsException e) {
+				
+			}
+	
+			System.out.println("the photog");
+			System.out.println(photographer);
+		}
+		
+		return returnValue;
 	}
 
 	@RequestMapping(value = { "/listPhotographers", "/WeddingTracker/listPhotographers" })

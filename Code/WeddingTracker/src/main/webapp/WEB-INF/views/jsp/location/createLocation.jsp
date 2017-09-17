@@ -13,23 +13,32 @@
 		<div>
 			<h2>Create Location</h2>
 			
-			<form:form method="POST" action="/WeddingTracker/addLocation">
+			<form:form method="POST" action="/WeddingTracker/addLocation" commandName="location">
 				<table>
 					<tr>
 						<td><form:label path = "street">Street Address</form:label></td>
 						<td><form:input path = "street"/></td>
+						<td><form:errors path= "street" cssClass="error" /></td>
 					</tr>
 					<tr>
 						<td><form:label path = "city">City</form:label></td>
 						<td><form:input path = "city" /></td>
+						<td><form:errors path= "city" cssClass="error" /></td>
 					</tr>
 					<tr>
 						<td><form:label path = "state">State</form:label></td>
-						<td><form:input path = "state"/></td>
+						<td>
+							<form:select path="state">
+							<form:option value="OH"/>
+							<form:options items = "${stateMap}" />
+							</form:select>
+						</td>
+						<td><form:errors path= "state" cssClass="error" /></td>
 					</tr>
 					<tr>
 						<td><form:label path = "zip">Zip</form:label></td>
 						<td><form:input path = "zip" /></td>
+						<td><form:errors path= "zip" cssClass="error" /></td>
 					</tr>
 					<tr>
 						<td><form:label path = "description">Description (Optional)</form:label></td>
@@ -38,7 +47,8 @@
 					
 					<tr>
 						<td colspan="2">
-							<input type="submit" value = "Submit">
+							<input type="submit" name="submitCancelParam" value = "Submit">
+							<input type="submit" name="submitCancelParam" value = "Cancel">
 						</td>
 					</tr>
 				</table>

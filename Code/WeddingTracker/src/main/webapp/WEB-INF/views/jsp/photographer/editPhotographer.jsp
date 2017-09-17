@@ -13,22 +13,25 @@
 		<div>
 			<h2>Edit a Photographer</h2>
 			
-			<form:form method="POST" action="/WeddingTracker/editPhotographer">
+			<form:form method="POST" action="/WeddingTracker/editPhotographer" commandName="photographer">
 				<table>
 					<tr>
 						<td><form:label path = "firstName">First Name</form:label></td>
 						<td><form:input path = "firstName"/></td>
+						<td><form:errors path= "firstName" cssClass="error" /></td>
 					</tr>
 					<tr>
 						<td><form:label path = "lastName">Last Name</form:label></td>
 						<td><form:input path = "lastName"/></td>
+						<td><form:errors path= "lastName" cssClass="error" /></td>
 					</tr>
 					<tr>
 						<td><form:hidden path="staffId"/></td>
 					</tr>	
 					<tr>
 						<td colspan="2">
-							<input type="submit" value = "Submit">
+							<input type="submit" name="submitCancelParam" value = "Submit">
+							<input type="submit" name="submitCancelParam" value = "Cancel">
 						</td>
 					</tr>
 				</table>

@@ -2,13 +2,21 @@ package com.defrainphoto.weddingtracker.model;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 //import javax.validation.constraints.NotNull;
 
 public class Location implements Serializable{
 	private String locationId;
+	@NotEmpty
 	private String city;
+	@NotEmpty
 	private String state;
+	@NotEmpty
 	private String zip;
+	@NotEmpty
 	private String street;
 	private String description;
 	

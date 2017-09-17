@@ -20,11 +20,12 @@
 		<div>
 			<h2>Create Event</h2>
 			
-			<form:form method="POST" action="/WeddingTracker/addEvent">
+			<form:form method="POST" action="/WeddingTracker/addEvent" commandName="event">
 				<table>
 					<tr>
 						<td><form:label path = "eventName">Event Name</form:label></td>
 						<td><form:input path = "eventName" /></td>
+						<td><form:errors path= "eventName" cssClass="error" /></td>
 					</tr>
 					<tr>
 						<td>Event Type</td>
@@ -33,6 +34,7 @@
 					<tr>
 						<td><form:label path = "eventDate">Date</form:label></td>
 						<td><form:input id="datepicker" path = "eventDate" type="text"/></td>
+						<td><form:errors path= "eventDate" cssClass="error" /></td>
 					</tr>
 					
 					<tr>
@@ -56,11 +58,15 @@
 						<td><form:label path = "notes">Notes</form:label></td>
 						<td><form:input path = "notes" /></td>
 					</tr>
-					<td><form:hidden path="duration"/></td>
+					<form:hidden path="duration"/>
 					<tr>
 						<td colspan="2">
-							<input type="submit" value = "Submit">
+							<input type="submit" name="submitCancelParam" value = "Submit">
+							<input type="submit" name="submitCancelParam" value = "Cancel">
 						</td>
+<!-- 						<td colspan="1"> -->
+							
+<!-- 						</td> -->
 					</tr>
 				</table>
 			</form:form>

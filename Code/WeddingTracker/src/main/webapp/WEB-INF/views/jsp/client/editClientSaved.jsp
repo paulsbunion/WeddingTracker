@@ -36,7 +36,7 @@
       
       <div>
       <ul>
-      	<li><a href="/WeddingTracker/listClients">Client List</a></li>
+      	<li><a href="/WeddingTracker/listClients">List Clients</a></li>
       	<li><a href="/WeddingTracker/">Home</a></li>
       </ul>
       </div>

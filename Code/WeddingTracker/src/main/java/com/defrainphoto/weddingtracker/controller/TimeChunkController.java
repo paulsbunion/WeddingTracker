@@ -95,26 +95,38 @@ public class TimeChunkController {
 	}
 	
 	@RequestMapping(value = {"/addTimeSlice", "/WeddingTracker/addTimeSlice"}, method = RequestMethod.POST)
-	public String addTimeChunk(@ModelAttribute("timeChunk") TimeChunk timeChunk, ModelMap model,
+	public String addTimeChunk(@ModelAttribute("timeChunk") TimeChunk timeChunk,
+			@RequestParam(value = "submitCancelParam") String submitCancel, ModelMap model,
 			@ModelAttribute("location") String location, 
 			@ModelAttribute("client") Client client) {
-		System.out.println("hello, me");
-		model.addAttribute("client", timeChunk.getClient());
-		model.addAttribute("description", timeChunk.getDescription());
-		model.addAttribute("durationHr", timeChunk.getDurationHr());
-		model.addAttribute("durationMin", timeChunk.getDurationMin());
-		model.addAttribute("location", timeChunk.getLocation());
-		model.addAttribute("photographers", timeChunk.getPhotographers());
-		model.addAttribute("position", timeChunk.getPosition());
-		model.addAttribute("startTime", timeChunk.getStartTime());
-		model.addAttribute("eventId", timeChunk.getEventId());
-		model.addAttribute("timeSlice", timeChunk);
-		model.addAttribute("notes", timeChunk.getNotes());
 		
-		timeChunk = timelineManager.timeChunkManager.addTimeChunk(timeChunk);
+		String returnValue = "timeline/addTimeSlice";
 		
-		model.addAttribute("chunkId", timeChunk.getChunkId());
-		return "timeline/addTimeSlice";
+		// if cancel, go to list events page
+		if (submitCancel.equalsIgnoreCase("cancel")) {
+			// clear model
+			model.clear();
+			returnValue = "redirect:/listTimeSlices/" + timeChunk.getEventId();
+		}
+		else {
+			model.addAttribute("client", timeChunk.getClient());
+			model.addAttribute("description", timeChunk.getDescription());
+			model.addAttribute("durationHr", timeChunk.getDurationHr());
+			model.addAttribute("durationMin", timeChunk.getDurationMin());
+			model.addAttribute("location", timeChunk.getLocation());
+			model.addAttribute("photographers", timeChunk.getPhotographers());
+			model.addAttribute("position", timeChunk.getPosition());
+			model.addAttribute("startTime", timeChunk.getStartTime());
+			model.addAttribute("eventId", timeChunk.getEventId());
+			model.addAttribute("timeSlice", timeChunk);
+			model.addAttribute("notes", timeChunk.getNotes());
+			
+			timeChunk = timelineManager.timeChunkManager.addTimeChunk(timeChunk);
+			
+			model.addAttribute("chunkId", timeChunk.getChunkId());
+		}
+		
+		return returnValue;
 	}
 	
 	@RequestMapping(value={"/editTimeSlice/{eventId}/{chunkId}", "/WeddingTracker/editTimeSlice/{eventId}/{chunkId}"}, method = RequestMethod.GET)
@@ -180,37 +192,49 @@ public class TimeChunkController {
 	
 	@RequestMapping(value={"/editTimeSlice", "/WeddingTracker/editTimeSlice"}, method = RequestMethod.POST)
 	public String editTimeSliceSaved(@ModelAttribute("timeChunk")TimeChunk timeChunk,
+			@RequestParam(value = "submitCancelParam") String submitCancel,
 			@ModelAttribute("timeline")Timeline timeline,
 			@ModelAttribute("eventId")String eventId, ModelMap model) {
 		
-		model.addAttribute("chunkId", timeChunk.getChunkId());
-		model.addAttribute("eventId", timeChunk.getEventId());
-		model.addAttribute("position", timeChunk.getPosition());
-		model.addAttribute("location", timeChunk.getLocation());
-		model.addAttribute("description", timeChunk.getDescription());
-		model.addAttribute("client", timeChunk.getClient());
-		model.addAttribute("photographers", timeChunk.getPhotographers());
-		model.addAttribute("startTime", timeChunk.getStartTime());
-		model.addAttribute("notes", timeChunk.getNotes());
+		String returnValue = "timeline/editTimeSliceSaved";
 		
-		System.out.println(timeChunk.getPhotographers());
-		System.out.println("before error");
-		timeline.setEventId(eventId);
-		System.out.println(eventId);
-//		timeline.setStartTime(start);
-//		timeline.setTotalTime(total);
+		// if cancel, go to list events page
+		if (submitCancel.equalsIgnoreCase("cancel")) {
+			// clear model
+			model.clear();
+			returnValue = "redirect:/listTimeSlices/" + timeChunk.getEventId();
+		}
+		else {
+			model.addAttribute("chunkId", timeChunk.getChunkId());
+			model.addAttribute("eventId", timeChunk.getEventId());
+			model.addAttribute("position", timeChunk.getPosition());
+			model.addAttribute("location", timeChunk.getLocation());
+			model.addAttribute("description", timeChunk.getDescription());
+			model.addAttribute("client", timeChunk.getClient());
+			model.addAttribute("photographers", timeChunk.getPhotographers());
+			model.addAttribute("startTime", timeChunk.getStartTime());
+			model.addAttribute("notes", timeChunk.getNotes());
+			
+			System.out.println(timeChunk.getPhotographers());
+			System.out.println("before error");
+			timeline.setEventId(eventId);
+			System.out.println(eventId);
+	//		timeline.setStartTime(start);
+	//		timeline.setTotalTime(total);
+			
+			timeChunk.setTimeline(timeline);
+			System.out.println(timeChunk);
+			System.out.println(timeChunk.getTimeline());
+			System.out.println(timeChunk.getTimeline().getEventId());
+			System.out.println(timeline);
+			timelineManager.timeChunkManager.updateTimeChunk(timeChunk);
+			System.out.println("after error");
+			
+			System.out.println("the chunk");
+			System.out.println(timeChunk);
+		}
 		
-		timeChunk.setTimeline(timeline);
-		System.out.println(timeChunk);
-		System.out.println(timeChunk.getTimeline());
-		System.out.println(timeChunk.getTimeline().getEventId());
-		System.out.println(timeline);
-		timelineManager.timeChunkManager.updateTimeChunk(timeChunk);
-		System.out.println("after error");
-		
-		System.out.println("the chunk");
-		System.out.println(timeChunk);
-		return "timeline/editTimeSliceSaved";
+		return returnValue;
 	}
 	
 	@RequestMapping(value={"/deleteTimeSlice/{eventId}/{chunkId}", "/WeddingTracker/deleteTimeSlice/{eventId}/{chunkId}"})

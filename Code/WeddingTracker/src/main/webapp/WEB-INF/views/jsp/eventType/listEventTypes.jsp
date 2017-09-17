@@ -43,6 +43,7 @@
 		
 		<div>
       	<a href="/WeddingTracker/">Home</a>
+      	<a href="/WeddingTracker/listEvents">Events</a>
       </div>
 	</body>
 </html>

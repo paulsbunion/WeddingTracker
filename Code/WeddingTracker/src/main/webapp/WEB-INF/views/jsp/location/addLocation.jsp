@@ -23,8 +23,10 @@
       </div>  
       
       <div>
-      	<a href="/WeddingTracker/">Home</a>
-      	<a href="/WeddingTracker/listLocations">Locations</a>
+	      <ul>
+	   		   <li><a href="/WeddingTracker/listLocations">List Locations</a></li>
+	   		   <li><a href="/WeddingTracker">Home</a></li>
+	   	  </ul>	
       </div>
    </body>
    

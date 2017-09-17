@@ -72,6 +72,13 @@ public Photographer updatePhotographer(Photographer photographer) {
 			
 			session.beginTransaction();
 			System.out.println("in the update");
+			// check if the new event name already exists
+			Photographer findPhotographerName = findPhotographer(temp, false, true, true);
+			
+			// if already in DB, throw exception
+			if (findPhotographerName != null && findPhotographerName.getStaffId() != temp.getStaffId()) {
+				throw new EntityExistsException("Entity already Exists:  " + findPhotographerName.toString());
+			}
 			session.saveOrUpdate(photographer);
 			session.getTransaction().commit();
 			

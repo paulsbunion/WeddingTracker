@@ -64,6 +64,7 @@
       	<div>
       	<ul>
       		<li><a href="/WeddingTracker/listTimeSlices/${eventId}">View Timeline</a></li>
+      		<li><a href="/WeddingTracker/listEvents">List Events</a></li>
       		<li><a href="/WeddingTracker/">Home</a></li>
     	</ul>	
       	</div>

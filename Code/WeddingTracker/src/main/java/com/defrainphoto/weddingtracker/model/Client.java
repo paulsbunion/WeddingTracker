@@ -6,13 +6,19 @@ import java.util.Set;
 //import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 public class Client implements Serializable{
 	private String clientId;
+	@NotEmpty
 	private String firstName;
+	@NotEmpty
 	private String lastName;
+	@NotEmpty
 	private String address;
+	@NotEmpty
 	private String phoneNumber;
+	@NotEmpty
 	private String email;
 	private String autoRemind;
 	private Set<Event> events;

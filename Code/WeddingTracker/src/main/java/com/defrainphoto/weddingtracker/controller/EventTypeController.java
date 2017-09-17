@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.defrainphoto.weddingtracker.model.EventType;
@@ -27,16 +28,25 @@ public class EventTypeController {
 	}
 	
 	@RequestMapping(value = {"/addEventType", "/WeddingTracker/addEventType"}, method = RequestMethod.POST)
-	public String addEvent(@ModelAttribute("WeddingTracker")EventType eventType, ModelMap model) {
+	public String addEvent(@ModelAttribute("WeddingTracker")EventType eventType,
+			@RequestParam(value = "submitCancelParam") String submitCancel, ModelMap model) {
 		
-		model.addAttribute("eventType", eventType.getEventType());
-		model.addAttribute("baseCost", eventType.getBaseCost());
+		String returnValue = "eventType/addEventType";
 		
-		eventType.setEventTypeId("");
-		System.out.println();
-		eventTypeManager.addEventType(eventType);
+		// if cancel, go to list events page
+		if (submitCancel.equalsIgnoreCase("cancel")) {
+			returnValue = "redirect:/listEventTypes";
+		}
+		else {
+			model.addAttribute("eventType", eventType.getEventType());
+			model.addAttribute("baseCost", eventType.getBaseCost());
+			
+			eventType.setEventTypeId("");
+			System.out.println();
+			eventTypeManager.addEventType(eventType);
+		}
 		
-		return "eventType/addEventType";
+		return returnValue;
 	}
 	
 	@RequestMapping(value={"/listEventTypes", "/WeddingTracker/listEventTypes"}) 
@@ -60,15 +70,24 @@ public class EventTypeController {
 	}
 	
 	@RequestMapping(value={"/editEventType", "/WeddingTracker/editEventType"}, method = RequestMethod.POST)
-	public String editEventTypeSaved(@ModelAttribute("eventType")EventType eventType, ModelMap model) {
+	public String editEventTypeSaved(@ModelAttribute("eventType")EventType eventType,
+			@RequestParam(value = "submitCancelParam") String submitCancel, ModelMap model) {
 		
-		model.addAttribute("eventTypeDesc", eventType.getEventType());
-		model.addAttribute("baseCost", eventType.getBaseCost());
-
-		eventTypeManager.updateEventType(eventType);
+		String returnValue = "eventType/editEventTypeSaved";
 		
-		model.addAttribute("eventTypeId", eventType.getEventTypeId());
+		// if cancel, go to list events page
+		if (submitCancel.equalsIgnoreCase("cancel")) {
+			returnValue = "redirect:/listEventTypes";
+		}
+		else {
+			model.addAttribute("eventTypeDesc", eventType.getEventType());
+			model.addAttribute("baseCost", eventType.getBaseCost());
+	
+			eventTypeManager.updateEventType(eventType);
+			
+			model.addAttribute("eventTypeId", eventType.getEventTypeId());
+		}
 		
-		return "eventType/editEventTypeSaved";
+		return returnValue;
 	}
 }

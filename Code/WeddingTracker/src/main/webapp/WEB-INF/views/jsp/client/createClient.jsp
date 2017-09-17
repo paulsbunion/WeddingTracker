@@ -13,27 +13,33 @@
 		<div>
 			<h2>Create Client</h2>
 			
-			<form:form method="POST" action="/WeddingTracker/addClient">
+			<form:form method="POST" action="/WeddingTracker/addClient" commandName="client">
 				<table>
 					<tr>
 						<td><form:label path = "firstName">First Name</form:label></td>
 						<td><form:input path = "firstName"/></td>
+						<td><form:errors path= "firstName" cssClass="error" /></td>
 					</tr>
 					<tr>
 						<td><form:label path = "lastName">Last Name</form:label></td>
 						<td><form:input path = "lastName"/></td>
+						<td><form:errors path= "lastName" cssClass="error" /></td>
 					</tr>
 					<tr>
 						<td><form:label path = "address">Address</form:label></td>
 						<td><form:input path = "address"/></td>
+						<td><form:errors path= "address" cssClass="error" /></td>
 					</tr>
 					<tr>
 						<td><form:label path = "phoneNumber">Phone Number</form:label></td>
 						<td><form:input path = "phoneNumber"/></td>
+						<td><form:errors path= "phoneNumber" cssClass="error" /></td>
+						
 					</tr>
 					<tr>
 						<td><form:label path = "email">Email</form:label></td>
 						<td><form:input path = "email"/></td>
+						<td><form:errors path= "email" cssClass="error" /></td>
 					</tr>
 					<tr>
 						<td><form:label path = "autoRemind">Email Auto Remind</form:label></td>
@@ -42,7 +48,8 @@
 					
 					<tr>
 						<td colspan="2">
-							<input type="submit" value = "Submit">
+							<input type="submit" name="submitCancelParam" value = "Submit">
+							<input type="submit" name="submitCancelParam" value = "Cancel">
 						</td>
 					</tr>
 				</table>

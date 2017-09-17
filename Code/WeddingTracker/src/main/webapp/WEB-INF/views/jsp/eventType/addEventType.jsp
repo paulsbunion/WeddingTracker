@@ -23,7 +23,12 @@
       </div>  
       
       <div>
-      	<a href="/WeddingTracker/">Home</a>
+      	<ul>
+	      	<li><a href="/WeddingTracker/listEventTypes">List Event Types</a></li>
+	      	<li><a href="/WeddingTracker/listEvents">List Events</a></li>
+	      	<li><a href="/WeddingTracker/">Home</a></li>
+      	</ul>
+      	
       </div>
    </body>
    

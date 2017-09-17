@@ -87,7 +87,10 @@
 					<td><form:hidden path="timeline" /></td>
 				</tr>
 				<tr>
-					<td colspan="2"><input type="submit" value="Submit"></td>
+					<td colspan="2">
+						<input type="submit" name="submitCancelParam" value = "Submit">
+						<input type="submit" name="submitCancelParam" value = "Cancel">
+					</td>
 				</tr>
 			</table>
 		</form:form>

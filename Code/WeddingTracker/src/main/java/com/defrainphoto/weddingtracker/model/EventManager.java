@@ -59,6 +59,13 @@ public class EventManager {
 			
 			session.beginTransaction();
 			System.out.println("in the update");
+			// check if the new event name already exists
+			Event findEventName = findEvent(temp, false, true);
+			
+			// if already in DB, throw exception
+			if (findEventName != null && findEventName.getEventId() != temp.getEventId()) {
+				throw new EntityExistsException("Entity already Exists:  " + findEventName.toString());
+			}
 			session.saveOrUpdate(event);
 			session.getTransaction().commit();
 			
@@ -76,7 +83,8 @@ public class EventManager {
 		openSession();
 		
 		session.beginTransaction();
-		StringBuilder queryString = new StringBuilder("from Event");
+		StringBuilder queryString = new StringBuilder("from Event ev");
+		queryString.append(" order by ev.eventDate");
 		Query query = session.createQuery(queryString.toString());
 		
 		List list = query.list();

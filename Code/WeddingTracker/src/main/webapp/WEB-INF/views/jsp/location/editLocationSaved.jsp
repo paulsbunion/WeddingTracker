@@ -36,9 +36,9 @@
       
       <div>
       <ul>
-      	<li><a href="/WeddingTracker/listLocations">Location List</a></li>
-      	<li><a href="/WeddingTracker/">Home</a></li>
-      </ul>
+   		   <li><a href="/WeddingTracker/listLocations">List Locations</a></li>
+   		   <li><a href="/WeddingTracker">Home</a></li>
+   	  </ul>	
       </div>
    </body>
    

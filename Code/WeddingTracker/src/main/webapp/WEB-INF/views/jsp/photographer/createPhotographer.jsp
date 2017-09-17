@@ -13,20 +13,23 @@
 		<div>
 			<h2>Create Photographer</h2>
 			
-			<form:form method="POST" action="/WeddingTracker/addPhotographer">
+			<form:form method="POST" action="/WeddingTracker/addPhotographer" commandName="photographer">
 				<table>
 					<tr>
 						<td><form:label path = "firstName">First Name</form:label></td>
 						<td><form:input path = "firstName"/></td>
+						<td><form:errors path= "firstName" cssClass="error" /></td>
 					</tr>
 					<tr>
 						<td><form:label path = "lastName">Last Name</form:label></td>
 						<td><form:input path = "lastName" /></td>
+						<td><form:errors path= "lastName" cssClass="error" /></td>
 					</tr>
 					
 					<tr>
 						<td colspan="2">
-							<input type="submit" value = "Submit">
+							<input type="submit" name="submitCancelParam" value = "Submit">
+							<input type="submit" name="submitCancelParam" value = "Cancel">
 						</td>
 					</tr>
 				</table>

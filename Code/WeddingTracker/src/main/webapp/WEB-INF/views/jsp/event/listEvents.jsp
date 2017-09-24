@@ -20,7 +20,21 @@
 			<spring:url value="/listEventTypes" var="listEventTypesUrl" />
 			<button onclick="location.href='${listEventTypesUrl}'">List Event Types</button>
 			
-			<h2>List of Events</h2>
+			<spring:url value="/listPastEvents" var="listPastEventsUrl"/>
+			<spring:url value="/listEvents" var="listFutureEventsUrl"/>
+			
+			<c:set var="pFValueBttnText" value="Past Events"/>
+			<c:set var="pFCurrVal" value="Future"/>
+			<c:set var="urlVal" value="${listPastEventsUrl }"/>
+			
+			<c:if test="${pastFuture == 'past'}">
+				<c:set var="pFValueBttnText" value="Future Events"/>
+				<c:set var="pFCurrVal" value="Past"/>
+				<c:set var="urlVal" value="${listFutureEventsUrl }"/>
+			</c:if>
+			
+<%-- 			<h2>List of Events <button onclick="location.href='${listPastEventsUrl}'">Past Events</button></h2> --%>
+			<h2>List of <c:out value="${pFCurrVal}"/> Events <button onclick="location.href='${urlVal}'"><c:out value="${pFValueBttnText}"/></button></h2>
 			<spring:url value="/createEvent" var="createEventUrl" />
 			<button onclick="location.href='${createEventUrl}'">New Event</button>
 			

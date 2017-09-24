@@ -30,6 +30,7 @@
 					<tr>
 						<td>Event Type</td>
 						<td><form:select path = "eventType" items = "${eventTypeList}" /> </td>
+						<td><form:errors path= "eventType" cssClass="error" /></td>
 					</tr>
 					<tr>
 						<td><form:label path = "eventDate">Date</form:label></td>

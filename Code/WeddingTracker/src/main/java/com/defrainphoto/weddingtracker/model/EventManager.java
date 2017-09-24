@@ -1,5 +1,6 @@
 package com.defrainphoto.weddingtracker.model;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -55,17 +56,26 @@ public class EventManager {
 		
 		// else, open session, save, and commit
 		else {
+			
+//			System.out.println("in the update");
+			// check if the new event name already exists
+			Event findEventName = findEvent(temp, false, true);
+//			System.out.println("done finding event");
+//			System.out.println(findEventName);
+//			System.out.println("event ids:");
+//			System.out.println(findEventName.getEventId() + " : " + temp.getEventId());
+			
 			openSession();
 			
 			session.beginTransaction();
-			System.out.println("in the update");
-			// check if the new event name already exists
-			Event findEventName = findEvent(temp, false, true);
 			
 			// if already in DB, throw exception
-			if (findEventName != null && findEventName.getEventId() != temp.getEventId()) {
+			if (findEventName != null && !findEventName.getEventId().equals(temp.getEventId())) {
+//				System.out.println("throwing exception");
 				throw new EntityExistsException("Entity already Exists:  " + findEventName.toString());
 			}
+//			System.out.println("the saved event type");
+//			System.out.println(event.getEventType());
 			session.saveOrUpdate(event);
 			session.getTransaction().commit();
 			
@@ -86,6 +96,68 @@ public class EventManager {
 		StringBuilder queryString = new StringBuilder("from Event ev");
 		queryString.append(" order by ev.eventDate");
 		Query query = session.createQuery(queryString.toString());
+		
+		List list = query.list();
+		
+		session.getTransaction().commit();
+		
+		if (list != null && !list.isEmpty()) {
+			result  = (List<Event>) list;
+			found = true;
+		}
+		
+		else {
+			found = false;
+		}
+		Hibernate.initialize(list);
+		closeSession();
+		
+		return found ? list : null;
+	}
+	
+	public List<Event> getEventsByToday(Date today, boolean getPastEvents) {
+		String EqualityOperator = ">=";
+		if (getPastEvents) {
+			EqualityOperator = "<";
+		}
+		boolean found = false;
+		List<Event> result = null;
+		openSession();
+		session.beginTransaction();
+		StringBuilder queryString = new StringBuilder("from Event ev");
+		queryString.append(" where ev.eventDate " + EqualityOperator +" :today");
+		queryString.append(" order by ev.eventDate");
+		Query query = session.createQuery(queryString.toString());
+		query.setDate("today", today);
+		
+		List list = query.list();
+		
+		session.getTransaction().commit();
+		
+		if (list != null && !list.isEmpty()) {
+			result  = (List<Event>) list;
+			found = true;
+		}
+		
+		else {
+			found = false;
+		}
+		Hibernate.initialize(list);
+		closeSession();
+		
+		return found ? list : null;
+	}
+	
+	public List<Event> getAllPastEvents(Date today) {
+		boolean found = false;
+		List<Event> result = null;
+		openSession();
+		session.beginTransaction();
+		StringBuilder queryString = new StringBuilder("from Event ev");
+		queryString.append(" where ev.eventDate <:today");
+		queryString.append(" order by ev.eventDate");
+		Query query = session.createQuery(queryString.toString());
+		query.setDate("today", today);
 		
 		List list = query.list();
 		

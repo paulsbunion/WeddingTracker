@@ -83,5 +83,8 @@ public class EventType implements Serializable{
 	public String toString() {
 		return "" + eventTypeId + " " + eventType + " " + baseCost;
 	}
+	public String toStringNoId() {
+		return "" + eventType + ": " + baseCost;
+	}
 	
 }

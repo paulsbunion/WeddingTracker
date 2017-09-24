@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 public class SqlDateEditor extends PropertyEditorSupport{
 	@Override
 	public void setAsText(String text) throws IllegalArgumentException {
+		System.out.println("converting date text to object");
 		if (StringUtils.hasText(text)) {
 			String[] data = text.split("/");
 			Date newDate = null;

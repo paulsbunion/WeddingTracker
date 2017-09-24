@@ -3,6 +3,7 @@ package com.defrainphoto.weddingtracker.controller;
 import java.sql.Date;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
@@ -75,6 +76,9 @@ public class EventController {
 		
 		String returnValue = "event/addEvent";
 		
+		System.out.println("adding an event");
+		System.out.println(event);
+		
 		// if cancel, go to list events page
 		if (submitCancel.equalsIgnoreCase("cancel")) {
 			returnValue = "redirect:/listEvents";
@@ -124,7 +128,7 @@ public class EventController {
 		model.addObject("eventId", eventId);
 		model.addObject("duration", event.getDuration());
 		
-		model.addObject("eventType", event.getEventType());
+//		model.addObject("eventType", event.getEventType());
 		
 		return model;
 	}
@@ -132,9 +136,10 @@ public class EventController {
 	@RequestMapping(value={"/editEvent", "/WeddingTracker/editEvent"}, method = RequestMethod.POST)
 	public String editEventSaved(@Valid @ModelAttribute("event")Event event, BindingResult result,
 			@RequestParam(value = "submitCancelParam") String submitCancel,			
-			@ModelAttribute("eventType")EventType eventType,
+//			@ModelAttribute("eventType")EventType eventType,
 			@ModelAttribute("duration")Time duration, ModelMap model) {
-		
+		System.out.println("begin edit");
+		System.out.println(event);
 		String returnValue = "event/editEventSaved";
 		
 		// if cancel, go to list events page
@@ -149,12 +154,14 @@ public class EventController {
 		else {		
 			model.addAttribute("eventName", event.getEventName());
 	//		model.addAttribute("eventType", event.getEventType());
-			model.addAttribute("eventType", eventType);
+			model.addAttribute("eventType", event.getEventType());
 			model.addAttribute("eventDate", event.getEventDate());
 			model.addAttribute("startTime", event.getStartTime());
 			model.addAttribute("notes", event.getNotes());
 			model.addAttribute("duration", duration);
 			try {
+				System.out.println("updating the event");
+				System.out.println(event);
 				eventManager.updateEvent(event);
 			}
 			catch (EntityExistsException e) {
@@ -169,10 +176,26 @@ public class EventController {
 	
 	@RequestMapping(value={"/listEvents", "/WeddingTracker/listEvents"})
 	public String listEvents(Map<String, Object> map) {
-		
-		map.put("eventList", eventManager.getAllEvents());
+		Date today = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+		map.put("eventList", eventManager.getEventsByToday(today, false));
+//		map.put("eventList", eventManager.getAllEvents());
 		// get timeline id's
 		map.put("timelineIdMap", timelineManager.getallTimelineIds());
+		
+		map.put("pastFuture", "future");
+		
+		return "event/listEvents";
+	}
+	
+	@RequestMapping(value={"/listPastEvents", "/WeddingTracker/listPastEvents"})
+	public String listPastEvents(Map<String, Object> map) {
+		Date today = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+		map.put("eventList", eventManager.getEventsByToday(today, true));
+//		map.put("eventList", eventManager.getAllEvents());
+		// get timeline id's
+		map.put("timelineIdMap", timelineManager.getallTimelineIds());
+		
+		map.put("pastFuture", "past");
 		
 		return "event/listEvents";
 	}
@@ -198,7 +221,7 @@ public class EventController {
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
-		binder.registerCustomEditor(EventType.class, new EventTypeEditor());
+		binder.registerCustomEditor(EventType.class, new EventTypeEditor(eventTypeManager));
 		binder.registerCustomEditor(Time.class, new SqlTimeEditor());
 		binder.registerCustomEditor(Date.class, new SqlDateEditor());
 	}

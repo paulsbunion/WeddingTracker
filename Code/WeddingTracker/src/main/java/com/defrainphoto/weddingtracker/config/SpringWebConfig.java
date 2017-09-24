@@ -12,7 +12,7 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc //mvc:annotation-driven
 @Configuration
 //@ComponentScan({ "com.defrainphoto.weddingtracker.controller" })
-@ComponentScan({ "com.defrainphoto.weddingtracker.controller", "com.defrainphoto.weddingtracker" })
+@ComponentScan({ "com.defrainphoto.weddingtracker.controller","com.defrainphoto.weddingtracker.editors", "com.defrainphoto.weddingtracker" })
 public class SpringWebConfig extends WebMvcConfigurerAdapter {
 
 	@Override

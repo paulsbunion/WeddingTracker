@@ -24,6 +24,7 @@ public class Event implements Serializable{
 	private Timeline timeline;
 	private String extraCost;
 	private String notes;
+	private Mileage mileage;
 	
 //	private Set<Photographer> photographers;	
 //	private Set<Client> clients;
@@ -163,6 +164,14 @@ public class Event implements Serializable{
 //		}
 //		this.clients.add(client);
 //	}
+
+	public Mileage getMileage() {
+		return mileage;
+	}
+
+	public void setMileage(Mileage mileage) {
+		this.mileage = mileage;
+	}
 
 	@Override
 	public int hashCode() {

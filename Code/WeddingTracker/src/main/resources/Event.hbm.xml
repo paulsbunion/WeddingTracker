@@ -40,6 +40,9 @@
         	<column name="NOTES"/>
         </property>
         
+        <one-to-one name="mileage" class="com.defrainphoto.weddingtracker.model.Mileage" >
+        </one-to-one>
+        
 <!-- 		<set name="photographers" table="EVENT_PHOTOGRAPHERS" fetch="select" cascade="save-update" > -->
 <!--         	<key column="EVENTID" not-null="true" /> -->
 <!--         	<many-to-many column="STAFFID" -->

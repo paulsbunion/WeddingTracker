@@ -98,6 +98,10 @@
 						<c:set var = "locAddr" value ="${timeSlice.location.street}, ${timeSlice.location.city}, ${timeSlice.location.state}, ${timeSlice.location.zip}"/>
 <%-- 						<c:out value="${timeSlice.location.description}"></c:out> --%>
 						<c:if test="${not empty newLocation}">
+						<!-- if the description is empty, provide default-->
+						<c:if test="${empty locDesc}">
+							<c:set var="locDesc" value="Location"/>
+						</c:if>
 						@ <a href="http://maps.google.com/?q=${locAddr}"> ${locDesc}</a>
 <%-- 							<c:out value="@ <a href ="http://maps.google.com/?q=${locAddr}</a>'"></c:out> --%>
 						</c:if>

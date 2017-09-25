@@ -14,3 +14,8 @@ Code/WeddingTracker/src/main/resources/hibernate.cfg.xml
 /**/dataInserts.txt
 **\dataInserts.txt
 \**\dataInserts.txt
+
+**/MileageManager.java
+/**/MileageManager.java
+**\MileageManager.java
+\**\MileageManager.java

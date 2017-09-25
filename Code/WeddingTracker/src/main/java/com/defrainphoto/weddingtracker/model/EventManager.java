@@ -37,7 +37,20 @@ public class EventManager {
 			temp = findEvent(newEvent, false, true);
 			newEvent.setEventId(temp.getEventId()); 
 			Hibernate.initialize(newEvent);
+			
+			// add a mileage db record
+			Integer year = newEvent.getEventDate().getYear() + 1900;
+			Mileage newMileage = new Mileage(newEvent.getEventId(), year, 0);
+			
+			openSession();
+			session.beginTransaction();
+			System.out.println("adding mileage");
+			System.out.println(newMileage);
+			session.save(newMileage);
+			session.getTransaction().commit();
+			
 			closeSession();
+			
 			found = true;
 		}
 		
@@ -48,6 +61,8 @@ public class EventManager {
 		
 		boolean found = false;
 		Event temp = findEvent(event, true, false);
+		Integer oldYear = 0;
+		Integer newYear = event.getEventDate().getYear() + 1900;
 		
 		// if not in DB, throw exception
 		if (temp == null) {
@@ -56,7 +71,7 @@ public class EventManager {
 		
 		// else, open session, save, and commit
 		else {
-			
+			oldYear = temp.getEventDate().getYear() + 1900;
 //			System.out.println("in the update");
 			// check if the new event name already exists
 			Event findEventName = findEvent(temp, false, true);
@@ -81,6 +96,23 @@ public class EventManager {
 			
 			Hibernate.initialize(event);
 			closeSession();
+			
+			// if year changed, update year in mileage
+			if (oldYear != newYear) {
+				Mileage mileage = new Mileage(event.getEventId(), oldYear, 0);
+				openSession();
+				
+				session.beginTransaction();
+				mileage = (Mileage)session.get(Mileage.class, mileage.getEventId());
+				System.out.println("old mileage");
+				System.out.println(mileage);
+				mileage.setYear(newYear);
+				
+				session.saveOrUpdate(mileage);
+				System.out.println("new mileage");
+				System.out.println(mileage);
+				session.getTransaction().commit();
+			}
 			found = true;
 		}
 		

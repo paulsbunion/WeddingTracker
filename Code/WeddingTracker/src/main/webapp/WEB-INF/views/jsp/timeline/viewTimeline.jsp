@@ -75,13 +75,13 @@
 						<td><fmt:formatDate type="time" timeStyle="short" value="${timeSlice.startTime}"/>
 						<c:set var="endDuration" value ='<%=Time.valueOf("" + (String)(pageContext.getAttribute("startTime").toString())) %>' />
 						
-						<c:if test="${not empty durationHr}">
+						<c:if test="${not empty durationHr && durationHr ne 0}">
 							<c:set var="endDuration" value='<%=Time.valueOf((((Time)pageContext.getAttribute("endDuration")).getHours() + Integer.valueOf((String)pageContext.getAttribute("durationHr")) ) + ":00:00") %>' />
 						</c:if>
 						
-						<c:if test="${not empty durationMin}">
+						<c:if test="${not empty durationMin && durationMin ne 0}">
 							<c:set var="endDuration" value='<%=Time.valueOf( (((Time)pageContext.getAttribute("endDuration")).getHours()) + ":" 
-							+  (((Time)pageContext.getAttribute("endDuration")).getMinutes() + Integer.valueOf((String)pageContext.getAttribute("durationMin")) ) 
+							+  (((Time)pageContext.getAttribute("startTime")).getMinutes() + Integer.valueOf((String)pageContext.getAttribute("durationMin")) ) 
 							+ ":00") %>' />
 						</c:if>
 						

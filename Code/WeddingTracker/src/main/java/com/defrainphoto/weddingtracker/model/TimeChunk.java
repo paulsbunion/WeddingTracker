@@ -18,6 +18,7 @@ public class TimeChunk implements Serializable {
 	private Client client;
 	private Set<Photographer> photographers;
 	private String notes;
+	private String trackMileage;
 	
 	private String eventId;
 	
@@ -149,6 +150,14 @@ public class TimeChunk implements Serializable {
 
 	public void setNotes(String notes) {
 		this.notes = notes;
+	}
+
+	public String getTrackMileage() {
+		return trackMileage;
+	}
+
+	public void setTrackMileage(String trackMileage) {
+		this.trackMileage = trackMileage;
 	}
 
 	@Override

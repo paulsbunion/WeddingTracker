@@ -32,6 +32,7 @@
 		         <tr>
 		            <td>Location</td>
 		            <td>${location}</td>
+		            <td>${trackMileage}</td>
 		         </tr>
 		         <tr>
 		            <td>Client</td>

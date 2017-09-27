@@ -121,6 +121,12 @@ public class TimeChunkController {
 			model.addAttribute("timeSlice", timeChunk);
 			model.addAttribute("notes", timeChunk.getNotes());
 			
+			System.out.println("the track mileage preference");
+			if (timeChunk.getTrackMileage() == null) {
+				timeChunk.setTrackMileage("N");
+			}
+			System.out.println(timeChunk.getTrackMileage());
+			
 			timeChunk = timelineManager.timeChunkManager.addTimeChunk(timeChunk);
 			
 			model.addAttribute("chunkId", timeChunk.getChunkId());
@@ -227,6 +233,13 @@ public class TimeChunkController {
 			System.out.println(timeChunk.getTimeline());
 			System.out.println(timeChunk.getTimeline().getEventId());
 			System.out.println(timeline);
+			
+			System.out.println("the track mileage preference");
+			if (timeChunk.getTrackMileage() == null) {
+				timeChunk.setTrackMileage("N");
+			}
+			System.out.println(timeChunk.getTrackMileage());
+			
 			timelineManager.timeChunkManager.updateTimeChunk(timeChunk);
 			System.out.println("after error");
 			

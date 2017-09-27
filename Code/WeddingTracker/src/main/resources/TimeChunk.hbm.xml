@@ -76,5 +76,9 @@
             <column name="NOTES"/>
         </property>
         
+        <property name="trackMileage">
+            <column name="TRACKMILEAGE"/>
+        </property>
+        
     </class>
 </hibernate-mapping>

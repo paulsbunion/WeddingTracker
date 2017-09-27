@@ -56,6 +56,12 @@
 							<form:options items="${locationList}" />
 						</form:select></td>
 				</tr>
+			
+				<tr>
+					<td></td>
+					<td><form:checkbox path="trackMileage" value = "Y"/>Track Mileage to / from this location</td>
+				</tr>
+					
 				<tr>
 					<td><form:label path="client">Client</form:label></td>
 					<td><form:select path="client">

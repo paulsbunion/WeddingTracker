@@ -105,6 +105,7 @@
 						@ <a href="http://maps.google.com/?q=${locAddr}"> ${locDesc}</a>
 <%-- 							<c:out value="@ <a href ="http://maps.google.com/?q=${locAddr}</a>'"></c:out> --%>
 						</c:if>
+						<c:if test="${timeSlice.trackMileage == 'Y' }"> < MileageTracker ></c:if>
 						</td>
 						
 					</tr>

@@ -73,11 +73,13 @@ public class TimeChunkManager {
 			session.beginTransaction();
 			session.save(newChunk);
 			session.getTransaction().commit();
-			
 			temp = findTimeChunk(newChunk, true, true, false);
+			temp.setEventId(newChunk.getEventId());
 			newChunk = temp; 
 			
-			Hibernate.initialize(newChunk);
+			Hibernate.initialize(temp);
+			Hibernate.initialize(temp.getEventId());
+			System.out.println("the eventid here: " + temp.getEventId());
 			closeSession();
 			found = true;
 //		}
@@ -422,6 +424,7 @@ public class TimeChunkManager {
 			if (list != null && !list.isEmpty()) {
 				TimeChunk temp = (TimeChunk) list.get(0);
 				Hibernate.initialize(temp);
+				Hibernate.initialize(temp.getEventId());
 				Hibernate.initialize(temp.getClient());
 				Hibernate.initialize(temp.getDescription());
 				Hibernate.initialize(temp.getDurationHr());

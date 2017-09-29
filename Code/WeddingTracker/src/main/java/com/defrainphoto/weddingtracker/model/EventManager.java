@@ -40,7 +40,7 @@ public class EventManager {
 			
 			// add a mileage db record
 			Integer year = newEvent.getEventDate().getYear() + 1900;
-			Mileage newMileage = new Mileage(newEvent.getEventId(), year, 0);
+			Mileage newMileage = new Mileage(newEvent.getEventId(), year, 0.0);
 			
 			openSession();
 			session.beginTransaction();
@@ -99,7 +99,7 @@ public class EventManager {
 			
 			// if year changed, update year in mileage
 			if (oldYear != newYear) {
-				Mileage mileage = new Mileage(event.getEventId(), oldYear, 0);
+				Mileage mileage = new Mileage(event.getEventId(), oldYear, 0.0);
 				openSession();
 				
 				session.beginTransaction();
@@ -190,6 +190,35 @@ public class EventManager {
 		queryString.append(" order by ev.eventDate");
 		Query query = session.createQuery(queryString.toString());
 		query.setDate("today", today);
+		
+		List list = query.list();
+		
+		session.getTransaction().commit();
+		
+		if (list != null && !list.isEmpty()) {
+			result  = (List<Event>) list;
+			found = true;
+		}
+		
+		else {
+			found = false;
+		}
+		Hibernate.initialize(list);
+		closeSession();
+		
+		return found ? list : null;
+	}
+	
+	public List<Event> getAllEventsByYear(String year) {
+		boolean found = false;
+		List<Event> result = null;
+		openSession();
+		session.beginTransaction();
+		StringBuilder queryString = new StringBuilder("from Event ev");
+		queryString.append(" where year(ev.eventDate) = :year");
+		queryString.append(" order by ev.eventDate");
+		Query query = session.createQuery(queryString.toString());
+		query.setParameter("year", year);
 		
 		List list = query.list();
 		

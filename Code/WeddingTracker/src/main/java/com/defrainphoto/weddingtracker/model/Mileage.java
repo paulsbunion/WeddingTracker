@@ -23,11 +23,11 @@ public class Mileage implements Serializable{
 	private Integer year;
 	
 	@Column(name="TOTALMILES")
-	private Integer totalMiles;
+	private Double totalMiles;
 
 	public Mileage() {}
 	
-	public Mileage(String eventId, Integer year, Integer totalMiles) {
+	public Mileage(String eventId, Integer year, Double totalMiles) {
 		this.eventId = eventId;
 		this.year = year;
 		this.totalMiles = totalMiles;
@@ -50,11 +50,11 @@ public class Mileage implements Serializable{
 		this.year = year;
 	}
 
-	public Integer getTotalMiles() {
+	public Double getTotalMiles() {
 		return totalMiles;
 	}
 
-	public void setTotalMiles(Integer totalMiles) {
+	public void setTotalMiles(Double totalMiles) {
 		this.totalMiles = totalMiles;
 	}
 

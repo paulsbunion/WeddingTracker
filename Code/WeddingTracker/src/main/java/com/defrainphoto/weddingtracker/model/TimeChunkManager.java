@@ -28,6 +28,9 @@ public class TimeChunkManager {
 //	private LocationManager locationManager = new LocationManager();
 	@Autowired
 	private TimelineManager timelineManager;
+	@Autowired 
+	private MileageManager mileageManager;
+	
 	Session session;
 
 //	public TimeChunkManager(TimelineManager timelineManager) {
@@ -78,6 +81,12 @@ public class TimeChunkManager {
 			closeSession();
 			found = true;
 //		}
+			
+			// if the location should be tracked, update the event mileage
+//			if (found && newChunk.getTrackMileage().equals("Y")) {
+			if (found) {
+				mileageManager.updateEventMileage(newChunk);
+			}
 		
 		return found ? newChunk : null;
 		
@@ -86,6 +95,7 @@ public class TimeChunkManager {
 	public TimeChunk updateTimeChunk(TimeChunk timeChunk) {
 		
 		boolean found = false;
+		String wasTracked;
 		TimeChunk temp = findTimeChunk(timeChunk, true, true, false);
 		
 		// if not in DB, throw exception
@@ -95,6 +105,8 @@ public class TimeChunkManager {
 		
 		// else, open session, save, and commit
 		else {
+			wasTracked = temp.getTrackMileage();
+			
 			openSession();
 			
 			session.beginTransaction();
@@ -106,6 +118,14 @@ public class TimeChunkManager {
 			Hibernate.initialize(timeChunk.getTimeline());
 			closeSession();
 			found = true;
+		}
+		
+		// if the location should be tracked, update the event mileage
+		// this occurs when it was before, but no longer is, or when it is now being tracked
+//		if (found && (timeChunk.getTrackMileage().equals("Y") || wasTracked.equals("Y")) ) {
+		if (found) {
+		
+			mileageManager.updateEventMileage(timeChunk);
 		}
 		
 		return found ? timeChunk : null;
@@ -672,6 +692,11 @@ public class TimeChunkManager {
 			deleted = deleteTimeChunk(foundTimeChunk);
 		}
 
+		// update the mileage
+		if (deleted) {		
+			mileageManager.updateEventMileage(timeChunk);
+		}
+		
 		return deleted? foundTimeChunk : null;
 	}
 	

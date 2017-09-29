@@ -114,5 +114,8 @@ public class Location implements Serializable{
 		return "" + street + ", " + city + ", " + state + ", " + zip + space + description;
 	}
 	
+	public String toGoogleMapString() {
+		return ("" + street + "+" + city + "+" + state + "+" + zip).replace(" ", "+");
+	}
 
 }

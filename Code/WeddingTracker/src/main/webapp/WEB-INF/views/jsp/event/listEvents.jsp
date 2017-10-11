@@ -45,7 +45,7 @@
 						<th>Event Name</th>
 						<th>Date</th>
 						<th>Start Time</th>
-						<th>Duration</th>
+						<th>Miles</th>
 					</tr>
 				</thead>
 				
@@ -60,7 +60,8 @@
 					<td><c:out value="${event.eventName}"/></td>
 					<td><fmt:formatDate pattern="MM/dd/yyy" value="${event.eventDate}"/></td>
 					<td><fmt:formatDate type="time" timeStyle="short" value="${event.startTime}"/></td>
-					<td><c:out value="${event.duration.getHours()} Hr ${event.duration.getMinutes()} Min"/></td>
+<%-- 					<td><c:out value="${event.duration.getHours()} Hr ${event.duration.getMinutes()} Min"/></td> --%>
+					<td><c:out value="${event.mileage.totalMiles}"></c:out>
 					
 					
 					<spring:url value="/listTimeSlices/${event.eventId}" var="editTimelineUrl" />

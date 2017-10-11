@@ -3,6 +3,7 @@ package com.defrainphoto.weddingtracker.controller;
 import java.sql.Date;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.EventListener;
 import java.util.HashMap;
@@ -36,6 +37,8 @@ import com.defrainphoto.weddingtracker.model.Event;
 import com.defrainphoto.weddingtracker.model.EventManager;
 import com.defrainphoto.weddingtracker.model.EventType;
 import com.defrainphoto.weddingtracker.model.EventTypeManager;
+import com.defrainphoto.weddingtracker.model.Mileage;
+import com.defrainphoto.weddingtracker.model.MileageManager;
 import com.defrainphoto.weddingtracker.model.TimeChunk;
 import com.defrainphoto.weddingtracker.model.Timeline;
 import com.defrainphoto.weddingtracker.model.TimelineManager;
@@ -51,6 +54,9 @@ public class EventController {
 	@Autowired
 	private TimelineManager timelineManager;
 //	private TimelineManager timelineManager = new TimelineManager();
+	@Autowired
+	private MileageManager mileageManager;
+	
 	
 	@RequestMapping(value = {"/createEvent", "/WeddingTracker/createEvent"}, method = RequestMethod.GET)
 	public ModelAndView createEvent() {
@@ -177,16 +183,33 @@ public class EventController {
 	@RequestMapping(value={"/listEvents", "/WeddingTracker/listEvents"})
 	public String listEvents(Map<String, Object> map) {
 		Date today = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-		map.put("eventList", eventManager.getEventsByToday(today, false));
+		
+		List<Event> events = eventManager.getEventsByToday(today, false);
+		
+		map.put("eventList", events);
 //		map.put("eventList", eventManager.getAllEvents());
 		// get timeline id's
 		map.put("timelineIdMap", timelineManager.getallTimelineIds());
+//		map.put("eventMileage", generateEventMileageList(events));
 		
 		map.put("pastFuture", "future");
 		
 		return "event/listEvents";
 	}
 	
+//	private List<Mileage> generateEventMileageList(List<Event> events) {
+//		List<Mileage> mileageList = mileageManager.getAllEventsMileage();
+//		List<Mileage> result = new ArrayList<Mileage>();
+//		String eventId = "";
+//		
+//		for (Event e : events) {
+//			eventId = e.getEventId();
+//			for
+//			result.add(mileageList.)
+//		}
+//		return null;
+//	}
+
 	@RequestMapping(value={"/listPastEvents", "/WeddingTracker/listPastEvents"})
 	public String listPastEvents(Map<String, Object> map) {
 		Date today = new java.sql.Date(Calendar.getInstance().getTime().getTime());

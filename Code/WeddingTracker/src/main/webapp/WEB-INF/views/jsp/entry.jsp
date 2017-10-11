@@ -25,6 +25,7 @@
 		<spring:url value="/listPhotographers" var="listPhotographersUrl" />
 		<spring:url value="/listEventTypes" var="listEventTypesUrl" />
 		<spring:url value="/listLocations" var="listLocationsUrl" />
+		<spring:url value="/listMileage" var="listMileageUrl" />
 		
 			
 			<tr>
@@ -32,6 +33,7 @@
 				<td><button onclick="location.href='${listClientsUrl}'">Clients</button></td>
 				<td><button onclick="location.href='${listPhotographersUrl}'">Photographers</button></td>
 				<td><button onclick="location.href='${listLocationsUrl}'">Locations</button></td>
+				<td><button onclick="location.href='${listMileageUrl}'">Mileage</button></td>
 			</tr>
 		</table>
 			<ul>

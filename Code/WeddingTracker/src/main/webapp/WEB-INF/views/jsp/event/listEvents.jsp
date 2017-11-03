@@ -9,6 +9,9 @@
 	<head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Wedding Tracker - List of Events</title>
+		
+		<!-- confirm delete -->
+        <script type="text/javascript" src="resources/core/js/confirmDelete.js"></script>
 	</head>
 	
 	<body>
@@ -85,7 +88,8 @@
 					
 					<td>
 						<nobr>
-							<button onclick="location.href='${deleteEventUrl}'">Delete Event</button>
+<%-- 							<button onclick="location.href='${deleteEventUrl}'">Delete Event</button> --%>
+							<button onclick="confirmDelete('${deleteEventUrl}')">Delete Event</button>
 						</nobr>
 					</td>
 				</tr>

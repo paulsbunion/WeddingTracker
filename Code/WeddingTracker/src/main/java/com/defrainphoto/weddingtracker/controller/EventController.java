@@ -234,10 +234,13 @@ public class EventController {
 		
 		
 		eventManager.deleteEventById(event);
+		Date today = new java.sql.Date(Calendar.getInstance().getTime().getTime());
 		
-		map.put("eventList", eventManager.getAllEvents());
+		map.put("eventList", eventManager.getEventsByToday(today, false));
 		// get timeline id's
 		map.put("timelineIdMap", timelineManager.getallTimelineIds());
+		
+		map.put("pastFuture", "future");
 		
 		return "event/listEvents";
 	}

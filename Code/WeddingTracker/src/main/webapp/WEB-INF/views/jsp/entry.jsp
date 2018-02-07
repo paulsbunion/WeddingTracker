@@ -7,9 +7,33 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Wedding Tracker - Home</title>
+		<script src="resources/snow.js"></script>
+		<style type="text/css">
+/* 	body { */
+/*  		background: #2f64bf; */
+/*  		overflow: hidden; */
+/*  		color: 68f442; */
+/* 	} */
+/* 	h2 { */
+/* 		color: "#2f64bf" !important; */
+/* 	} */
+	
+/* 	#sky { */
+/* 		position: absolute; */
+/* 		pointer-events:none; */
+/* 		overflow: hidden; */
+/* 	} */
+	
+/* 	button { */
+/* /* 		position: relative; */ */
+/* 		color: red; */
+/* 	} */
+	
+</style>
 	</head>
 
 	<body>
+<%-- 	<canvas id="sky"></canvas> --%>
 		<div>
 			<spring:url value="/logout" var="logoutUrl" />
 			<c:if test="${pageContext.request.userPrincipal.name != null}">
@@ -51,6 +75,8 @@
 <!-- 				<li><a href="/WeddingTracker/listEventTypes">List EventTypes</a></li> -->
 <!-- 				<li><a href="/WeddingTracker/listEvents">List Events</a></li> -->
 			</ul>
+		</div>
+		<div>
 		</div>
 	</body>
 </html>
